@@ -23,7 +23,7 @@ module ActsAsApprovable
 
         cattr_accessor :approvable_ignore
         ignores = Array.wrap(options.delete(:ignore) { [] })
-        ignores.push(:created_at, :updated_at, self.approvable_field)
+        ignores.push('created_at', 'updated_at', self.approvable_field)
         self.approvable_ignore = ignores.compact.uniq.map(&:to_s)
 
         cattr_accessor :approvable_only
