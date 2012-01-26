@@ -137,7 +137,7 @@ module ActsAsApprovable
           original, changed_to = changes[attr]
 
           @approval.object[attr] = changed_to
-          write_attribute(attr.to_sym, original)
+          write_attribute(attr.to_s, original)
         end
       end
     end
