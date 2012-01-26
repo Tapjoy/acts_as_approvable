@@ -57,7 +57,7 @@ class Approval < ActiveRecord::Base
     if update?
       data = {}
       object.each do |attr, value|
-        data[attr] = value if item.attributes.include?(attr)
+        data[attr] = value if item.attribute_names.include?(attr)
       end
 
       item.without_approval { update_attributes!(data) }
