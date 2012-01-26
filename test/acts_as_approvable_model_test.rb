@@ -129,6 +129,12 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       assert !@approval.rejected?
     end
 
+    should 'check attributes in object' do
+      @approval.object['foo'] = 'bar'
+      @approval.approve!
+      assert_equal @approval.object['description'], @approval.item.description
+    end
+
     context 'that is accepted' do
       setup { @approval.approve! }
 
@@ -144,7 +150,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       end
 
       should 'update the target item' do
-        assert_equal @approval.object[:description], @approval.item.description
+        assert_equal @approval.object['description'], @approval.item.description
       end
 
       should 'raise an error if approved again' do
