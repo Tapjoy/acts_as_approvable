@@ -55,9 +55,10 @@ class Approval < ActiveRecord::Base
     raise "This is a stale approval" if stale? and !options.delete(:force)
 
     if update?
-      data = Hash[object.map do |attr, value|
-        [attr, value] if item.attributes.include?(attr)
-      end.flatten]
+      data = {}
+      object.each do |attr, value|
+        data[attr] = value if item.attributes.include?(attr)
+      end
 
       item.without_approval { update_attributes!(data) }
     elsif create? && item.approval_state.present?
