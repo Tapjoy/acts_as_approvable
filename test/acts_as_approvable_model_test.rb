@@ -5,7 +5,11 @@ class User < ActiveRecord::Base
 end
 
 class Project < ActiveRecord::Base
-  acts_as_approvable :ignore => :title, :on => :update
+  acts_as_approvable :on => :update, :ignore => :title
+end
+
+class Game < ActiveRecord::Base
+  acts_as_approvable :on => :update, :only => :title
 end
 
 class Employee < ActiveRecord::Base
@@ -16,42 +20,93 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
   load_schema
 
   context 'A record with update only approval' do
-    setup { @project = Project.create }
+    context 'and ignored fields' do
+      setup { @project = Project.create }
 
-    should 'have no approvals' do
-      assert @project.approvals.empty?
-    end
-
-    context 'which updates an ignored column' do
-      setup { @project.update_attribute(:title, 'Ignore Me') }
-
-      should 'not have an approval' do
+      should 'have no approvals' do
         assert @project.approvals.empty?
       end
+
+      context 'which updates an ignored column' do
+        setup { @project.update_attribute(:title, 'Ignore Me') }
+
+        should 'not have an approval' do
+          assert @project.approvals.empty?
+        end
+      end
+
+      context 'which updates an ignore column and a non-ignored column' do
+        setup { @project.update_attributes(:title => 'Ignore Me', :description => 'Must Review') }
+
+        should 'have one approval' do
+          assert_equal 1, @project.approvals.size
+        end
+
+        should 'not update the records ignored column' do
+          assert_equal nil, @project.description
+        end
+
+        should 'update the records non-ignored columns' do
+          assert_equal 'Ignore Me', @project.title
+        end
+
+        should 'have the description on the approval' do
+          assert @project.approvals.last.object.key?('description')
+          assert_equal 'Must Review', @project.approvals.last.object['description']
+        end
+      end
+
+      context 'that is altered using #without_approvable' do
+        setup { @project.without_approval { update_attribute(:description, 'updated') } }
+
+        should 'not have an approval object' do
+          assert @project.approvals.empty?
+        end
+      end
     end
 
-    context 'which updates an ignore column and a non-ignored column' do
-      setup { @project.update_attributes(:title => 'Ignore Me', :description => 'Must Review') }
+    context 'and "only" fields' do
+      setup { @game = Game.create }
 
-      should 'have one approval' do
-        assert_equal 1, @project.approvals.size
+      should 'have no approvals' do
+        assert @game.approvals.empty?
       end
 
-      should 'not update the records non-ignored column' do
-        assert_equal nil, @project.description
+      context 'which updates an only column' do
+        setup { @game.update_attribute(:title, 'review') }
+
+        should 'have an approval' do
+          assert_equal 1, @game.approvals.size
+        end
       end
 
-      should 'have the description on the approval' do
-        assert @project.approvals.last.object.key?('description')
-        assert_equal 'Must Review', @project.approvals.last.object['description']
+      context 'which updates an only column and another column' do
+        setup { @game.update_attributes(:title => 'review', :description => 'no review') }
+
+        should 'have one approval' do
+          assert_equal 1, @game.approvals.size
+        end
+
+        should 'not update the records only column' do
+          assert_equal nil, @game.title
+        end
+
+        should 'update the records other fields' do
+          assert_equal 'no review', @game.description
+        end
+
+        should 'have the title on the approval' do
+          assert @game.approvals.last.object.key?('title')
+          assert_equal 'review', @game.approvals.last.object['title']
+        end
       end
-    end
 
-    context 'that is altered using #without_approvable' do
-      setup { @project.without_approval { update_attribute(:description, 'updated') } }
+      context 'that is altered using #without_approvable' do
+        setup { @game.without_approval { update_attribute(:title, 'updated') } }
 
-      should 'not have an approval object' do
-        assert @project.approvals.empty?
+        should 'not have an approval object' do
+          assert @game.approvals.empty?
+        end
       end
     end
   end

@@ -13,6 +13,13 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :games, :force => true do |t|
+    t.string  :title
+    t.text    :description
+
+    t.timestamps
+  end
+
   create_table :employees, :force => true do |t|
     t.string  :name
 

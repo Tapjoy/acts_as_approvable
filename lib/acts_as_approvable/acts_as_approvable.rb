@@ -24,7 +24,9 @@ module ActsAsApprovable
         cattr_accessor :approvable_ignore
         ignores = Array.wrap(options.delete(:ignore) { [] }).push(:created_at, :updated_at, self.approvable_field)
         self.approvable_ignore = ignores.compact.uniq.map(&:to_s)
-        puts self.approvable_ignore
+
+        cattr_accessor :approvable_only
+        self.approvable_only = Array.wrap(options.delete(:only) { [] }).uniq.map(&:to_s)
 
         cattr_accessor :approvals_active
         self.approvals_active = true
@@ -122,7 +124,11 @@ module ActsAsApprovable
       end
 
       def notably_changed
-        changed - self.class.approvable_ignore
+        unless self.class.approvable_only.empty?
+          self.class.approvable_only.select { |field| changed.include?(field) }
+        else
+          changed - self.class.approvable_ignore
+        end
       end
 
       private
