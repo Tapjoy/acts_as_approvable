@@ -89,7 +89,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       end
 
       should 'update the target item' do
-        assert_equal @approval.object[:description], @approval.item.description
+        assert_equal @approval.object['description'], @approval.item.description
       end
 
       should 'raise an error if approved again' do
