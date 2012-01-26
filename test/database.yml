@@ -1,0 +1,7 @@
+sqlite:
+  :adapter: sqlite
+  :database: test/acts_as_approvable_plugin.sqlite.db
+
+sqlite3:
+  :adapter: sqlite3
+  :database: test/acts_as_approvable_plugin.sqlite3.db
