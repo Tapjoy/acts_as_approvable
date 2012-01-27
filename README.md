@@ -33,15 +33,15 @@ Options
 The following options may be used to configure the workflow on a per-model
 basis:
 
- :on            The type of events (:create or :update) to require approval on.
- :ignore        A list of fields to ignore for :update approvals.
- :only          A list of fields that should be approved. All other fields are
-                ignored. If set, the :ignore option is... ignored.
- :state_field   A local model field to save the :create approvals state. Useful
-                for selecting approved models without joining the approvals table.
+ * `:on`            The type of events (`:create` or `:update`) to require approval on.
+ * `:ignore`        A list of fields to ignore for `:update` approvals.
+ * `:only`          A list of fields that should be approved. All other fields are
+                    ignored. If set, the `:ignore` option is... ignored.
+ * `:state_field`   A local model field to save the `:create` approvals state. Useful
+                    for selecting approved models without joining the approvals table.
 
-The fields :created_at, :updated_at and whatever is set for the :state_field are
-automatically ignored.
+The fields `:created_at`, `:updated_at` and whatever is set for the `:state_field`
+are automatically ignored.
 
 Examples
 ========
