@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   :item_type, :null => false
     t.integer  :item_id,   :null => false
     t.string   :event,     :null => false
-    t.string   :state,     :null => false, :default => :pending
+    t.string   :state,     :null => false, :default => 'pending'
     t.string   :owner_type
     t.integer  :owner_id
     t.text     :object
@@ -39,5 +39,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
-  add_index :approvals, [:status, :event, :item_type, :item_id, :owner_id]
+  add_index :approvals, [:state, :event]
+  add_index :approvals, [:item_type, :item_id]
+  add_index :approvals, [:owner_id]
 end
