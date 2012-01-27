@@ -1,0 +1,30 @@
+%h1 Approval Queue
+
+- form_for(:approval, :url => approvals_path, :method => :get) do |f|
+  - unless @conditions[:state].is_a?(Array) # History page shouldn't allow selecting different states
+    = f.label(:state)
+    = f.select(:state, options_for_select(Approval.options_for_state, @conditions[:state]))
+  - unless Approval.options_for_owner.empty?
+    = f.label(:owner_id)
+    = f.select(:owner_id, options_for_select(Approval.options_for_owner, @conditions[:owner_id]))
+  = f.label(:item_type)
+  = f.select(:item_type, options_for_select(Approval.options_for_type, @conditions[:item_type]))
+
+%table
+  %thead
+    %tr
+      %th Type
+      %th Record
+      %th Owner
+      %th State
+      %th
+  %tbody
+    - @approvals.each do |approval|
+      %tr
+        %td= approval.item_type.classify
+        %td= approval.item.try(:to_s) || approval.item.id
+        %td= approval.owner.try(:to_s)
+        %td= approval.state
+        %td.actions
+          = link_to('Approve', approve_approval_path(approval))
+          = link_to('Reject', reject_approval_path(approval))

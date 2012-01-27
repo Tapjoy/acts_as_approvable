@@ -10,6 +10,27 @@ class Approval < ActiveRecord::Base
 
   before_save :can_save?
 
+  def self.options_for_state
+    [
+      ['All', 'all'],
+      ['Pending', 'pending'],
+      ['Approved', 'approved'],
+      ['Rejected', 'rejected']
+    ]
+  end
+
+  def self.options_for_owner
+    all(:select => 'DISTINCT(owner_id), owner_type').map do |row|
+      [row.owner.to_s, row.owner_id]
+    end
+  end
+
+  def self.options_for_type
+    all(:select => 'DISTINCT(item_type)').map do |row|
+      [row.item_type.classify, row.item_type]
+    end
+  end
+
   def pending?
     state == 'pending'
   end
