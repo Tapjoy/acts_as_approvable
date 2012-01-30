@@ -29,15 +29,11 @@ class Approval < ActiveRecord::Base
 
   def self.options_for_owner
     return [] unless has_owner?
-    all(:select => 'DISTINCT(owner_id)').map do |row|
-      [row.owner.to_s, row.owner_id]
-    end
+    all(:select => 'DISTINCT(owner_id)', :conditions => 'owner_id IS NOT NULL').map { |row| [row.owner.to_s, row.owner_id] }
   end
 
   def self.options_for_type
-    all(:select => 'DISTINCT(item_type)').map do |row|
-      [row.item_type.classify, row.item_type]
-    end
+    all(:select => 'DISTINCT(item_type)').map { |row| [row.item_type.classify, row.item_type] }
   end
 
   def pending?
