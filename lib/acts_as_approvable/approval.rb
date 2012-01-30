@@ -1,6 +1,5 @@
 class Approval < ActiveRecord::Base
   belongs_to :item,  :polymorphic => true
-  belongs_to :owner, :polymorphic => true
 
   validates_presence_of  :item
   validates_inclusion_of :event, :in => %w(create update)
@@ -9,6 +8,15 @@ class Approval < ActiveRecord::Base
   serialize :object
 
   before_save :can_save?
+
+  def self.owner_model=(model)
+    send(:belongs_to, :owner, :class_name => model.to_s)
+    @has_owner = true
+  end
+
+  def self.has_owner?
+    @has_owner || false
+  end
 
   def self.options_for_state
     [
@@ -20,7 +28,8 @@ class Approval < ActiveRecord::Base
   end
 
   def self.options_for_owner
-    all(:select => 'DISTINCT(owner_id), owner_type').map do |row|
+    return [] unless has_owner?
+    all(:select => 'DISTINCT(owner_id)').map do |row|
       [row.owner.to_s, row.owner_id]
     end
   end

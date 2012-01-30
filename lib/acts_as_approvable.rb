@@ -16,6 +16,9 @@ module ActsAsApprovable
     @enabled ||= true
   end
 
+  def self.owner_model=(model)
+    Approval.owner_model = model
+  end
 
   def self.view_language=(lang)
     @lang = lang

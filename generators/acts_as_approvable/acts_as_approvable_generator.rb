@@ -29,6 +29,7 @@ class ActsAsApprovableGenerator < Rails::Generator::Base
     opt.separator 'Options:'
     opt.on('--base BASE', 'Base class for ApprovableController.') { |v| options[:base] = v }
     opt.on('--haml', 'Generate HAML views instead of ERB.') { |v| options[:haml] = v }
+    opt.on('--owner [User]', 'Enable and, optionally, set the model for approval ownerships.') { |v| options[:owner] = v || 'User' }
   end
 end
 
