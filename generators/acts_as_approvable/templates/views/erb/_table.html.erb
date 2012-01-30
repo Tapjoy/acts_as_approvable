@@ -1,0 +1,26 @@
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Record</th>
+      <th>Owner</th>
+      <th>State</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%% @approvals.each do |approval| %>
+      <tr>
+        <td><%%= approval.item_type.classify %></td>
+        <td><%%= approval.item.try(:to_s) || approval.item.id %></td>
+        <td><%%= approval.owner.try(:to_s) %></td>
+        <td><%%= approval.state %></td>
+        <td class='actions'>
+          <%%= link_to('Approve', approve_approval_path(approval)) %>
+          <%%= link_to('Reject', reject_approval_path(approval)) %>
+        </td>
+      </tr>
+    <%% end %>
+  </tbody>
+</table>
+

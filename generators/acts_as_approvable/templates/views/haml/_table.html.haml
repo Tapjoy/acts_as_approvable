@@ -1,0 +1,19 @@
+%table
+  %thead
+    %tr
+      %th Type
+      %th Record
+      %th Owner
+      %th State
+      %th
+  %tbody
+    - @approvals.each do |approval|
+      %tr
+        %td= approval.item_type.classify
+        %td= approval.item.try(:to_s) || approval.item.id
+        %td= approval.owner.try(:to_s)
+        %td= approval.state
+        %td.actions
+          = link_to('Approve', approve_approval_path(approval))
+          = link_to('Reject', reject_approval_path(approval))
+

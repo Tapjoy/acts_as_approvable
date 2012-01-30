@@ -15,4 +15,13 @@ module ActsAsApprovable
   def self.enabled?
     @enabled ||= true
   end
+
+
+  def self.view_language=(lang)
+    @lang = lang
+  end
+
+  def self.view_language
+    @lang || 'erb'
+  end
 end

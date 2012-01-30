@@ -1,5 +1,6 @@
 class ApprovalsController < <%= options[:base] %>
   before_filter :setup_conditions, :only => [:index, :history]
+  before_filter :setup_partial, :only => [:index, :history]
   before_filter :find_approval, :only => [:approve, :reject]
 
   def index
@@ -43,7 +44,21 @@ class ApprovalsController < <%= options[:base] %>
     end
   end
 
+  # Check for the selected models partial, use the generic one if it doesn't exist
+  def setup_partial
+    @table_partial = @conditions.fetch(:item_type) { 'table' }
+
+    if @table_partial != 'table'
+      partial_path = Rails.root.join('app', 'views', 'approvals', "_#{@table_partial}.html.#{view_language}")
+      @table_partial = 'table' unless File.exist?(partial_path)
+    end
+  end
+
   def find_approval
     @approval = Approval.find(params[:id])
+  end
+
+  def view_language
+    ActsAsApprovable.view_language
   end
 end

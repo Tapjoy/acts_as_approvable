@@ -9,7 +9,11 @@ class ActsAsApprovableGenerator < Rails::Generator::Base
       m.template 'approvals_controller.rb', 'app/controllers/approvals_controller.rb'
 
       m.directory 'app/views/approvals'
-      m.template "index.html.#{view_language}", "app/views/approvals/index.html.#{view_language}"
+      m.template "views/#{view_language}/index.html.#{view_language}", "app/views/approvals/index.html.#{view_language}"
+      m.template "views/#{view_language}/_table.html.#{view_language}", "app/views/approvals/_table.html.#{view_language}"
+
+      m.directory 'config/initializers'
+      m.template 'initializer.rb', 'config/initializers/acts_as_approvable.rb'
 
       m.route 'map.resources :approvals, :only => [:index], :collection => [:history], :member => [:approve, :reject]'
     end
@@ -23,6 +27,7 @@ class ActsAsApprovableGenerator < Rails::Generator::Base
   def add_options!(opt)
     opt.separator ''
     opt.separator 'Options:'
+    opt.on('--base BASE', 'Base class for ApprovableController.') { |v| options[:base] = v }
     opt.on('--haml', 'Generate HAML views instead of ERB.') { |v| options[:haml] = v }
   end
 end
