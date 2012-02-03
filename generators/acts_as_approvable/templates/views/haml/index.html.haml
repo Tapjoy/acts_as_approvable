@@ -11,4 +11,4 @@
   = f.select(:item_type, options_for_select(Approval.options_for_type, @conditions[:item_type]), :prompt => 'All Types')
   = f.submit('Filter')
 
-= render :partial => @table_partial
+= render :partial => 'table'
