@@ -93,7 +93,7 @@ class Approval < ActiveRecord::Base
       item.without_approval { set_approval_state('approved'); save! }
     end
 
-    update_attributes(:state => 'approved')
+    update_attributes!(:state => 'approved')
     run_item_callback(:after_approve)
   end
 
@@ -105,7 +105,7 @@ class Approval < ActiveRecord::Base
       item.without_approval { set_approval_state('rejected'); save! }
     end
 
-    update_attributes(:state => 'rejected', :reason => reason)
+    update_attributes!(:state => 'rejected', :reason => reason)
     run_item_callback(:after_reject)
   end
 
