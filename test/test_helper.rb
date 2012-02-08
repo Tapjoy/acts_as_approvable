@@ -8,6 +8,7 @@ require 'shoulda'
 require 'active_record'
 
 require File.dirname(__FILE__) + '/../lib/acts_as_approvable'
+require './test/support'
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/debug.log')
 

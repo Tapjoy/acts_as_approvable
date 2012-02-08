@@ -5,8 +5,21 @@ require 'rdoc/task'
 desc 'Default: run unit tests.'
 task :default => :test
 
+desc 'Start a pry session with a database connection open'
+task :pry do |t|
+  $LOAD_PATH << './lib'
+  require 'pry'
+  require 'test/test_helper'
+
+  load_schema
+
+  ActsAsApprovable::Ownership.configure
+  Pry.start(TOPLEVEL_BINDING)
+end
+
 desc 'Test the acts_as_approvable plugin.'
 Rake::TestTask.new(:test) do |t|
+  `echo '' > test/debug.log`
   t.libs << 'lib'
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
