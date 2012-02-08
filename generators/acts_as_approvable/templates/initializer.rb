@@ -1,4 +1,3 @@
-ActsAsApprovable.view_language = <% view_language %>
-<% if options[:owner] %>
-ActsAsApprovable.owner_model = <%= options[:owner].constantize %>
+ActsAsApprovable.view_language = <%= view_language %>
+<% if owner? %>ActsAsApprovable::Ownership.configure(Approval, <%= options[:owner].constantize %>)
 <% end %>

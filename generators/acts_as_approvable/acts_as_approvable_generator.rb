@@ -15,13 +15,37 @@ class ActsAsApprovableGenerator < Rails::Generator::Base
       m.directory 'config/initializers'
       m.template 'initializer.rb', 'config/initializers/acts_as_approvable.rb'
 
-      m.route 'map.resources :approvals, :only => [:index], :collection => [:history], :member => [:approve, :reject]'
+      m.route route
     end
   end
 
   protected
   def view_language
     options[:haml] ? 'haml' : 'erb'
+  end
+
+  def owner?
+    options[:owner].present?
+  end
+
+  def collection_actions
+    actions = [:index, :history]
+    actions << :mine if owner?
+    actions.map { |a| ":#{a}" }
+  end
+
+  def member_actions
+    actions = [:approve, :reject]
+    actions << :assign if owner?
+    actions.map { |a| ":#{a}" }
+  end
+
+  def route
+    route = 'map.resources :approvals, :only => [:index], :collection => ['
+    route << collection_actions.reject { |a| a == ':index' }.join(', ')
+    route << '], :member => ['
+    route << member_actions.join(', ')
+    route << ']'
   end
 
   def add_options!(opt)
