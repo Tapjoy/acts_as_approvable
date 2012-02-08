@@ -39,8 +39,12 @@ module ActsAsApprovable
         (@options_for_available_owners ||= available_owners.map { |owner| option_for_owner(owner) }).dup
       end
 
+      def assigned_owners
+        all(:select => 'DISTINCT(owner_id)', :conditions => 'owner_id IS NOT NULL').map(&:owner)
+      end
+
       def options_for_assigned_owners
-        all(:select => 'DISTINCT(owner_id)', :conditions => 'owner_id IS NOT NULL').map { |row| option_for_owner(row.owner) }
+        assigned_owners.map { |owner| option_for_owner(owner) }
       end
 
       private
