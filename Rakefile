@@ -11,6 +11,7 @@ task :pry do |t|
   require 'pry'
   require 'test/test_helper'
 
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
   load_schema
 
   ActsAsApprovable::Ownership.configure
