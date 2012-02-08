@@ -15,6 +15,8 @@ module ActsAsApprovable
       #               events. Use #pending_changes? to see if there are pending updates for
       #               an object.
       def acts_as_approvable(options = {})
+        include InstanceMethods
+
         cattr_accessor :approvable_on
         self.approvable_on = Array.wrap(options.delete(:on) { [:create, :update] })
 
@@ -32,21 +34,19 @@ module ActsAsApprovable
         cattr_accessor :approvals_active
         self.approvals_active = true
 
-        send :include, InstanceMethods
-
         has_many :approvals, :as => :item, :dependent => :destroy
 
         if self.approvable_on.include?(:update)
-          send :include, UpdateInstanceMethods
+          include UpdateInstanceMethods
           before_update :approvable_update, :if => :approvable_update?
         end
 
         if self.approvable_on.include?(:create)
-          send :include, CreateInstanceMethods
+          include CreateInstanceMethods
           before_create :approvable_create, :if => :approvable_create?
         end
 
-        after_save :approvable_save,   :if => :approvals_enabled?
+        after_save :approvable_save, :if => :approvals_enabled?
       end
 
       def approvals_on
