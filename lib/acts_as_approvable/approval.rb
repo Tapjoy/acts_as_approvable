@@ -9,15 +9,6 @@ class Approval < ActiveRecord::Base
 
   before_save :can_save?
 
-  def self.owner_model=(model)
-    send(:belongs_to, :owner, :class_name => model.to_s)
-    @has_owner = true
-  end
-
-  def self.has_owner?
-    @has_owner || false
-  end
-
   def self.options_for_state
     [
       ['All', 'all'],
@@ -27,13 +18,8 @@ class Approval < ActiveRecord::Base
     ]
   end
 
-  def self.options_for_owner
-    return [] unless has_owner?
-    all(:select => 'DISTINCT(owner_id)', :conditions => 'owner_id IS NOT NULL').map { |row| [row.owner.to_s, row.owner_id] }
-  end
-
   def self.options_for_type
-    all(:select => 'DISTINCT(item_type)').map { |row| [row.item_type.classify, row.item_type] }
+    all(:select => 'DISTINCT(item_type)').map { |row| row.item_type }
   end
 
   def pending?
