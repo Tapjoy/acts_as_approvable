@@ -5,11 +5,9 @@
     <%%= f.label(:state) %>
     <%%= f.select(:state, options_for_select(Approval.options_for_state, @conditions[:state])) %>
   <%% end %>
-  <%% if Approval.has_owner?  %>
-    <%%= f.label(:owner_id) %>
-    <%%= f.select(:owner_id, options_for_select(Approval.options_for_owner, @conditions[:owner_id]), :prompt => 'All Users') %>
-  <%% end %>
-  <%%= f.label(:item_type) %>
+<% if owner? %>  <%%= f.label(:owner_id) %>
+  <%%= f.select(:owner_id, options_for_select(Approval.options_for_owner, @conditions[:owner_id]), :prompt => 'All Users') %>
+<% end %>  <%%= f.label(:item_type) %>
   <%%= f.select(:item_type, options_for_select(Approval.options_for_type, @conditions[:item_type]), :prompt => 'All Types') %>
   <%%= f.submit('Filter') %>
 <%% end %>
