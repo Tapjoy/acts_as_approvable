@@ -10,7 +10,7 @@ require 'active_record'
 require File.dirname(__FILE__) + '/../lib/acts_as_approvable'
 require './test/support'
 
-ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/debug.log')
+LOGGER = ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/debug.log')
 
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))

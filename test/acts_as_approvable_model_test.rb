@@ -138,11 +138,11 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       end
 
       should 'raise an error if approved again' do
-        assert_raise(RuntimeError) { @approval.approve! }
+        assert_raise(ActsAsApprovable::Error::Locked) { @approval.approve! }
       end
 
       should 'raise an error if rejected' do
-        assert_raise(RuntimeError) { @approval.reject! }
+        assert_raise(ActsAsApprovable::Error::Locked) { @approval.reject! }
       end
     end
 
@@ -165,11 +165,11 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       end
 
       should 'raise an error if approved' do
-        assert_raise(RuntimeError) { @approval.approve! }
+        assert_raise(ActsAsApprovable::Error::Locked) { @approval.approve! }
       end
 
       should 'raise an error if rejected again' do
-        assert_raise(RuntimeError) { @approval.reject! }
+        assert_raise(ActsAsApprovable::Error::Locked) { @approval.reject! }
       end
     end
   end
