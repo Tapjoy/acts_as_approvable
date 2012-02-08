@@ -98,7 +98,7 @@ class Approval < ActiveRecord::Base
   end
 
   def reject!(reason = nil)
-    raise ActsAsApprovable::Error::Stale if stale?
+    raise ActsAsApprovable::Error::Locked if locked?
     return unless run_item_callback(:before_reject)
 
     if create? && item.approval_state.present?
