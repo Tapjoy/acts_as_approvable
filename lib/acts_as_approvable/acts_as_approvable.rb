@@ -91,13 +91,11 @@ module ActsAsApprovable
       def approve!
         return unless approvable_on?(:create) && approval.present?
         approval.approve!
-        reload
       end
 
       def reject!
         return unless approvable_on?(:create) && approval.present?
         approval.reject!
-        reload
       end
 
       private

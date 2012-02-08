@@ -208,7 +208,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
     end
 
     context 'when approved' do
-      setup { @user.approve! }
+      setup { @user.approve!; @user.reload }
 
       should 'be approved' do
         assert @user.approved?
@@ -222,7 +222,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
     end
 
     context 'when rejected' do
-      setup { @user.reject! }
+      setup { @user.reject!; @user.reload }
 
       should 'be rejected' do
         assert @user.rejected?
