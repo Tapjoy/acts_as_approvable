@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ActsAsApprovableOwnershipTest < Test::Unit::TestCase
+  load_schema
+
   context 'with default configuration' do
     setup { ActsAsApprovable::Ownership.configure }
 

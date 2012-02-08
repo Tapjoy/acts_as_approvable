@@ -20,7 +20,6 @@ end
 
 desc 'Test the acts_as_approvable plugin.'
 Rake::TestTask.new(:test) do |t|
-  `echo '' > test/debug.log`
   t.libs << 'lib'
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
