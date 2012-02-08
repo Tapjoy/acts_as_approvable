@@ -29,7 +29,7 @@ class Approval < ActiveRecord::Base
   end
 
   def state_was
-    STATES[(super || 0)]
+    STATES[(changed_attributes[:state] || 0)]
   end
 
   def state=(state)
