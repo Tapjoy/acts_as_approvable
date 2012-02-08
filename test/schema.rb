@@ -30,8 +30,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   :item_type, :null => false
     t.integer  :item_id,   :null => false
     t.string   :event,     :null => false
-    t.string   :state,     :null => false, :default => 'pending'
-    t.string   :owner_type
+    t.integer  :state,     :null => false, :default => 0
     t.integer  :owner_id
     t.text     :object
     t.text     :reason

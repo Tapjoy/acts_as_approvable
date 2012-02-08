@@ -1,9 +1,11 @@
 class Approval < ActiveRecord::Base
+  STATES = %w(pending approved rejected)
+
   belongs_to :item,  :polymorphic => true
 
   validates_presence_of  :item
   validates_inclusion_of :event, :in => %w(create update)
-  validates_inclusion_of :state, :in => %w(pending approved rejected)
+  validates_numericality_of :state, :greater_than_or_equal_to => 0, :less_than => STATES.length
 
   serialize :object
 
@@ -20,6 +22,19 @@ class Approval < ActiveRecord::Base
 
   def self.options_for_type
     all(:select => 'DISTINCT(item_type)').map { |row| row.item_type }
+  end
+
+  def state
+    STATES[(read_attribute(:state) || 0)]
+  end
+
+  def state_was
+    STATES[(super || 0)]
+  end
+
+  def state=(state)
+    state = STATES.index(state) if state.is_a?(String)
+    write_attribute(:state, state)
   end
 
   def pending?
