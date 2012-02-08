@@ -2,6 +2,7 @@ require 'active_record'
 
 require 'acts_as_approvable/acts_as_approvable'
 require 'acts_as_approvable/approval'
+require 'acts_as_approvable/ownership'
 
 module ActsAsApprovable
   def self.enable
@@ -16,8 +17,12 @@ module ActsAsApprovable
     @enabled ||= true
   end
 
-  def self.owner_model=(model)
-    Approval.owner_model = model
+  def self.owner_class=(klass)
+    @owner_class = klass
+  end
+
+  def self.owner_class
+    @owner_class
   end
 
   def self.view_language=(lang)
