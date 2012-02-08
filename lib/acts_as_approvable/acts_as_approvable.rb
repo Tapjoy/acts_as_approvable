@@ -160,6 +160,11 @@ module ActsAsApprovable
         self.class.approvable_on.include?(event)
       end
 
+      def before_approve(approval); end
+      def after_approve(approval); end
+      def before_reject(approval); end
+      def after_reject(approval); end
+
       # Executes a block with the approval queue off
       def without_approval(&block)
         memory = self.class.approvals_active # If we use #approvals_enabled? the global state might be incorrectly applied.

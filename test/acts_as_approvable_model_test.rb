@@ -260,5 +260,45 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
         assert_equal 1, @employee.update_approvals.size
       end
     end
+
+    context 'when approving' do
+      setup { @approval = @employee.approval }
+
+      should 'call before_approve hook' do
+        @approval.item.expects(:before_approve).once
+        @approval.approve!
+      end
+
+      should 'call after_approve hook' do
+        @approval.item.expects(:after_approve).once
+        @approval.approve!
+      end
+
+      should 'halt if before_approve returns false' do
+        @approval.item.stubs(:before_approve).returns(false)
+        @approval.approve!
+        assert @approval.item.pending?
+      end
+    end
+
+    context 'when rejecting' do
+      setup { @approval = @employee.approval }
+
+      should 'call before_reject hook' do
+        @approval.item.expects(:before_reject).once
+        @approval.reject!
+      end
+
+      should 'call after_reject hook' do
+        @approval.item.expects(:after_reject).once
+        @approval.reject!
+      end
+
+      should 'halt if before_reject returns false' do
+        @approval.item.stubs(:before_reject).returns(false)
+        @approval.reject!
+        assert @approval.item.pending?
+      end
+    end
   end
 end

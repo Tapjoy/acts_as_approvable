@@ -65,6 +65,7 @@ class Approval < ActiveRecord::Base
   def approve!(options = {})
     raise "This approval is locked: #{state}" if locked?
     raise "This is a stale approval" if stale? and !options.delete(:force)
+    return unless run_item_callback(:before_approve)
 
     if update?
       data = {}
@@ -78,15 +79,23 @@ class Approval < ActiveRecord::Base
     end
 
     update_attributes(:state => 'approved')
+    run_item_callback(:after_approve)
   end
 
   def reject!(reason = nil)
     raise "This approval is locked: #{state}" if locked?
+    return unless run_item_callback(:before_reject)
 
     if create? && item.approval_state.present?
       item.without_approval { set_approval_state('rejected'); save! }
     end
 
     update_attributes(:state => 'rejected', :reason => reason)
+    run_item_callback(:after_reject)
+  end
+
+  private
+  def run_item_callback(callback)
+    item.send(callback, self) != false
   end
 end

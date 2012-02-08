@@ -3,6 +3,7 @@ ENV['RAILS_ROOT'] ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '
 
 require 'rubygems'
 require 'test/unit'
+require 'mocha'
 require 'shoulda'
 require 'active_record'
 
