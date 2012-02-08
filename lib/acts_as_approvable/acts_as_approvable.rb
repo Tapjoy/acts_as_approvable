@@ -105,7 +105,7 @@ module ActsAsApprovable
 
       def approvable_create
         @approval = approvals.build(:event => 'create', :state => 'pending')
-        set_approval_state 'pending'
+        set_approval_state('pending')
       end
     end
 
@@ -136,14 +136,15 @@ module ActsAsApprovable
       end
 
       def approvable_update
-        @approval = approvals.build(:event => 'update', :state => 'pending', :object => {})
-
+        changed = {}
         notably_changed.each do |attr|
           original, changed_to = changes[attr]
 
-          @approval.object[attr] = changed_to
           write_attribute(attr.to_s, original)
+          changed[attr] = changed_to
         end
+
+        @approval = approvals.build(:event => 'update', :state => 'pending', :object => changed)
       end
     end
 
@@ -176,7 +177,7 @@ module ActsAsApprovable
 
       private
       def approvable_save
-        @approval.save if @approval
+        @approval.save if @approval.present? && @approval.new_record?
       end
     end
   end
