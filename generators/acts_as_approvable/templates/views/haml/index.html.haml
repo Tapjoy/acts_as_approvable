@@ -1,13 +1,13 @@
 %h1 Approval Queue
 
-- form_for(:approval, :url => approvals_path, :method => :get) do |f|
+- form_for(:approval, :url => approvals_path, :html => {:method => :get}) do |f|
   - unless @conditions[:state].is_a?(Array) # History page shouldn't allow selecting different states
-    = f.label(:state)
-    = f.select(:state, options_for_select(Approval.options_for_state, @conditions[:state]))
-<% if owner? %>  = f.label(:owner_id)
-  = f.select(:owner_id, options_for_select(Approval.options_for_owner, @conditions[:owner_id]), :prompt => 'All Users')
-<% end %>  = f.label(:item_type)
-  = f.select(:item_type, options_for_select(Approval.options_for_type, @conditions[:item_type]), :prompt => 'All Types')
-  = f.submit('Filter')
+    = label_tag('state', 'State')
+    = select_tag('state', options_for_select(Approval.options_for_state, @conditions[:state]))
+<% if owner? %>  = label_tag('owner_id', 'Owner')
+  = select('owner_id', options_for_select(Approval.options_for_available_owners(true), @conditions[:owner_id]))
+<% end %>  = label_tag('item_type', 'Type')
+  = select_tag('item_type', options_for_select(Approval.options_for_type(true), @conditions[:item_type]))
+  %button{:type => 'Submit'} Filter
 
 = render :partial => @table_partial

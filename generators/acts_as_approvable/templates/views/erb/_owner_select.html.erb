@@ -1,0 +1,4 @@
+<% form_for(approval, :url => assign_approval_path(approval.id), :html => {:class => 'assignment'}) do |f| %>
+  <%= f.select(:owner_id, options_for_select(Approval.options_for_available_owners(true), approval.owner_id)) %>
+  <%= f.submit('Set') %>
+<% end %>

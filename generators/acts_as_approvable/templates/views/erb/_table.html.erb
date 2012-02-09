@@ -13,7 +13,7 @@
       <tr>
         <td><%%= approval.item_type.classify %></td>
         <td><%%= approval.item.try(:to_s) || approval.item.id %></td>
-<% if owner? %>        <td><%%= approval.owner.try(:to_s) %></td>
+<% if owner? %>        <td><%%= render :partial => 'owner_select', :locals => {:approval => approval} %></td>
 <% end %>        <td><%%= approval.state %></td>
         <td class='actions'>
           <%%= link_to('Approve', approve_approval_path(approval)) %>

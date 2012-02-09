@@ -1,6 +1,6 @@
 <h1>Approval Queue</h1>
 
-<%% form_for(:approval, :url => approvals_path, :method => :get) do |f| %>
+<%% form_for(:approval, :url => approvals_path, :html => {:method => :get}) do |f| %>
   <%% unless @conditions[:state].is_a?(Array) # History page shouldn't allow selecting different states %>
     <%%= f.label(:state) %>
     <%%= f.select(:state, options_for_select(Approval.options_for_state, @conditions[:state])) %>

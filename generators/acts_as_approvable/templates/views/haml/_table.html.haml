@@ -11,7 +11,7 @@
       %tr
         %td= approval.item_type.classify
         %td= approval.item.try(:to_s) || approval.item.id
-<% if owner? %>        %td= approval.owner.try(:to_s)
+<% if owner? %>        %td= render :partial => 'owner_select', :locals => {:approval => approval}
 <% end %>        %td= approval.state
         %td.actions
           = link_to('Approve', approve_approval_path(approval))
