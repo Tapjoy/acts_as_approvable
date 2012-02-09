@@ -4,7 +4,7 @@ module ActsAsApprovable
       approval.send(:include, self)
 
       ActsAsApprovable.owner_class = owner
-      approval.send(:belongs_to, :owner, :class_name => owner.to_s.tableize.to_sym, :foreign_key => :owner_id)
+      approval.send(:belongs_to, :owner, :class_name => owner.to_s, :foreign_key => :owner_id)
 
       approval.class_exec(&block) if block
     end
