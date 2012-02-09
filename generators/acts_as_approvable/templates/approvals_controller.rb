@@ -29,7 +29,7 @@ class ApprovalsController < <%= options[:base] %>
     if params[:approval][:owner_id].empty?
       @approval.unassign
     else
-      user = Approval.owner_class.find(params[:approval][:owner_id])
+      user = <%= options[:owner] %>.find(params[:approval][:owner_id])
       @approval.assign(user)
     end
   end
