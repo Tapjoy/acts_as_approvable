@@ -21,8 +21,9 @@ class Approval < ActiveRecord::Base
   end
 
   def self.options_for_type(with_prompt = false)
-    @options_for_type ||= all(:select => 'DISTINCT(item_type)').map { |row| row.item_type }
-    @options_for_type.dup.unshift(['All Types', nil]) if with_prompt
+    types = all(:select => 'DISTINCT(item_type)').map { |row| row.item_type }
+    types.unshift(['All Types', nil]) if with_prompt
+    types
   end
 
   def state
