@@ -1,2 +1,3 @@
 test/*.db
 test/debug.log
+coverage/
