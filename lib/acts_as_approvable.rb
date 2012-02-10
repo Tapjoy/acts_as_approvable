@@ -6,30 +6,48 @@ require 'acts_as_approvable/error'
 require 'acts_as_approvable/ownership'
 
 module ActsAsApprovable
+  ##
+  # Enable the approval queue at a global level.
   def self.enable
     @enabled = true
   end
 
+  ##
+  # Disable the approval queue at a global level.
   def self.disable
     @enabled = false
   end
 
+  ##
+  # Returns true if the approval queue is enabled globally.
   def self.enabled?
     @enabled ||= true
   end
 
+  ##
+  # Set the referenced Owner class to be used by generic finders.
+  #
+  # See {Ownership}[rdoc-ref:ActsAsApprovable::Ownership]
   def self.owner_class=(klass)
     @owner_class = klass
   end
 
+  ##
+  # Get the referenced Owner class to be used by generic finders.
+  #
+  # See ActsAsApprovable::Ownership
   def self.owner_class
     @owner_class
   end
 
+  ##
+  # Set the engine used for rendering view files.
   def self.view_language=(lang)
     @lang = lang
   end
 
+  ##
+  # Get the engine used for rendering view files. Defaults to 'erb'
   def self.view_language
     @lang || 'erb'
   end
