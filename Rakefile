@@ -30,7 +30,7 @@ desc 'Generate documentation for the acts_as_approvable plugin.'
 YARD::Rake::YardocTask.new do |t|
   yard_dir = (ENV['YARD_DIR'] || 'yardoc')
   t.files   = ['lib/**/*.rb', 'README.md']
-  t.options = ['-r', 'README.md', '-o', yard_dir]
+  t.options = ['-r', 'README.md', '-o', yard_dir, '--markup', 'markdown']
 end
 
 desc 'Generate documentation and update the gh-pages branch'
