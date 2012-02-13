@@ -1,6 +1,6 @@
 require 'rake'
 require 'rake/testtask'
-require 'rdoc/task'
+require 'yard'
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -27,10 +27,8 @@ Rake::TestTask.new(:test) do |t|
 end
 
 desc 'Generate documentation for the acts_as_approvable plugin.'
-RDoc::Task.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'ActsAsApprovable'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README.md')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+YARD::Rake::YardocTask.new do |t|
+  yard_dir = (ENV['YARD_DIR'] || 'yardoc')
+  t.files   = ['lib/**/*.rb', 'README.md']
+  t.options = ['-r', 'README.md', '-o', yard_dir]
 end
