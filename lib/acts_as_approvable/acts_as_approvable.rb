@@ -1,18 +1,23 @@
 module ActsAsApprovable
+  ##
+  # The meat of {ActsAsApprovable}. This applies methods for the configured approval events
+  # and configures the required relationships.
   module Model
     def self.included(base)
       base.send :extend, ClassMethods
     end
 
+    ##
+    # Class methods added to `ActiveRecord::Base`.
     module ClassMethods
       # Declare this in your model to require approval on new records or changes to fields.
       #
-      # Options:
-      # 
-      # * <tt>:on</tt> - an array declaring when approval is required (<tt>:update</tt> or <tt>:create</tt>)
-      # * <tt>:ignore</tt> - an array of fields to ignore
-      # * <tt>:only</tt> - an array of fields that are explicitly approvable. This option supercedes <tt>:ignore</tt>.
-      # * <tt>:state_field</tt> - field to store local state in. by default state is not stored locally. Note that the local state is the state of the creation event, not update events. Use #pending_changes? to see if there are pending updates for an object.
+      # @param [Hash] options the options for this models approval workflow.
+      # @option options [Symbol,Array] :on    The events to require approval on (`:create` or `:update`).
+      # @option options [String] :state_field The local field to store `:create` approval state.
+      # @option options [Array]  :ignore      A list of fields to ignore. By default we ignore `:created_at`, `:updated_at` and
+      #                                       the field specified in `:state_field`.
+      # @option options [Array]  :only        A list of fields to explicitly require approval on. This list supercedes `:ignore`.
       def acts_as_approvable(options = {})
         include InstanceMethods
 
@@ -62,18 +67,21 @@ module ActsAsApprovable
     end
 
     ##
-    # Instance methods that apply to the :create event specifically.
+    # Instance methods that apply to the `:create` event specifically.
     module CreateInstanceMethods
       ##
       # Retrieve approval record for the creation event.
+      #
+      # @return [Approval]
       def approval
         approvals.find_by_event('create')
       end
 
       ##
-      # Get the approval state of the current record from either the
-      # local state field or, if no state field exists, the creation
-      # approval object.
+      # Get the approval state of the current record from either the local state
+      # field or, if no state field exists, the creation approval object.
+      #
+      # @return [String] one of `'pending'`, `'approved`' or `'rejected'`.
       def approval_state
         if self.class.approvable_field
           read_attribute(self.class.approvable_field)
@@ -84,6 +92,8 @@ module ActsAsApprovable
 
       ##
       # Set the records local approval state.
+      #
+      # @param [String] state one of `'pending'`, `'approved`' or `'rejected'`.
       def set_approval_state(state)
         return unless self.class.approvable_field
         write_attribute(self.class.approvable_field, state)
@@ -108,14 +118,18 @@ module ActsAsApprovable
       end
 
       ##
-      # Approves the record through Approval#approve!
+      # Approves the record through {Approval#approve!}
+      #
+      # @return [Boolean]
       def approve!
         return unless approvable_on?(:create) && approval.present?
         approval.approve!
       end
 
       ##
-      # Rejects the record through Approval#reject!
+      # Rejects the record through {Approval#reject!}
+      #
+      # @return [Boolean]
       def reject!
         return unless approvable_on?(:create) && approval.present?
         approval.reject!
@@ -136,13 +150,13 @@ module ActsAsApprovable
     # Instance methods that apply to the :update event specifically.
     module UpdateInstanceMethods
       ##
-      # Retrieve all approval records for update events.
+      # Retrieve all approval records for `:update` events.
       def update_approvals
         approvals.find_all_by_event('update')
       end
 
       ##
-      # Returns true if the record has any #update_approvals that are pending
+      # Returns true if the record has any `#update_approvals` that are pending
       # approval.
       def pending_changes?
         !update_approvals.empty?
@@ -157,6 +171,8 @@ module ActsAsApprovable
       ##
       # Returns an array of any notable (eg. not ignored) fields that have not
       # been changed.
+      #
+      # @return [Array] a list of changed fields.
       def notably_changed
         unless self.class.approvable_only.empty?
           self.class.approvable_only.select { |field| changed.include?(field) }
@@ -184,7 +200,7 @@ module ActsAsApprovable
     end
 
     ##
-    # Instance methods that apply to both :update and :create events.
+    # Instance methods that apply to both `:update` and `:create` events.
     module InstanceMethods
       ##
       # Returns true if the approval queue is active at both the local and global
@@ -194,14 +210,14 @@ module ActsAsApprovable
       end
 
       ##
-      # Returns the inverse of #approvals_enabled?
+      # Returns the inverse of `#approvals_enabled?`
       def approvals_disabled?
         !approvals_active?
       end
 
       ##
       # Returns true if the model is configured to use the approval queue on the
-      # given event (:create or :update).
+      # given event (`:create` or `:update`).
       def approvable_on?(event)
         self.class.approvable_on.include?(event)
       end

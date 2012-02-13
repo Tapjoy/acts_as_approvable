@@ -1,4 +1,6 @@
 class Approval < ActiveRecord::Base
+  ##
+  # Enumeration of available states.
   STATES = %w(pending approved rejected)
 
   belongs_to :item,  :polymorphic => true
@@ -12,7 +14,7 @@ class Approval < ActiveRecord::Base
   before_save :can_save?
 
   ##
-  # Build an array of states usable by #options_for_select.
+  # Build an array of states usable by Rails' `#options_for_select`.
   def self.options_for_state
     [
       ['All', 'all'],
@@ -23,7 +25,7 @@ class Approval < ActiveRecord::Base
   end
 
   ##
-  # Build an array of types usable by #options_for_select.
+  # Build an array of types usable by Rails' `#options_for_select`.
   def self.options_for_type(with_prompt = false)
     types = all(:select => 'DISTINCT(item_type)').map { |row| row.item_type }
     types.unshift(['All Types', nil]) if with_prompt
@@ -31,19 +33,19 @@ class Approval < ActiveRecord::Base
   end
 
   ##
-  # Get the current state of the approval. Converts from integer via STATES constant.
+  # Get the current state of the approval. Converts from integer via {STATES} constant.
   def state
     STATES[(read_attribute(:state) || 0)]
   end
 
   ##
-  # Get the previous state of the approval. Converts from integer via STATES constant.
+  # Get the previous state of the approval. Converts from integer via {STATES} constant.
   def state_was
     STATES[(changed_attributes[:state] || 0)]
   end
 
   ##
-  # Set the state of the approval. Converts from string to integer via STATES constant.
+  # Set the state of the approval. Converts from string to integer via {STATES} constant.
   def state=(state)
     state = STATES.index(state) if state.is_a?(String)
     write_attribute(:state, state)
@@ -74,7 +76,7 @@ class Approval < ActiveRecord::Base
   end
 
   ##
-  # Returns the inverse of #locked?
+  # Returns true if the approval has not been approved or rejected.
   def unlocked?
     not locked?
   end
@@ -101,13 +103,13 @@ class Approval < ActiveRecord::Base
   end
 
   ##
-  # Returns true if this is an :update approval event.
+  # Returns true if this is an `:update` approval event.
   def update?
     event == 'update'
   end
 
   ##
-  # Returns true if this is a :create approval event.
+  # Returns true if this is a `:create` approval event.
   def create?
     event == 'create'
   end
@@ -115,8 +117,10 @@ class Approval < ActiveRecord::Base
   ##
   # Attempt to approve the record change.
   #
-  # Options:
-  # :force        do not block approval if the record is stale
+  # @param [Hash] options options applied to this acceptance.
+  # @option options [Boolean] :force if the approval record is stale force the acceptance.
+  # @raise [ActsAsApprovable::Error::Locked] raised if the record is {#locked? locked}.
+  # @raise [ActsAsApprovable::Error::Stale] raised if the record is {#stale? stale} and `force` is false.
   def approve!(options = {})
     raise ActsAsApprovable::Error::Locked if locked?
     raise ActsAsApprovable::Error::Stale if stale? and !options.delete(:force)
@@ -139,6 +143,9 @@ class Approval < ActiveRecord::Base
 
   ##
   # Attempt to reject the record change.
+  #
+  # @param [String] reason a reason for rejecting the change.
+  # @raise [ActsAsApprovable::Error::Locked] raised if the record is {#locked? locked}.
   def reject!(reason = nil)
     raise ActsAsApprovable::Error::Locked if locked?
     return unless run_item_callback(:before_reject)

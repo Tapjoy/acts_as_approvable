@@ -27,7 +27,7 @@ module ActsAsApprovable
   ##
   # Set the referenced Owner class to be used by generic finders.
   #
-  # See {Ownership}[rdoc-ref:ActsAsApprovable::Ownership]
+  # @see Ownership
   def self.owner_class=(klass)
     @owner_class = klass
   end
@@ -35,7 +35,7 @@ module ActsAsApprovable
   ##
   # Get the referenced Owner class to be used by generic finders.
   #
-  # See ActsAsApprovable::Ownership
+  # @see Ownership
   def self.owner_class
     @owner_class
   end
