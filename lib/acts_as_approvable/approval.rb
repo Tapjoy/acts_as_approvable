@@ -117,13 +117,12 @@ class Approval < ActiveRecord::Base
   ##
   # Attempt to approve the record change.
   #
-  # @param [Hash] options options applied to this acceptance.
-  # @option options [Boolean] :force if the approval record is stale force the acceptance.
+  # @param [Boolean] force if the approval record is stale force the acceptance.
   # @raise [ActsAsApprovable::Error::Locked] raised if the record is {#locked? locked}.
   # @raise [ActsAsApprovable::Error::Stale] raised if the record is {#stale? stale} and `force` is false.
-  def approve!(options = {})
+  def approve!(force = false)
     raise ActsAsApprovable::Error::Locked if locked?
-    raise ActsAsApprovable::Error::Stale if stale? and !options.delete(:force)
+    raise ActsAsApprovable::Error::Stale if stale? and !force
     return unless run_item_callback(:before_approve)
 
     if update?

@@ -172,6 +172,30 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
         assert_raise(ActsAsApprovable::Error::Locked) { @approval.reject! }
       end
     end
+
+    context 'that is stale' do
+      setup { @approval.update_attributes(:created_at => 10.days.ago) }
+
+      should 'be stale' do
+        assert @approval.stale?
+        assert !@approval.fresh?
+      end
+
+      should 'raise an error if approved' do
+        assert_raise(ActsAsApprovable::Error::Stale) { @approval.approve! }
+        assert @approval.pending?
+      end
+
+      should 'not raise an error if rejected' do
+        assert_nothing_raised { @approval.reject! }
+        assert @approval.rejected?
+      end
+
+      should 'allow approval when forced' do
+        assert_nothing_raised { @approval.approve!(true) }
+        assert @approval.approved?
+      end
+    end
   end
 
   context 'A record with create only approval' do
