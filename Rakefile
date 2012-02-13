@@ -32,3 +32,19 @@ YARD::Rake::YardocTask.new do |t|
   t.files   = ['lib/**/*.rb', 'README.md']
   t.options = ['-r', 'README.md', '-o', yard_dir]
 end
+
+desc 'Generate documentation and update the gh-pages branch'
+task :site => :yard do |t|
+  def run_or_quit(cmd)
+    puts "Running #{cmd}"
+    `#{cmd}`
+    raise "Command failed!" if $? != 0
+  end
+
+  run_or_quit('git checkout gh-pages')
+  run_or_quit('rsync -rv --delete --exclude yardoc/ --exclude .git/ --exclude .gitignore yardoc/ ./')
+  run_or_quit('git add .')
+  run_or_quit('git commit -m "Updating documentation"')
+  run_or_quit('git push origin gh-pages')
+  run_or_quit('git checkout master')
+end
