@@ -62,6 +62,10 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
         should 'have an approval' do
           assert_equal 1, @game.approvals.size
         end
+
+        should 'have pending changes' do
+          assert @game.pending_changes?
+        end
       end
 
       context 'which updates an only column and another column' do
