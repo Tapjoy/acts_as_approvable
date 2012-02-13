@@ -3,6 +3,12 @@ require 'test_helper'
 class ActsAsApprovableOwnershipTest < Test::Unit::TestCase
   load_schema
 
+  def teardown
+    ActiveRecord::Base.send(:subclasses).each do |klass|
+      klass.delete_all
+    end
+  end
+
   context 'with default configuration' do
     setup { ActsAsApprovable::Ownership.configure }
 

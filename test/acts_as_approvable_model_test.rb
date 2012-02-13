@@ -3,6 +3,12 @@ require 'test_helper'
 class ActsAsApprovableModelTest < Test::Unit::TestCase
   load_schema
 
+  def teardown
+    ActiveRecord::Base.send(:subclasses).each do |klass|
+      klass.delete_all
+    end
+  end
+
   context 'A record with update only approval' do
     context 'and ignored fields' do
       setup { @project = Project.create }
@@ -377,6 +383,28 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       assert Approval.options_for_state.include?(['Pending', 'pending'])
       assert Approval.options_for_state.include?(['Approved', 'approved'])
       assert Approval.options_for_state.include?(['Rejected', 'rejected'])
+    end
+  end
+
+  context '.options_for_type' do
+    context 'without approval records' do
+      should 'be empty' do
+        assert Approval.options_for_type.empty?
+      end
+    end
+
+    context 'with approval records' do
+      setup do
+        Project.create.update_attributes(:description => 'review')
+        Game.create.update_attributes(:title => 'review')
+        User.create
+      end
+
+      should 'contain all types with approvals' do
+        assert Approval.options_for_type.include?('Project')
+        assert Approval.options_for_type.include?('Game')
+        assert Approval.options_for_type.include?('User')
+      end
     end
   end
 end
