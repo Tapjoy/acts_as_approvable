@@ -366,4 +366,17 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       end
     end
   end
+
+  context '.options_for_state' do
+    should 'return an array' do
+      assert_kind_of Array, Approval.options_for_state
+    end
+
+    should 'contain our states' do
+      assert Approval.options_for_state.include?(['All', 'all'])
+      assert Approval.options_for_state.include?(['Pending', 'pending'])
+      assert Approval.options_for_state.include?(['Approved', 'approved'])
+      assert Approval.options_for_state.include?(['Rejected', 'rejected'])
+    end
+  end
 end
