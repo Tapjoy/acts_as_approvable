@@ -96,6 +96,59 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
           assert @game.approvals.empty?
         end
       end
+
+      context 'with approval queue disabled' do
+        context 'at the record level' do
+          setup do
+            @game.approvals_off
+            @game.update_attributes(:title => 'review')
+          end
+
+          teardown { @game.approvals_on }
+
+          should 'have approvals off' do
+            assert @game.approvals_disabled?
+          end
+
+          should 'not have an approval object' do
+            assert @game.approvals.empty?
+          end
+        end
+
+        context 'at the model level' do
+          setup do
+            Game.approvals_off
+            @game.update_attributes(:title => 'review')
+          end
+
+          teardown { Game.approvals_on }
+
+          should 'have approvals off' do
+            assert @game.approvals_disabled?
+          end
+
+          should 'not have an approval object' do
+            assert @game.approvals.empty?
+          end
+        end
+
+        context 'at the global level' do
+          setup do
+            ActsAsApprovable.disable
+            @game.update_attributes(:title => 'review')
+          end
+
+          teardown { ActsAsApprovable.enable }
+
+          should 'have approvals off' do
+            assert @game.approvals_disabled?
+          end
+
+          should 'not have an approval object' do
+            assert @game.approvals.empty?
+          end
+        end
+      end
     end
   end
 

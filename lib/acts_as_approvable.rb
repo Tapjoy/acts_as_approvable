@@ -21,7 +21,8 @@ module ActsAsApprovable
   ##
   # Returns true if the approval queue is enabled globally.
   def self.enabled?
-    @enabled ||= true
+    @enabled = true if @enabled.nil?
+    @enabled
   end
 
   ##

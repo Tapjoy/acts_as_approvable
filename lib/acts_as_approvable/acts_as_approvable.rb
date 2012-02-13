@@ -206,13 +206,21 @@ module ActsAsApprovable
       # Returns true if the approval queue is active at both the local and global
       # level. Note that the global level supercedes the local level.
       def approvals_enabled?
-        ActsAsApprovable.enabled? and self.class.approvals_active
+        ActsAsApprovable.enabled? and self.class.approvals_active and not @approvals_disabled
       end
 
       ##
       # Returns the inverse of `#approvals_enabled?`
       def approvals_disabled?
-        !approvals_active?
+        !approvals_enabled?
+      end
+
+      def approvals_off
+        @approvals_disabled = true
+      end
+
+      def approvals_on
+        @approvals_disabled = false
       end
 
       ##
