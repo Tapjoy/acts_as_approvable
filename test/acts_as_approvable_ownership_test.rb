@@ -44,10 +44,7 @@ class ActsAsApprovableOwnershipTest < Test::Unit::TestCase
         @employee = Employee.create
         @approval = @employee.approval
 
-        User.approvals_off
-        @user1 = User.create
-        @user2 = User.create
-        User.approvals_on
+        @user1, @user2 = User.without_approval { [create, create] }
       end
 
       context '#assign' do
@@ -93,9 +90,7 @@ class ActsAsApprovableOwnershipTest < Test::Unit::TestCase
 
       context 'with some assigned owners' do
         setup do
-          User.approvals_off
-          @user3 = User.create
-          User.approvals_on
+          @user3 = User.without_approval { create }
 
           @approval.assign(@user1)
           Employee.create.approval.assign(@user3)

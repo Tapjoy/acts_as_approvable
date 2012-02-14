@@ -64,6 +64,17 @@ module ActsAsApprovable
       def approvals_off
         self.approvals_active = false
       end
+
+      ##
+      # Execute a code block while the approval queue is temporarily disabled. The
+      # queue state will be returned to it's previous value, either on or off.
+      def without_approval(&block)
+        enable = self.approvals_active
+        approvals_off
+        class_eval &block
+      ensure
+        approvals_on if enable
+      end
     end
 
     ##

@@ -312,6 +312,13 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
         assert_equal 'rejected', @user.state
       end
     end
+
+    context '.without_approval' do
+      should 'disable approvals for the given block' do
+        @user = User.without_approval { create }
+        assert @user.approval.nil?
+      end
+    end
   end
 
   context 'A record with default settings' do
