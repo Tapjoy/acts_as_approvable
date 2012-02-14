@@ -17,5 +17,15 @@ module ActsAsApprovable
         super(*args)
       end
     end
+
+    ##
+    # Raised when a record is assigned as owner that is not found in
+    # {ActsAsApprovable::Ownership::ClassMethods#available_owners}.
+    class InvalidOwner < ActsAsApprovable::Error
+      def initialize(*args)
+        args[0] = 'this record cannot be assigned as an owner'
+        super(*args)
+      end
+    end
   end
 end

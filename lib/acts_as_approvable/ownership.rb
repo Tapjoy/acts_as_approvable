@@ -38,6 +38,7 @@ module ActsAsApprovable
       #
       # @return [Boolean]
       def assign(owner)
+        raise ActsAsApprovable::Error::InvalidOwner unless self.class.available_owners.include?(owner)
         self.owner = owner
         save
       end
