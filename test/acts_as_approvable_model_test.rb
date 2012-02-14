@@ -393,10 +393,10 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
     end
 
     should 'contain our states' do
-      assert Approval.options_for_state.include?(['All', 'all'])
-      assert Approval.options_for_state.include?(['Pending', 'pending'])
-      assert Approval.options_for_state.include?(['Approved', 'approved'])
-      assert Approval.options_for_state.include?(['Rejected', 'rejected'])
+      assert Approval.options_for_state.include?(['All', -1])
+      assert Approval.options_for_state.include?(['Pending', 0])
+      assert Approval.options_for_state.include?(['Approved', 1])
+      assert Approval.options_for_state.include?(['Rejected', 2])
     end
   end
 

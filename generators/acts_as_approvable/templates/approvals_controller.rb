@@ -5,14 +5,14 @@ class ApprovalsController < <%= options[:base] %>
   around_filter :json_wrapper, :only => [<%= member_actions.join(', ') %>]
 
   def index
-    state = params[:state] || 'pending'
-    @conditions[:state] = state if state != 'any'
+    state = params[:state] || Approval.enumerate_state('pending')
+    @conditions[:state] = state if state > -1
 
     @approvals = Approval.all(:conditions => @conditions, :order => 'created_at ASC')
   end
 
   def history
-    @conditions[:state] = ['approved', 'rejected']
+    @conditions[:state] = Approval.enumerate_states('approved', 'rejected')
 
     @approvals = Approval.all(:conditions => @conditions, :order => 'created_at DESC')
     render :index

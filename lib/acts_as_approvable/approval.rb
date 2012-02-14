@@ -14,14 +14,27 @@ class Approval < ActiveRecord::Base
   before_save :can_save?
 
   ##
+  # Find the enumerated value for a given state.
+  #
+  # @return [Integer]
+  def self.enumerate_state(state)
+    enumerate_states(state).first
+  end
+
+  ##
+  # Find the enumerated values for a list of states.
+  #
+  # @return [Array]
+  def self.enumerate_states(*states)
+    states.map { |name| STATES.index(name) }.compact
+  end
+
+  ##
   # Build an array of states usable by Rails' `#options_for_select`.
   def self.options_for_state
-    [
-      ['All', 'all'],
-      ['Pending', 'pending'],
-      ['Approved', 'approved'],
-      ['Rejected', 'rejected']
-    ]
+    options = [['All', -1]]
+    STATES.each_index { |x| options << [STATES[x].capitalize, x] }
+    options
   end
 
   ##
@@ -47,7 +60,7 @@ class Approval < ActiveRecord::Base
   ##
   # Set the state of the approval. Converts from string to integer via {STATES} constant.
   def state=(state)
-    state = STATES.index(state) if state.is_a?(String)
+    state = self.class.enumerate_state(state) if state.is_a?(String)
     write_attribute(:state, state)
   end
 
