@@ -9,11 +9,11 @@ Installation
 
 Install the plugin as you would any other Rails plugin:
 
-    script/plugin install git://github.com/jlogsdon/acts_as_approvable.git
+    $ script/plugin install git://github.com/jlogsdon/acts_as_approvable.git
 
 After installing the plugin you should run the generator:
 
-    script/generate acts_as_approvable
+    $ script/generate acts_as_approvable
 
 Generator Options
 =================
@@ -23,6 +23,13 @@ These options are also available by passing `--help` as an option to the generat
     --base BASE     Base class for ApprovableController.
     --haml          Generate HAML views instead of ERB.
     --owner [User]  Enable and, optionally, set the model for approval ownerships.
+
+Documentation
+=============
+
+API Documentation is [available online](http://jlogsdon.github.com/acts_as_approvable).
+
+Better user documentation is needed...
 
 Usage
 =====
@@ -86,3 +93,9 @@ Examples
     class Project < ActiveRecord::Base
       acts_as_approvable :on => :update, :ignore => [:views, :installs]
     end
+
+Contributors
+============
+
+ * James Logsdon
+ * Hwan-Joon Choi
