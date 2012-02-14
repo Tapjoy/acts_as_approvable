@@ -206,7 +206,7 @@ module ActsAsApprovable
       # Returns true if the approval queue is active at both the local and global
       # level. Note that the global level supercedes the local level.
       def approvals_enabled?
-        ActsAsApprovable.enabled? and self.class.approvals_active and not @approvals_disabled
+        ActsAsApprovable.enabled? and self.class.approvals_active and approvals_on?
       end
 
       ##
@@ -221,6 +221,10 @@ module ActsAsApprovable
 
       def approvals_on
         @approvals_disabled = false
+      end
+
+      def approvals_on?
+        not @approvals_disabled
       end
 
       ##
@@ -252,11 +256,11 @@ module ActsAsApprovable
       # Execute a code block while the approval queue is temporarily disabled. The
       # queue state will be returned to it's previous value, either on or off.
       def without_approval(&block)
-        memory = self.class.approvals_active # If we use #approvals_enabled? the global state might be incorrectly applied.
-        self.class.approvals_off
+        enable = approvals_on? # If we use #approvals_enabled? the global state might be incorrectly applied.
+        approvals_off
         instance_eval &block
       ensure
-        self.class.approvals_on if memory
+        approvals_on if enable
       end
 
       private

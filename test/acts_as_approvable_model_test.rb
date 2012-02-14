@@ -46,11 +46,18 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
         end
       end
 
-      context 'that is altered using #without_approvable' do
-        setup { @project.without_approval { update_attribute(:description, 'updated') } }
-
+      context 'that is altered using #without_approval' do
         should 'not have an approval object' do
+          @project.without_approval { update_attribute(:description, 'updated') }
           assert @project.approvals.empty?
+        end
+
+        should 'correctly restore approval queue state' do
+          assert @project.approvals_on?
+          @project.approvals_off
+          assert !@project.approvals_on?
+          @project.without_approval { update_attribute(:description, 'updated') }
+          assert !@project.approvals_on?
         end
       end
     end
@@ -95,7 +102,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
         end
       end
 
-      context 'that is altered using #without_approvable' do
+      context 'that is altered using #without_approval' do
         setup { @game.without_approval { update_attribute(:title, 'updated') } }
 
         should 'not have an approval object' do
