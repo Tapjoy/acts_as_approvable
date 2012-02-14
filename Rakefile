@@ -1,5 +1,6 @@
 require 'rake'
 require 'rake/testtask'
+require 'rcov/rcovtask'
 require 'yard'
 
 desc 'Default: run unit tests.'
@@ -20,10 +21,17 @@ end
 
 desc 'Test the acts_as_approvable plugin.'
 Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
+  t.libs    << 'test' << 'lib'
   t.pattern = 'test/*_test.rb'
   t.verbose = true
+end
+
+Rcov::RcovTask.new do |t|
+  t.libs        << 'test' << 'lib'
+  t.rcov_opts   << '--exclude' << '"Library/Ruby/*"' << '--sort' << 'coverage'
+  t.pattern     = 'test/*_test.rb'
+  t.output_dir  = 'coverage/'
+  t.verbose     = true
 end
 
 desc 'Generate documentation for the acts_as_approvable plugin.'
