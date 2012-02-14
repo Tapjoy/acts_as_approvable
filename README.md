@@ -97,5 +97,6 @@ Examples
 Contributors
 ============
 
- * James Logsdon
- * Hwan-Joon Choi
+ * [James Logsdon](http://github.com/jlogsdon) (Lead developer)
+ * [Hwan-Joon Choi](http://github.com/hc5duke) (Performance enhancements, bug fixes)
+ * [Neal Wiggins](http://github.com/nwigginsTJ) (Enumeration of states)
