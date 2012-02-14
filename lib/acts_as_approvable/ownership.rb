@@ -106,7 +106,7 @@ module ActsAsApprovable
       #
       # @return [Array] a 2-index array with a display string and value.
       def option_for_owner(owner)
-        [owner.to_s, owner.id]
+        [owner.to_str, owner.id]
       end
     end
   end
