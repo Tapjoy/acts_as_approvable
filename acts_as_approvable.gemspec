@@ -27,4 +27,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<rcov> if RUBY_VERSION =~ /^1\.8/
   s.add_development_dependency %q<simplecov> if RUBY_VERSION =~ /^1\.9/
   s.add_development_dependency %q<yard>
+  s.add_development_dependency %q<pry>
 end

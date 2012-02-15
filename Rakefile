@@ -11,7 +11,7 @@ desc 'Start a pry session with a database connection open'
 task :pry do |t|
   $LOAD_PATH << './lib'
   require 'pry'
-  require 'test/test_helper'
+  require './test/test_helper'
 
   ActiveRecord::Base.logger = Logger.new(STDOUT)
   load_schema
