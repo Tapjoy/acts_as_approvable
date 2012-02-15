@@ -281,5 +281,3 @@ module ActsAsApprovable
     end
   end
 end
-
-ActiveRecord::Base.send :include, ActsAsApprovable::Model

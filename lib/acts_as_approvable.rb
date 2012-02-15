@@ -51,6 +51,22 @@ module ActsAsApprovable
   ##
   # Get the engine used for rendering view files. Defaults to 'erb'
   def self.view_language
-    @lang || 'erb'
+    if Rails.version =~ /^3\./
+      Rails.configuration.generators.rails[:template_engine].try(:to_s) || 'erb'
+    else
+      @lang || 'erb'
+    end
   end
+end
+
+if Rails.version =~ /^3\./
+  module ActsAsApprovable
+    class Railtie < Rails::Railtie
+      initializer 'acts_as_approvable.configure_rails_initialization' do |app|
+        ActiveRecord::Base.send :include, ActsAsApprovable::Model
+      end
+    end
+  end
+else
+  ActiveRecord::Base.send :include, ActsAsApprovable::Model
 end
