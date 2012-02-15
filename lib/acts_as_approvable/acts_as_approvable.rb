@@ -71,7 +71,7 @@ module ActsAsApprovable
       def without_approval(&block)
         enable = self.approvals_active
         approvals_off
-        class_eval &block
+        yield(self)
       ensure
         approvals_on if enable
       end
@@ -95,7 +95,7 @@ module ActsAsApprovable
       # @return [String] one of `'pending'`, `'approved`' or `'rejected'`.
       def approval_state
         if self.class.approvable_field
-          read_attribute(self.class.approvable_field)
+          send(self.class.approvable_field)
         else
           approval.state
         end
@@ -107,7 +107,7 @@ module ActsAsApprovable
       # @param [String] state one of `'pending'`, `'approved`' or `'rejected'`.
       def set_approval_state(state)
         return unless self.class.approvable_field
-        write_attribute(self.class.approvable_field, state)
+        send("#{self.class.approvable_field}=".to_sym, state)
       end
 
       ##
@@ -269,9 +269,17 @@ module ActsAsApprovable
       def without_approval(&block)
         enable = approvals_on? # If we use #approvals_enabled? the global state might be incorrectly applied.
         approvals_off
-        instance_eval &block
+        yield(self)
       ensure
         approvals_on if enable
+      end
+
+      def save_without_approval(*args)
+        without_approval { |i| save(*args) }
+      end
+
+      def save_without_approval!(*args)
+        without_approval { |i| save!(*args) }
       end
 
       private

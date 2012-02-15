@@ -47,9 +47,14 @@ def load_schema
   ActiveRecord::Migration.suppress_messages do
     load(File.dirname(__FILE__) + '/schema.rb')
   end
+
+  ar_classes.each { |klass| klass.reset_column_information }
+end
+
+def ar_classes
+  ActiveRecord::Base.send(ActiveRecord::Base.respond_to?(:descendants) ? :descendants : :subclasses)
 end
 
 def truncate
-  klasses = ActiveRecord::Base.send(ActiveRecord::Base.respond_to?(:descendants) ? :descendants : :subclasses)
-  klasses.each { |klass| klass.delete_all }
+  ar_classes.each { |klass| klass.delete_all }
 end

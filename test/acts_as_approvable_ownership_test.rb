@@ -4,9 +4,7 @@ class ActsAsApprovableOwnershipTest < Test::Unit::TestCase
   load_schema
 
   def teardown
-    ActiveRecord::Base.send(:subclasses).each do |klass|
-      klass.delete_all
-    end
+    truncate
   end
 
   context 'with default configuration' do
@@ -44,7 +42,7 @@ class ActsAsApprovableOwnershipTest < Test::Unit::TestCase
         @employee = Employee.create
         @approval = @employee.approval
 
-        @user1, @user2 = User.without_approval { [create, create] }
+        @user1, @user2 = User.without_approval { |m| [m.create, m.create] }
       end
 
       context '#assign' do
@@ -90,7 +88,7 @@ class ActsAsApprovableOwnershipTest < Test::Unit::TestCase
 
       context 'with some assigned owners' do
         setup do
-          @user3 = User.without_approval { create }
+          @user3 = User.without_approval { |m| m.create }
 
           @approval.assign(@user1)
           Employee.create.approval.assign(@user3)

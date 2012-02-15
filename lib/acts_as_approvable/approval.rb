@@ -144,11 +144,12 @@ class Approval < ActiveRecord::Base
         data[attr] = value if item.attribute_names.include?(attr)
       end
 
-      item.without_approval { update_attributes!(data) }
-    elsif create? && item.approval_state.present?
-      item.without_approval { set_approval_state('approved'); save! }
+      item.attributes = data
+    elsif create?
+      item.set_approval_state('approved')
     end
 
+    item.save_without_approval!
     update_attributes!(:state => 'approved')
     run_item_callback(:after_approve)
   end
@@ -162,10 +163,11 @@ class Approval < ActiveRecord::Base
     raise ActsAsApprovable::Error::Locked if locked?
     return unless run_item_callback(:before_reject)
 
-    if create? && item.approval_state.present?
-      item.without_approval { set_approval_state('rejected'); save! }
+    if create?
+      item.set_approval_state('rejected')
     end
 
+    item.save_without_approval!
     update_attributes!(:state => 'rejected', :reason => reason)
     run_item_callback(:after_reject)
   end

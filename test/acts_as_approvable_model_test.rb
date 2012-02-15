@@ -46,7 +46,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
 
       context 'that is altered using #without_approval' do
         should 'not have an approval object' do
-          @project.without_approval { update_attribute(:description, 'updated') }
+          @project.without_approval { |i| i.update_attribute(:description, 'updated') }
           assert @project.approvals.empty?
         end
 
@@ -54,7 +54,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
           assert @project.approvals_on?
           @project.approvals_off
           assert !@project.approvals_on?
-          @project.without_approval { update_attribute(:description, 'updated') }
+          @project.without_approval { |i| i.update_attribute(:description, 'updated') }
           assert !@project.approvals_on?
         end
       end
@@ -101,7 +101,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
       end
 
       context 'that is altered using #without_approval' do
-        setup { @game.without_approval { update_attribute(:title, 'updated') } }
+        setup { @game.without_approval { |i| i.update_attribute(:title, 'updated') } }
 
         should 'not have an approval object' do
           assert @game.approvals.empty?
@@ -284,7 +284,10 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
     end
 
     context 'when approved' do
-      setup { @user.approve!; @user.reload }
+      setup do
+        @user.approve!
+        @user.reload
+      end
 
       should 'be approved' do
         assert @user.approved?
@@ -298,7 +301,10 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
     end
 
     context 'when rejected' do
-      setup { @user.reject!; @user.reload }
+      setup do
+        @user.reject!
+        @user.reload
+      end
 
       should 'be rejected' do
         assert @user.rejected?
@@ -313,7 +319,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
 
     context '.without_approval' do
       should 'disable approvals for the given block' do
-        @user = User.without_approval { create }
+        @user = User.without_approval { |m| m.create }
         assert @user.approval.nil?
       end
     end
