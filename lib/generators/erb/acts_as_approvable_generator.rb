@@ -1,8 +1,6 @@
-require 'rails/generators/erb'
-
 module Erb
   module Generators
-    class ActsAsApprovableGenerator < Erb::Generators::Base
+    class ActsAsApprovableGenerator < Rails::Generators::Base
       source_root File.expand_path('../templates', __FILE__)
 
       class_option :owner, :type => :string, :optional => true, :desc => 'Model that can own approvals'
@@ -14,6 +12,18 @@ module Erb
       end
 
       protected
+      def format
+        :html
+      end
+
+      def handler
+        :erb
+      end
+
+      def filename_with_extensions(name)
+        [name, format, handler].compact.join('.')
+      end
+
       def owner?
         options[:owner].present?
       end

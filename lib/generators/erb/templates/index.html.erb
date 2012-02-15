@@ -1,0 +1,15 @@
+<h1>Approval Queue</h1>
+
+<%% form_for(:approval, :url => approvals_path, :html => {:method => :get}) do |f| %>
+  <%% unless @conditions[:state].is_a?(Array) # History page shouldn't allow selecting different states %>
+    <%%= f.label(:state) %>
+    <%%= f.select(:state, options_for_select(Approval.options_for_state, @conditions[:state])) %>
+  <%% end %>
+<% if owner? %>  <%%= f.label(:owner_id) %>
+  <%%= f.select(:owner_id, options_for_select(Approval.options_for_assigned_owners, @conditions[:owner_id]), :prompt => 'All Users') %>
+<% end %>  <%%= f.label(:item_type) %>
+  <%%= f.select(:item_type, options_for_select(Approval.options_for_type, @conditions[:item_type]), :prompt => 'All Types') %>
+  <%%= f.submit('Filter') %>
+<%% end %>
+
+<%%= render :partial => @table_partial %>

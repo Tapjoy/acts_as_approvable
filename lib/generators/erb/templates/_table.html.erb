@@ -1,0 +1,26 @@
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Record</th>
+<% if owner? %>      <th>Owner</th>
+<% end %>      <th>State</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%% @approvals.each do |approval| %>
+      <tr>
+        <td><%%= approval.item_type.classify %></td>
+        <td><%%= approval.item.try(:to_s) || approval.item.id %></td>
+<% if owner? %>        <td><%%= render :partial => 'owner_select', :locals => {:approval => approval} %></td>
+<% end %>        <td><%%= approval.state %></td>
+        <td class='actions'>
+          <%%= link_to('Approve', approve_approval_path(approval)) %>
+          <%%= link_to('Reject', reject_approval_path(approval)) %>
+        </td>
+      </tr>
+    <%% end %>
+  </tbody>
+</table>
+
