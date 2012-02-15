@@ -19,6 +19,15 @@ task :pry do |t|
   Pry.start(TOPLEVEL_BINDING)
 end
 
+desc 'Copy templates from Rails 3 generators to the Rails 2 generators'
+task :copy do |t|
+  ['erb', 'haml'].each do |lang|
+    Dir["lib/generators/#{lang}/templates/*"].each do |file|
+      FileUtils.cp(file, "generators/acts_as_approvable/templates/views/#{lang}/#{File.basename(file)}")
+    end
+  end
+end
+
 desc 'Test the acts_as_approvable plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs    << 'test' << 'lib'
