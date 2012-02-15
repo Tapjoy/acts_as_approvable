@@ -17,9 +17,14 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- test/*`.split("\n")
   s.require_paths = ['lib']
 
+  s.add_development_dependency %q<activerecord>, '~> 2.3'
+  s.add_development_dependency %q<appraisal>
   s.add_development_dependency %q<redcarpet>
   s.add_development_dependency %q<shoulda>
+  s.add_development_dependency %q<sqlite3>
+  s.add_development_dependency %q<mocha>
   s.add_development_dependency %q<rake>
-  s.add_development_dependency %q<rcov>
+  s.add_development_dependency %q<rcov> if RUBY_VERSION =~ /^1\.8/
+  s.add_development_dependency %q<simplecov> if RUBY_VERSION =~ /^1\.9/
   s.add_development_dependency %q<yard>
 end

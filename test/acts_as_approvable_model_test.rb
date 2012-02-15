@@ -4,9 +4,7 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
   load_schema
 
   def teardown
-    ActiveRecord::Base.send(:subclasses).each do |klass|
-      klass.delete_all
-    end
+    truncate
   end
 
   context 'A record with update only approval' do

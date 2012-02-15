@@ -1,3 +1,8 @@
+if RUBY_VERSION =~ /^1\.9/
+  require 'simplecov'
+  SimpleCov.start if ENV['COVERAGE']
+end
+
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', '..'))
 
@@ -10,7 +15,12 @@ require 'active_record'
 require File.dirname(__FILE__) + '/../lib/acts_as_approvable'
 require './test/support'
 
-LOGGER = ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/debug.log')
+logfile = File.dirname(__FILE__) + '/debug.log'
+LOGGER = ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
+                                       ActiveSupport::BufferedLogger.new(logfile)
+                                     else
+                                       Logger.new(logfile)
+                                     end
 
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
@@ -37,4 +47,9 @@ def load_schema
   ActiveRecord::Migration.suppress_messages do
     load(File.dirname(__FILE__) + '/schema.rb')
   end
+end
+
+def truncate
+  klasses = ActiveRecord::Base.send(ActiveRecord::Base.respond_to?(:descendants) ? :descendants : :subclasses)
+  klasses.each { |klass| klass.delete_all }
 end

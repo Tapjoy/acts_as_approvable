@@ -6,6 +6,12 @@ require 'acts_as_approvable/error'
 require 'acts_as_approvable/ownership'
 require 'acts_as_approvable/version'
 
+if defined?(Rails) && Rails.version =~ /^3\./
+  require 'acts_as_approvable/railtie'
+elsif defined?(ActiveRecord)
+  ActiveRecord::Base.send :include, ActsAsApprovable::Model
+end
+
 module ActsAsApprovable
   ##
   # Enable the approval queue at a global level.
@@ -57,16 +63,4 @@ module ActsAsApprovable
       @lang || 'erb'
     end
   end
-end
-
-if Rails.version =~ /^3\./
-  module ActsAsApprovable
-    class Railtie < Rails::Railtie
-      initializer 'acts_as_approvable.configure_rails_initialization' do |app|
-        ActiveRecord::Base.send :include, ActsAsApprovable::Model
-      end
-    end
-  end
-else
-  ActiveRecord::Base.send :include, ActsAsApprovable::Model
 end
