@@ -5,7 +5,7 @@ class ApprovalsController < <%= options[:base] %>
   around_filter :json_wrapper, :only => [<%= member_actions.join(', ') %>]
 
   def index
-    state = params[:state] || Approval.enumerate_state('pending')
+    state = params[:state] =~ /^\d+$/ ? params[:state].to_i : Approval.enumerate_state('pending')
     @conditions[:state] = state if state > -1
 
     @approvals = Approval.all(:conditions => @conditions, :order => 'created_at ASC')
