@@ -43,7 +43,7 @@ These options are also available by passing `--help` as an option to the generat
 API Documentation
 =================
 
-API Documentation is [available online](http://jlogsdon.github.com/acts_as_approvable).
+API Documentation is [available online](http://rubydoc.info/gems/acts-as-approvable/frames).
 
 Configuration
 =============
