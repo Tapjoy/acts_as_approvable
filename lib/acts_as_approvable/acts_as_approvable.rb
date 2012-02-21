@@ -96,7 +96,7 @@ module ActsAsApprovable
       def approval_state
         if self.class.approvable_field
           send(self.class.approvable_field)
-        else
+        elsif approval.present?
           approval.state
         end
       end
