@@ -1,3 +1,7 @@
+== 0.6.3
+
+ * Correct state parameter validation for negative numbers
+
 == 0.6.2
 
  * Rename main file to match gem name
