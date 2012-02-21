@@ -1,3 +1,8 @@
+== 0.6.3.1
+
+ * Update rails 2 generator with previous fix
+ * Fix test helper
+
 == 0.6.3
 
  * Correct state parameter validation for negative numbers
