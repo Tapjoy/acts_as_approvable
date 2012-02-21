@@ -1,7 +1,7 @@
 PATH
   remote: /Users/jlogsdon/Code/acts_as_approvable/acts_as_approvable
   specs:
-    acts_as_approvable (0.5.0)
+    acts-as-approvable (0.6.0)
 
 GEM
   remote: http://rubygems.org/
@@ -88,7 +88,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.1.0)
-  acts_as_approvable!
+  acts-as-approvable!
   appraisal
   mocha
   pry

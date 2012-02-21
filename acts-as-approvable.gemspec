@@ -1,8 +1,8 @@
 $:.push File.expand_path('../lib', __FILE__)
-require "acts_as_approvable/version"
+require "acts-as-approvable/version"
 
 Gem::Specification.new do |s|
-  s.name    = %q(acts_as_approvable)
+  s.name    = %q(acts-as-approvable)
   s.version = ActsAsApprovable::VERSION
 
   s.summary     = %q(Generic approval queues for record creation and updates)

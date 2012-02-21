@@ -4,7 +4,7 @@ require 'acts_as_approvable/acts_as_approvable'
 require 'acts_as_approvable/approval'
 require 'acts_as_approvable/error'
 require 'acts_as_approvable/ownership'
-require 'acts_as_approvable/version'
+require 'acts-as-approvable/version'
 
 if defined?(Rails) && Rails.version =~ /^3\./
   require 'acts_as_approvable/railtie'
