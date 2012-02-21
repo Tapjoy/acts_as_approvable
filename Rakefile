@@ -27,6 +27,9 @@ task :copy do |t|
       FileUtils.cp(file, "generators/acts_as_approvable/templates/views/#{lang}/#{File.basename(file)}")
     end
   end
+  Dir["lib/generators/acts_as_approvable/templates/*"].each do |file|
+    FileUtils.cp(file, "generators/acts_as_approvable/templates/#{File.basename(file)}")
+  end
 end
 
 desc 'Test the acts_as_approvable plugin.'
