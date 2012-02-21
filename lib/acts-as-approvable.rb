@@ -1,5 +1,8 @@
 require 'active_record'
 
+
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
 require 'acts_as_approvable/acts_as_approvable'
 require 'acts_as_approvable/approval'
 require 'acts_as_approvable/error'
@@ -11,6 +14,8 @@ if defined?(Rails) && Rails.version =~ /^3\./
 elsif defined?(ActiveRecord)
   ActiveRecord::Base.send :include, ActsAsApprovable::Model
 end
+
+$LOAD_PATH.shift
 
 module ActsAsApprovable
   ##
