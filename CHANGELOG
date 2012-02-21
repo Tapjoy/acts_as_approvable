@@ -1,3 +1,7 @@
+== 0.6.3.2
+
+ * Fix the Rails 2 initializer
+
 == 0.6.3.1
 
  * Update rails 2 generator with previous fix
