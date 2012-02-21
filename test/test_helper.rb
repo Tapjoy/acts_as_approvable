@@ -12,7 +12,7 @@ require 'mocha'
 require 'shoulda'
 require 'active_record'
 
-require File.dirname(__FILE__) + '/../lib/acts_as_approvable'
+require File.dirname(__FILE__) + '/../lib/acts-as-approvable'
 require './test/support'
 
 logfile = File.dirname(__FILE__) + '/debug.log'
