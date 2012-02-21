@@ -1,3 +1,7 @@
+== 0.6.4
+
+ * around_filters cannot render content
+
 == 0.6.3.3
 
  * Don't call #state on nil objects
