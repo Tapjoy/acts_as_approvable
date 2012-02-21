@@ -4,3 +4,4 @@ coverage/
 rdoc/
 yardoc/
 .yardoc
+*.gem
