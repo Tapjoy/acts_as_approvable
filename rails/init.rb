@@ -1,1 +1,1 @@
-require 'acts_as_approvable'
+require 'acts-as-approvable'
