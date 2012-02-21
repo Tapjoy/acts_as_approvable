@@ -2,7 +2,6 @@ class ApprovalsController < <%= options[:base] %>
   before_filter :setup_conditions, :only => [<%= collection_actions.join(', ') %>]
   before_filter :setup_partial, :only => [<%= collection_actions.join(', ') %>]
   before_filter :find_approval, :only => [<%= member_actions.join(', ') %>]
-  around_filter :json_wrapper, :only => [<%= member_actions.join(', ') %>]
 
   def index
     state = params[:state] =~ /^-?\d+$/ ? params[:state].to_i : Approval.enumerate_state('pending')
@@ -26,22 +25,28 @@ class ApprovalsController < <%= options[:base] %>
   end
 
   def assign
-    if params[:approval][:owner_id].empty?
-      @approval.unassign
-    else
-      user = <%= options[:owner] %>.find(params[:approval][:owner_id])
-      @approval.assign(user)
+    json_wrapper do
+      if params[:approval][:owner_id].empty?
+        @approval.unassign
+      else
+        user = <%= options[:owner] %>.find(params[:approval][:owner_id])
+        @approval.assign(user)
+      end
     end
   end
 
 <% end %>  def approve
-<% if owner? %>    @approval.owner = current_user if respond_to?(:current_user)
-<% end %>    @approval.approve!
+    json_wrapper do
+<% if owner? %>      @approval.owner = current_user if respond_to?(:current_user)
+<% end %>      @approval.approve!
+    end
   end
 
   def reject
-<% if owner? %>    @approval.owner = current_user if respond_to?(:current_user)
-<% end %>    @approval.reject!(params[:reason])
+    json_wrapper do
+<% if owner? %>      @approval.owner = current_user if respond_to?(:current_user)
+<% end %>      @approval.reject!(params[:reason])
+    end
   end
 
   private
@@ -56,13 +61,7 @@ class ApprovalsController < <%= options[:base] %>
       json[:message] = 'An unknown error occured'
     end
 
-    respond_to do |format|
-      format.html do
-        flash[:error] = json[:message] if json[:message]
-        redirect_to :action => :index
-      end
-      format.json { render :json => json }
-    end
+    render :json => json
   end
 
   def setup_conditions
