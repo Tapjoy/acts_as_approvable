@@ -7,11 +7,25 @@ records.
 Installation
 ============
 
-Install the plugin as you would any other Rails plugin:
+Rails 3
+-------
 
-    $ script/plugin install git://github.com/jlogsdon/acts_as_approvable.git
+Add the gem to your Gemfile:
 
-After installing the plugin you should run the generator:
+    gem 'acts-as-approvable'
+
+Then run the generator:
+
+    rails g acts_as_approvable
+
+Rails 2
+-------
+
+Add the gem to `config/environment.rb`
+
+    config.gem 'acts-as-approvable'
+
+Then run `rake gems:install`. After the gem is installed, run the generator:
 
     $ script/generate acts_as_approvable
 
@@ -21,8 +35,10 @@ Generator Options
 These options are also available by passing `--help` as an option to the generator.
 
     --base BASE     Base class for ApprovableController.
-    --haml          Generate HAML views instead of ERB.
+    --haml*         Generate HAML views instead of ERB.
     --owner [User]  Enable and, optionally, set the model for approval ownerships.
+
+\* This option is not available in Rails 3. You should configure your template engine in `config/application.rb`
 
 API Documentation
 =================
