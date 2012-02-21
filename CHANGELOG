@@ -1,0 +1,6 @@
+== 0.6
+
+ * Convert to a gem
+ * Support for Rails 3.x
+ * Validate state parameter is an integer before using
+ * Correct spelling of `current_user` in controller templates

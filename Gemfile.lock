@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acts_as_approvable (0.5.0)
+    acts_as_approvable (0.6.0)
 
 GEM
   remote: http://rubygems.org/
