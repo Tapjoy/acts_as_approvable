@@ -1,3 +1,7 @@
+== 0.6.3.3
+
+ * Don't call #state on nil objects
+
 == 0.6.3.2
 
  * Fix the Rails 2 initializer
