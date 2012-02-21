@@ -35,12 +35,12 @@ class ApprovalsController < <%= options[:base] %>
   end
 
 <% end %>  def approve
-<% if owner? %>    @approval.owner = current_user if respond_to?(:curret_user)
+<% if owner? %>    @approval.owner = current_user if respond_to?(:current_user)
 <% end %>    @approval.approve!
   end
 
   def reject
-<% if owner? %>    @approval.owner = current_user if respond_to?(:curret_user)
+<% if owner? %>    @approval.owner = current_user if respond_to?(:current_user)
 <% end %>    @approval.reject!(params[:reason])
   end
 
