@@ -1,9 +1,14 @@
+require 'generators/acts_as_approvable/base'
+
 module Haml
   module Generators
     class ActsAsApprovableGenerator < Rails::Generators::Base
+      include ActsAsApprovable::Generators::Base
+
       source_root File.expand_path('../templates', __FILE__)
 
       class_option :owner, :type => :string, :optional => true, :desc => 'Model that can own approvals'
+      class_option :scripts, :type => :boolean, :optional => true, :default => false
 
       def copy_view_files
         template 'index.html.haml',          'app/views/approvals/index.html.haml'
@@ -22,22 +27,6 @@ module Haml
 
       def filename_with_extensions(name)
         [name, format, handler].compact.join('.')
-      end
-
-      def owner?
-        options[:owner].present?
-      end
-
-      def collection_actions
-        actions = [:index, :history]
-        actions << :mine if owner?
-        actions.map { |a| ":#{a}" }
-      end
-
-      def member_actions
-        actions = [:approve, :reject]
-        actions << :assign if owner?
-        actions.map { |a| ":#{a}" }
       end
     end
   end

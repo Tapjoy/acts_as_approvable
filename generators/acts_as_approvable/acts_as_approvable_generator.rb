@@ -1,4 +1,8 @@
+require 'generators/acts_as_approvable/base'
+
 class ActsAsApprovableGenerator < Rails::Generator::Base
+  include ActsAsApprovable::Generators::Base
+
   default_options :base => 'ApplicationController'
 
   def manifest
@@ -15,6 +19,12 @@ class ActsAsApprovableGenerator < Rails::Generator::Base
       m.directory 'config/initializers'
       m.template 'initializer.rb', 'config/initializers/acts_as_approvable.rb'
 
+      if scripts?
+        m.directory 'public/javascripts'
+        m.template 'jquery.form.js', 'public/javascripts/jquery.form.js'
+        m.template 'approvals.js', 'public/javascripts/approvals.js'
+      end
+
       m.route route
     end
   end
@@ -22,22 +32,6 @@ class ActsAsApprovableGenerator < Rails::Generator::Base
   protected
   def view_language
     options[:haml] ? 'haml' : 'erb'
-  end
-
-  def owner?
-    options[:owner].present?
-  end
-
-  def collection_actions
-    actions = [:index, :history]
-    actions << :mine if owner?
-    actions.map { |a| ":#{a}" }
-  end
-
-  def member_actions
-    actions = [:approve, :reject]
-    actions << :assign if owner?
-    actions.map { |a| ":#{a}" }
   end
 
   def route
@@ -54,6 +48,7 @@ class ActsAsApprovableGenerator < Rails::Generator::Base
     opt.on('--base BASE', 'Base class for ApprovableController.') { |v| options[:base] = v }
     opt.on('--haml', 'Generate HAML views instead of ERB.') { |v| options[:haml] = v }
     opt.on('--owner [User]', 'Enable and, optionally, set the model for approval ownerships.') { |v| options[:owner] = v || 'User' }
+    opt.on('--scripts', 'Indicates when to generate scripts.') { |v| options[:scripts] = v }
   end
 end
 

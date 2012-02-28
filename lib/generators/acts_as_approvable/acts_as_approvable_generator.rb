@@ -1,10 +1,15 @@
 require 'rails/generators/active_record'
+require 'generators/acts_as_approvable/base'
+
 
 class ActsAsApprovableGenerator < Rails::Generators::Base
+  include ActsAsApprovable::Generators::Base
+
   source_root File.expand_path('../templates', __FILE__)
 
   class_option :base, :type => :string, :default => 'ApplicationController', :desc => 'Base class for the ApprovalsController'
   class_option :owner, :type => :string, :optional => true, :desc => 'Model that can own approvals'
+  class_option :scripts, :type => :boolean, :optional => true, :default => false
 
   desc 'Generates ApprovalsController, a migration the create the Approval table, and an initializer for the plugin.'
 
@@ -27,11 +32,18 @@ class ActsAsApprovableGenerator < Rails::Generators::Base
 
       if owner?
         data << 'ActsAsApprovable::Ownership.configure'
-        data << "(:owner => #{options[:owner]})" if options[:owner] != 'User'
+        data << "(:owner => #{owner})" if owner != 'User'
       end
 
       data << "\n"
     end
+  end
+
+  def create_script_files
+    return unless scripts?
+
+    template 'jquery.form.js', 'public/javascripts/jquery.form.js'
+    template 'approvals.js', 'public/javascripts/approvals.js'
   end
 
   hook_for :template_engine
@@ -52,22 +64,5 @@ class ActsAsApprovableGenerator < Rails::Generators::Base
     resource << '  end'
 
     route(resource.join("\n"))
-  end
-
-  protected
-  def owner?
-    options[:owner].present?
-  end
-
-  def collection_actions
-    actions = [:index, :history]
-    actions << :mine if owner?
-    actions.map { |a| ":#{a}" }
-  end
-
-  def member_actions
-    actions = [:approve, :reject]
-    actions << :assign if owner?
-    actions.map { |a| ":#{a}" }
   end
 end

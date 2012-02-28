@@ -14,6 +14,6 @@
 <% if owner? %>        %td= render :partial => 'owner_select', :locals => {:approval => approval}
 <% end %>        %td= approval.state
         %td.actions
-          = link_to('Approve', approve_approval_path(approval))
-          = link_to('Reject', reject_approval_path(approval))
+          = link_to('Approve', approve_approval_path(approval), :class => 'approve')
+          = link_to('Reject', reject_approval_path(approval), :class => 'reject')
 

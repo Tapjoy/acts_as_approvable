@@ -37,6 +37,7 @@ These options are also available by passing `--help` as an option to the generat
     --base BASE     Base class for ApprovableController.
     --haml*         Generate HAML views instead of ERB.
     --owner [User]  Enable and, optionally, set the model for approval ownerships.
+    --scripts       Copy javascripts for ApprovalsController and its views.
 
 \* This option is not available in Rails 3. You should configure your template engine in `config/application.rb`
 

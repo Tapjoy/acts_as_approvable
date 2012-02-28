@@ -11,3 +11,5 @@
   %button{:type => 'Submit'} Filter
 
 = render :partial => @table_partial
+<% if scripts? %>
+= javascript_include_tag 'jquery.form.js', 'approvals.js'<% end %>
