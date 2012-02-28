@@ -85,7 +85,7 @@ Require approval for new Users, but not modifications...
 
       # Let the user know they were rejected
       def after_reject(approval)
-        ApprovalMailer.deliver_user_approved(self.email, approval.reason)
+        ApprovalMailer.deliver_user_rejected(self.email, approval.reason)
       end
     end
 
