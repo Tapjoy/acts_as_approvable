@@ -51,7 +51,7 @@ if RUBY_VERSION =~ /^1\.8/
 elsif RUBY_VERSION =~ /^1\.9/
   namespace :test do
     task :coverage do
-      ENV['COVERAGE'] = true
+      ENV['COVERAGE'] = 'true'
       Rake::Task['test'].invoke
     end
   end
