@@ -1,3 +1,8 @@
+== 0.6.6
+
+ * `#pending_changes?` should not be true if there are no pending update
+ approvals.
+
 == 0.6.5
 
  * Copy javascripts if `--scripts` is passed to the generator. AJAXifies the
