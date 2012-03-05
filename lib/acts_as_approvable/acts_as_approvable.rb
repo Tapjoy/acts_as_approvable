@@ -162,15 +162,15 @@ module ActsAsApprovable
     module UpdateInstanceMethods
       ##
       # Retrieve all approval records for `:update` events.
-      def update_approvals
-        approvals.find_all_by_event('update')
+      def update_approvals(all = true)
+        all ? approvals.find_all_by_event('update') : approvals.find_all_by_event_and_state('update', 0)
       end
 
       ##
       # Returns true if the record has any `#update_approvals` that are pending
       # approval.
       def pending_changes?
-        !update_approvals.empty?
+        !update_approvals(false).empty?
       end
 
       ##

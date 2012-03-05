@@ -100,6 +100,37 @@ class ActsAsApprovableModelTest < Test::Unit::TestCase
         end
       end
 
+      context 'that has approved, rejected and pending update approvals' do
+        setup do
+          @game.update_attributes(:title => 'review1')
+          @game.update_approvals.last.approve!(true)
+
+          @game.update_attributes(:title => 'review2')
+          @game.update_approvals.last.reject!
+
+          @game.update_attributes(:title => 'review3')
+          @game.update_attributes(:title => 'review4')
+        end
+
+        should 'have #pending_changes?' do
+          assert @game.pending_changes?
+        end
+      end
+
+      context 'that has approved and rejected, but no pending update approvals' do
+        setup do
+          @game.update_attributes(:title => 'review1')
+          @game.update_approvals.last.approve!(true)
+
+          @game.update_attributes(:title => 'review2')
+          @game.update_approvals.last.reject!
+        end
+
+        should 'have #pending_changes?' do
+          assert !@game.pending_changes?
+        end
+      end
+
       context 'that is altered using #without_approval' do
         setup { @game.without_approval { |i| i.update_attribute(:title, 'updated') } }
 
