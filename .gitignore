@@ -1,5 +1,7 @@
 test/*.db
 test/debug.log
+spec/*.db
+spec/debug.log
 coverage/
 rdoc/
 yardoc/

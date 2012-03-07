@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'rake/testtask'
+require 'rspec/core/rake_task'
 require 'yard'
 require 'appraisal'
 
@@ -33,11 +34,7 @@ task :copy do |t|
 end
 
 desc 'Test the acts_as_approvable plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs    << 'test' << 'lib'
-  t.pattern = 'test/*_test.rb'
-  t.verbose = true
-end
+RSpec::Core::RakeTask.new(:test)
 
 if RUBY_VERSION =~ /^1\.8/
   require 'rcov/rcovtask'
