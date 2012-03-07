@@ -34,14 +34,13 @@ GEM
     arel (2.2.1)
     builder (3.0.0)
     coderay (1.0.5)
+    database_cleaner (0.7.1)
+    diff-lcs (1.1.3)
     erubis (2.7.0)
     hike (1.2.1)
     i18n (0.6.0)
     json (1.6.5)
-    metaclass (0.0.1)
     method_source (0.7.0)
-    mocha (0.10.4)
-      metaclass (~> 0.0.1)
     multi_json (1.0.4)
     pry (0.9.8)
       coderay (~> 1.0.5)
@@ -67,7 +66,14 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     redcarpet (2.1.0)
-    shoulda (2.11.3)
+    rspec (2.8.0)
+      rspec-core (~> 2.8.0)
+      rspec-expectations (~> 2.8.0)
+      rspec-mocks (~> 2.8.0)
+    rspec-core (2.8.0)
+    rspec-expectations (2.8.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.8.0)
     simplecov (0.5.4)
       multi_json (~> 1.0.3)
       simplecov-html (~> 0.5.3)
@@ -90,12 +96,12 @@ DEPENDENCIES
   activerecord (~> 3.1.0)
   acts-as-approvable!
   appraisal
-  mocha
+  database_cleaner
   pry
   railties (~> 3.1.0)
   rake
   redcarpet
-  shoulda
+  rspec
   simplecov
   sqlite3
   yard
