@@ -3,7 +3,7 @@ require 'active_record'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-require 'acts_as_approvable/acts_as_approvable'
+require 'acts_as_approvable/model'
 require 'acts_as_approvable/approval'
 require 'acts_as_approvable/error'
 require 'acts_as_approvable/ownership'
