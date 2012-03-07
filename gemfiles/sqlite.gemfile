@@ -2,8 +2,6 @@
 
 source "http://rubygems.org"
 
-gem "activerecord", "~> 3.0.0"
-gem "railties", "~> 3.0.0"
-gem "sqlite3"
+gem "sqlite"
 
 gemspec :path=>"../"

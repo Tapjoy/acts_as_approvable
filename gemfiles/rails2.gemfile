@@ -3,5 +3,6 @@
 source "http://rubygems.org"
 
 gem "activerecord", "~> 2.3"
+gem "sqlite3"
 
 gemspec :path=>"../"

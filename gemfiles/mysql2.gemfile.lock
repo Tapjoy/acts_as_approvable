@@ -1,5 +1,5 @@
 PATH
-  remote: .
+  remote: /Users/jlogsdon/Code/acts_as_approvable/acts_as_approvable
   specs:
     acts-as-approvable (0.6.7)
 
@@ -14,22 +14,23 @@ GEM
       rake
     coderay (1.0.5)
     metaclass (0.0.1)
-    method_source (0.7.0)
+    method_source (0.7.1)
     mocha (0.10.4)
       metaclass (~> 0.0.1)
-    multi_json (1.0.4)
-    pry (0.9.8)
+    multi_json (1.1.0)
+    mysql2 (0.3.11)
+    pry (0.9.8.4)
       coderay (~> 1.0.5)
-      method_source (~> 0.7)
-      slop (>= 2.4.3, < 3)
+      method_source (~> 0.7.1)
+      slop (>= 2.4.4, < 3)
     rake (0.9.2.2)
     redcarpet (2.1.0)
     shoulda (2.11.3)
-    simplecov (0.5.4)
-      multi_json (~> 1.0.3)
+    simplecov (0.6.1)
+      multi_json (~> 1.0)
       simplecov-html (~> 0.5.3)
     simplecov-html (0.5.3)
-    slop (2.4.3)
+    slop (2.4.4)
     yard (0.7.5)
 
 PLATFORMS
@@ -40,6 +41,7 @@ DEPENDENCIES
   acts-as-approvable!
   appraisal
   mocha
+  mysql2
   pry
   rake
   redcarpet
