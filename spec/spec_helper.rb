@@ -10,12 +10,15 @@ ENV['RAILS_ROOT'] ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '
 
 require 'rubygems'
 require 'rspec'
+require 'shoulda'
 require 'database_cleaner'
 require 'active_record'
 
-require File.dirname(__FILE__) + '/../lib/acts-as-approvable'
+require File.expand_path('../lib/acts-as-approvable', File.dirname(__FILE__))
+require File.expand_path('support/models', File.dirname(__FILE__))
+require File.expand_path('support/matchers', File.dirname(__FILE__))
 
-logfile = File.dirname(__FILE__) + '/debug.log'
+logfile = File.expand_path('debug.log', File.dirname(__FILE__))
 LOGGER = ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
                                        ActiveSupport::BufferedLogger.new(logfile)
                                      else
@@ -23,7 +26,7 @@ LOGGER = ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
                                      end
 
 def load_schema
-  config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
+  config = YAML::load(IO.read(File.expand_path('database.yml', File.dirname(__FILE__))))
 
   unless db_adapter = ENV['DB']
     %w(sqlite3 mysql2 sqlite).each do |gem|
@@ -44,7 +47,7 @@ def load_schema
 
   ActiveRecord::Base.establish_connection(config[db_adapter])
   ActiveRecord::Migration.suppress_messages do
-    load(File.dirname(__FILE__) + '/schema.rb')
+    load(File.expand_path('schema.rb', File.dirname(__FILE__)))
   end
 
   ar_classes.each { |klass| klass.reset_column_information }

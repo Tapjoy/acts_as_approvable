@@ -1,27 +1,22 @@
 ActiveRecord::Schema.define(:version => 0) do
-  create_table :users, :force => true do |t|
-    t.string  :login
+  create_table :defaults, :force => true do |t|
+    t.string  :title
+    t.text    :body
+
+    t.timestamps
+  end
+
+  create_table :creates, :force => true do |t|
+    t.string  :title
+    t.text    :body
     t.string  :state
 
     t.timestamps
   end
 
-  create_table :projects, :force => true do |t|
+  create_table :updates, :force => true do |t|
     t.string  :title
-    t.text    :description
-
-    t.timestamps
-  end
-
-  create_table :games, :force => true do |t|
-    t.string  :title
-    t.text    :description
-
-    t.timestamps
-  end
-
-  create_table :employees, :force => true do |t|
-    t.string  :name
+    t.text    :body
 
     t.timestamps
   end

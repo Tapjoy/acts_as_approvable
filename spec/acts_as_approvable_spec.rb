@@ -1,10 +1,28 @@
 require 'spec_helper'
 
 describe ActsAsApprovable do
-  describe '.enable' do
-    it 'flags the approval queue as on' do
-      ActsAsApprovable.enable
-      ActsAsApprovable.enabled?.should be_true
+  describe '.enabled?' do
+    it 'returns true by default' do
+      subject.enabled?.should be_true
     end
   end
+
+  describe '.disable' do
+    it 'disables the approval queue' do
+      subject.disable
+      subject.enabled?.should be_false
+    end
+  end
+
+  describe '.enable' do
+    it 'enables the approval queue' do
+      subject.enable
+      subject.enabled?.should be_true
+    end
+  end
+
+  it { should respond_to(:owner_class) }
+  it { should respond_to(:owner_class=) }
+  it { should respond_to(:view_language) }
+  it { should respond_to(:view_language=) }
 end

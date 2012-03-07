@@ -29,7 +29,7 @@ module ActsAsApprovable
 
         cattr_accessor :approvable_ignore
         ignores = Array.wrap(options.delete(:ignore) { [] })
-        ignores.push('created_at', 'updated_at', self.approvable_field)
+        ignores.push('created_at', 'updated_at', primary_key, self.approvable_field)
         self.approvable_ignore = ignores.compact.uniq.map(&:to_s)
 
         cattr_accessor :approvable_only
@@ -40,12 +40,12 @@ module ActsAsApprovable
 
         has_many :approvals, :as => :item, :dependent => :destroy
 
-        if self.approvable_on.include?(:update)
+        if approvable_on?(:update)
           include UpdateInstanceMethods
           before_update :approvable_update, :if => :approvable_update?
         end
 
-        if self.approvable_on.include?(:create)
+        if approvable_on?(:create)
           include CreateInstanceMethods
           before_create :approvable_create, :if => :approvable_create?
         end
@@ -63,6 +63,27 @@ module ActsAsApprovable
       # Disable the approval queue for this model.
       def approvals_off
         self.approvals_active = false
+      end
+
+      ##
+      # Returns true if the approval queue is active at both the local and global
+      # level. Note that the global level supercedes the local level.
+      def approvals_enabled?
+        ActsAsApprovable.enabled? and self.approvals_active
+      end
+
+      ##
+      # Returns true if the model is configured to use the approval queue on the
+      # given event (`:create` or `:update`).
+      def approvable_on?(event)
+        self.approvable_on.include?(event)
+      end
+
+      ##
+      # Returns a list of fields that require approval.
+      def approvable_fields
+        return self.approvable_only unless self.approvable_only.empty?
+        column_names - self.approvable_ignore
       end
 
       ##
@@ -185,11 +206,13 @@ module ActsAsApprovable
       #
       # @return [Array] a list of changed fields.
       def notably_changed
-        unless self.class.approvable_only.empty?
-          self.class.approvable_only.select { |field| changed.include?(field) }
-        else
-          changed - self.class.approvable_ignore
-        end
+        approvable_fields.select { |field| changed.include?(field) }
+      end
+
+      ##
+      # Returns a list of fields that require approval.
+      def approvable_fields
+        self.class.approvable_fields
       end
 
       private
@@ -242,7 +265,7 @@ module ActsAsApprovable
       # Returns true if the model is configured to use the approval queue on the
       # given event (`:create` or `:update`).
       def approvable_on?(event)
-        self.class.approvable_on.include?(event)
+        self.class.approvable_on?(event)
       end
 
       ##
