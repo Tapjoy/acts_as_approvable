@@ -18,7 +18,7 @@ GEM
     mocha (0.10.4)
       metaclass (~> 0.0.1)
     multi_json (1.1.0)
-    mysql2 (0.3.11)
+    mysql2 (0.2.18)
     pry (0.9.8.4)
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
@@ -41,7 +41,7 @@ DEPENDENCIES
   acts-as-approvable!
   appraisal
   mocha
-  mysql2
+  mysql2 (~> 0.2.18)
   pry
   rake
   redcarpet

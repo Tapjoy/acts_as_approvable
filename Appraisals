@@ -22,5 +22,5 @@ appraise 'rails32' do
 end
 
 appraise 'mysql2' do
-  gem 'mysql2'
+  gem 'mysql2',       '~> 0.2.18'
 end

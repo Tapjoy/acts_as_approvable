@@ -2,6 +2,6 @@
 
 source "http://rubygems.org"
 
-gem "mysql2"
+gem "mysql2", "~> 0.2.18"
 
 gemspec :path=>"../"

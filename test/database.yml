@@ -5,3 +5,8 @@ sqlite:
 sqlite3:
   :adapter: sqlite3
   :database: test/acts_as_approvable_plugin.sqlite3.db
+
+mysql2:
+  :adapter: mysql2
+  :database: acts_as_approvable_test
+  :user: root

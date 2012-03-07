@@ -27,19 +27,16 @@ LOGGER = ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
 
-  db_adapter = ENV['DB']
-
-  db_adapter ||=
-    begin
-      require 'sqlite'
-      'sqlite'
-    rescue MissingSourceFile
+  unless db_adapter = ENV['DB']
+    %w(sqlite3 mysql2 sqlite).each do |gem|
       begin
-        require 'sqlite3'
-        'sqlite3'
+        require gem
+        db_adapter = gem
+        break
       rescue MissingSourceFile
       end
     end
+  end
 
   if db_adapter.nil?
     raise 'No DB Adapter selected. Pass the DB= option to pick one, or install Sqlite or Sqlite3.'
