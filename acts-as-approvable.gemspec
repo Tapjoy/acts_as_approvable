@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<activerecord>, '~> 2.3'
   s.add_development_dependency %q<appraisal>
   s.add_development_dependency %q<redcarpet>
+  s.add_development_dependency %q<shoulda>
   s.add_development_dependency %q<rspec>
   s.add_development_dependency %q<database_cleaner>
   s.add_development_dependency %q<rake>

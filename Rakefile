@@ -12,12 +12,12 @@ desc 'Start a pry session with a database connection open'
 task :pry do |t|
   $LOAD_PATH << './lib'
   require 'pry'
-  require './test/test_helper'
+  require './spec/spec_helper'
 
   ActiveRecord::Base.logger = Logger.new(STDOUT)
   load_schema
 
-  ActsAsApprovable::Ownership.configure
+  #ActsAsApprovable::Ownership.configure
   Pry.start(TOPLEVEL_BINDING)
 end
 
