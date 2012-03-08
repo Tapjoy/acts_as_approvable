@@ -290,6 +290,10 @@ describe ActsAsApprovable::Model::InstanceMethods do
   end
 
   describe '#without_approval' do
+    around(:each) do
+      subject.approvals_on
+    end
+
     it 'disables approval queues' do
       subject.without_approval { |r| r.update_attributes(:title => 'no review') }
       subject.update_approvals.should be_empty

@@ -186,7 +186,7 @@ describe ActsAsApprovable::Model::ClassMethods do
   end
 
   describe '.without_approval' do
-    before(:each) do
+    around(:each) do
       subject.approvals_on
     end
 
