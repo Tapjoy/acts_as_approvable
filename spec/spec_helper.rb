@@ -1,7 +1,7 @@
 if RUBY_VERSION =~ /^1\.9/
   require 'simplecov'
   SimpleCov.start do
-    add_filter '/test/'
+    add_filter '/spec/'
   end if ENV['COVERAGE']
 end
 
