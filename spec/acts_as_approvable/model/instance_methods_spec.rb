@@ -91,11 +91,11 @@ describe ActsAsApprovable::Model::InstanceMethods do
       subject.stub(:approvals_enabled? => true)
     end
 
-    it 'returns the inverse of #approvals_enabled?' do
+    it 'returns the inverse of the approval queue status' do
       subject.approvals_disabled?.should == !subject.approvals_enabled?
     end
 
-    it 'calls #approvals_enabled?' do
+    it 'calls #approvals_enabled? for the status' do
       subject.should_receive(:approvals_enabled?).and_return(true)
       subject.approvals_disabled?
     end
@@ -118,6 +118,48 @@ describe ActsAsApprovable::Model::InstanceMethods do
 
     it 'enables the record level approval queue' do
       subject.approvals_on?.should be_true
+    end
+  end
+
+  describe '#approvals_on?' do
+    context 'when approval queues are enabled locally' do
+      before(:each) do
+        subject.instance_variable_set('@approvals_disabled', false)
+      end
+
+      it 'returns true' do
+        subject.approvals_on?.should be_true
+      end
+
+      it 'ignores the model level status' do
+        subject.stub(:model_approvals_on? => false)
+        subject.approvals_on?.should be_true
+      end
+
+      it 'ignores the global level status' do
+        subject.stub(:global_approvals_on? => false)
+        subject.approvals_on?.should be_true
+      end
+    end
+
+    context 'when approval queues are disabled locally' do
+      before(:each) do
+        subject.instance_variable_set('@approvals_disabled', true)
+      end
+
+      it 'returns false' do
+        subject.approvals_on?.should be_false
+      end
+
+      it 'ignores the model level status' do
+        subject.stub(:model_approvals_on? => true)
+        subject.approvals_on?.should be_false
+      end
+
+      it 'ignores the global level status' do
+        subject.stub(:global_approvals_on? => true)
+        subject.approvals_on?.should be_false
+      end
     end
   end
 end
