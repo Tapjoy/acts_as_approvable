@@ -181,4 +181,111 @@ describe ActsAsApprovable::Model::InstanceMethods do
       it { should_not be_approvable_on(:create) }
     end
   end
+
+  context 'with approval and rejection hooks' do
+    before(:each) do
+      @record = CreatesApprovable.create
+
+      @approval = @record.approval
+      @approval.stub(:item => @record)
+    end
+
+    describe '#before_approve' do
+      before(:each) do
+        @record.stub(:before_approve => true)
+      end
+
+      it 'is called when approving a record' do
+        @record.should_receive(:before_approve).and_return(true)
+        @approval.approve!
+      end
+
+      it 'is not called when rejecting a record' do
+        @record.should_not_receive(:before_approve)
+        @approval.reject!
+      end
+
+      it 'receives the approval as an argument' do
+        @record.should_receive(:before_approve).with(@approval).and_return(true)
+        @approval.approve!
+      end
+
+      context 'when it returns false' do
+        before(:each) do
+          @record.stub(:before_approve => false)
+        end
+
+        it 'prevents the approval from proceeding' do
+          @approval.approve!
+          @approval.state.should == 'pending'
+        end
+      end
+    end
+
+    describe '#before_reject' do
+      before(:each) do
+        @record.stub(:before_reject => true)
+      end
+
+      it 'is called when rejecting a record' do
+        @record.should_receive(:before_reject).and_return(true)
+        @approval.reject!
+      end
+
+      it 'is not called when approving a record' do
+        @record.should_not_receive(:before_reject)
+        @approval.approve!
+      end
+
+      it 'receives the approval as an argument' do
+        @record.should_receive(:before_reject).with(@approval).and_return(true)
+        @approval.reject!
+      end
+
+      context 'when it returns false' do
+        before(:each) do
+          @record.stub(:before_reject => false)
+        end
+
+        it 'prevents the rejection from proceeding' do
+          @approval.reject!
+          @approval.state.should == 'pending'
+        end
+      end
+    end
+
+    describe '#after_approve' do
+      it 'is called when approving a record' do
+        @record.should_receive(:before_approve)
+        @approval.approve!
+      end
+
+      it 'is not called when rejecting a record' do
+        @record.should_not_receive(:after_approve)
+        @approval.reject!
+      end
+
+      it 'receives the approval as an argument' do
+        @record.should_receive(:after_approve).with(@approval).and_return(true)
+        @approval.approve!
+      end
+    end
+
+    describe '#after_reject' do
+      it 'is called when rejecting a record' do
+        @record.should_receive(:after_reject).and_return(true)
+        @approval.reject!
+      end
+
+      it 'is not called when approving a record' do
+        @record.should_not_receive(:after_reject)
+        @approval.approve!
+      end
+
+      it 'receives the approval as an argument' do
+        @record.should_receive(:after_reject).with(@approval).and_return(true)
+        @approval.reject!
+      end
+    end
+  end
 end
