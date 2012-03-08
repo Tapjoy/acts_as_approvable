@@ -11,7 +11,6 @@ ENV['RAILS_ROOT'] ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '
 require 'rubygems'
 require 'rspec'
 require 'shoulda'
-require 'database_cleaner'
 require 'timecop'
 require 'active_record'
 
