@@ -86,38 +86,5 @@ describe ActsAsApprovable::Model do
       it { should extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
       it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
     end
-
-    context 'and :only fields' do
-      subject { UpdatesOnlyFieldsApprovable }
-
-      describe '.approvable_fields' do
-        subject { UpdatesOnlyFieldsApprovable.approvable_fields }
-
-        it { should include('body') }
-      end
-    end
-
-    context 'with :ignore fields' do
-      subject { UpdatesIgnoreFieldsApprovable }
-
-      it 'ignores the given fields' do
-        subject.approvable_ignore.should include('title')
-      end
-
-      it 'ignores timestamps' do
-        subject.approvable_ignore.should include('created_at')
-        subject.approvable_ignore.should include('updated_at')
-      end
-
-      it 'ignores the primary key' do
-        subject.approvable_ignore.should include(subject.primary_key)
-      end
-
-      describe '.approvable_fields' do
-        subject { UpdatesIgnoreFieldsApprovable.approvable_fields }
-
-        it { should include('body') }
-      end
-    end
   end
 end
