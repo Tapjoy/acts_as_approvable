@@ -35,8 +35,8 @@ module ActsAsApprovable
         cattr_accessor :approvable_only
         self.approvable_only = Array.wrap(options.delete(:only) { [] }).uniq.map(&:to_s)
 
-        cattr_accessor :approvals_active
-        self.approvals_active = true
+        cattr_accessor :approvals_disabled
+        self.approvals_disabled = false
 
         has_many :approvals, :as => :item, :dependent => :destroy
 
@@ -56,17 +56,17 @@ module ActsAsApprovable
       ##
       # Enable the approval queue for this model.
       def approvals_on
-        self.approvals_active = true
+        self.approvals_disabled = false
       end
 
       ##
       # Disable the approval queue for this model.
       def approvals_off
-        self.approvals_active = false
+        self.approvals_disabled = true
       end
 
       def approvals_on?
-        self.approvals_active
+        not self.approvals_disabled
       end
 
       ##
@@ -98,7 +98,7 @@ module ActsAsApprovable
       # Execute a code block while the approval queue is temporarily disabled. The
       # queue state will be returned to it's previous value, either on or off.
       def without_approval(&block)
-        enable = self.approvals_active
+        enable = self.approvals_on?
         approvals_off
         yield(self)
       ensure
@@ -270,7 +270,7 @@ module ActsAsApprovable
       end
 
       def model_approvals_on?
-        self.class.approvals_active
+        self.class.approvals_on?
       end
 
       def global_approvals_on?
