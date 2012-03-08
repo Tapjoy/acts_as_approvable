@@ -162,4 +162,23 @@ describe ActsAsApprovable::Model::InstanceMethods do
       end
     end
   end
+
+  describe '#approvable_on?' do
+    it { should be_approvable_on(:create) }
+    it { should be_approvable_on(:update) }
+
+    context 'when the model is approvable on :create events' do
+      subject { CreatesApprovable.new }
+
+      it { should be_approvable_on(:create) }
+      it { should_not be_approvable_on(:update) }
+    end
+
+    context 'when the model is approvable on :update events' do
+      subject { UpdatesApprovable.new }
+
+      it { should be_approvable_on(:update) }
+      it { should_not be_approvable_on(:create) }
+    end
+  end
 end
