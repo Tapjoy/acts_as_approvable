@@ -1,3 +1,7 @@
+class NotApprovable < ActiveRecord::Base
+  set_table_name 'nots'
+end
+
 class DefaultApprovable < ActiveRecord::Base
   set_table_name 'defaults'
 

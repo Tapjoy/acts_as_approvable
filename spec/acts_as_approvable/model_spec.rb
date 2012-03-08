@@ -1,6 +1,17 @@
 require 'spec_helper'
 
 describe ActsAsApprovable::Model do
+  context 'when acts_as_approvable is not configured' do
+    subject { NotApprovable }
+
+    it { subject.new.should_not have_many(:approvals) }
+
+    it { should_not extend(ActsAsApprovable::Model::ClassMethods) }
+    it { should_not extend(ActsAsApprovable::Model::InstanceMethods) }
+    it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+    it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+  end
+
   context 'with default configuration options' do
     subject { DefaultApprovable }
 
@@ -9,6 +20,7 @@ describe ActsAsApprovable::Model do
     it { should be_approvals_enabled }
     it { subject.new.should have_many(:approvals) }
 
+    it { should extend(ActsAsApprovable::Model::ClassMethods) }
     it { should extend(ActsAsApprovable::Model::InstanceMethods) }
     it { should extend(ActsAsApprovable::Model::CreateInstanceMethods) }
     it { should extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
@@ -34,6 +46,7 @@ describe ActsAsApprovable::Model do
       it { should be_approvable_on(:create) }
       it { should_not be_approvable_on(:update) }
 
+      it { should extend(ActsAsApprovable::Model::ClassMethods) }
       it { should extend(ActsAsApprovable::Model::InstanceMethods) }
       it { should extend(ActsAsApprovable::Model::CreateInstanceMethods) }
       it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
@@ -68,6 +81,7 @@ describe ActsAsApprovable::Model do
       it { should be_approvable_on(:update) }
       it { should_not be_approvable_on(:create) }
 
+      it { should extend(ActsAsApprovable::Model::ClassMethods) }
       it { should extend(ActsAsApprovable::Model::InstanceMethods) }
       it { should extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
       it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }

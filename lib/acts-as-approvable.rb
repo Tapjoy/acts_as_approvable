@@ -1,6 +1,5 @@
 require 'active_record'
 
-
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'acts_as_approvable/model'
@@ -12,7 +11,7 @@ require 'acts-as-approvable/version'
 if defined?(Rails) && Rails.version =~ /^3\./
   require 'acts_as_approvable/railtie'
 elsif defined?(ActiveRecord)
-  ActiveRecord::Base.send :include, ActsAsApprovable::Model
+  ActiveRecord::Base.send :extend, ActsAsApprovable::Model
 end
 
 $LOAD_PATH.shift
