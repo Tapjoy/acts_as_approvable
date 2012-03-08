@@ -143,19 +143,19 @@ module ActsAsApprovable
       ##
       # Returns true if the record is pending approval.
       def pending?
-        approval_state == 'pending' or approval.try(:pending?)
+        approval_state.present? ? approval_state == 'pending' : approval.try(:pending?)
       end
 
       ##
       # Returns true if the record has been approved.
       def approved?
-        approval_state == 'approved' or approval.try(:approved?)
+        approval_state.present? ? approval_state == 'approved' : approval.try(:approved?)
       end
 
       ##
       # Returns true if the record has been rejected.
       def rejected?
-        approval_state == 'rejected' or approval.try(:rejected?)
+        approval_state.present? ? approval_state == 'rejected' : approval.try(:rejected?)
       end
 
       ##
