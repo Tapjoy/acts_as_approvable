@@ -38,6 +38,7 @@ GEM
       simplecov-html (~> 0.5.3)
     simplecov-html (0.5.3)
     slop (2.4.4)
+    timecop (0.3.5)
     yard (0.7.5)
 
 PLATFORMS
@@ -55,4 +56,5 @@ DEPENDENCIES
   rspec
   shoulda
   simplecov
+  timecop
   yard

@@ -12,6 +12,7 @@ require 'rubygems'
 require 'rspec'
 require 'shoulda'
 require 'database_cleaner'
+require 'timecop'
 require 'active_record'
 
 require File.expand_path('../lib/acts-as-approvable', File.dirname(__FILE__))
@@ -66,7 +67,13 @@ RSpec.configure do |config|
     load_schema
   end
 
+  config.before(:each) do
+    freeze_at = Time.parse('2012-01-01')
+    Timecop.freeze(freeze_at)
+  end
+
   config.after(:each) do
+    Timecop.return
     truncate
   end
 end
