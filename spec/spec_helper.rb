@@ -68,6 +68,11 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
+    Object.send(:remove_const, :CleanApprovable) if defined?(CleanApprovable)
+    class CleanApprovable < ActiveRecord::Base
+      set_table_name 'nots'
+    end
+
     freeze_at = Time.parse('2012-01-01')
     Timecop.freeze(freeze_at)
   end

@@ -51,6 +51,17 @@ module ActsAsApprovable
     # Class methods available after acts_as_approvable has been called
     module ClassMethods
       ##
+      # Returns true if the approval queue is active at both the local and global
+      # level. Note that the global level supercedes the local level.
+      def approvals_enabled?
+        global_approvals_on? and approvals_on?
+      end
+
+      def approvals_disabled?
+        not approvals_enabled?
+      end
+
+      ##
       # Enable the approval queue for this model.
       def approvals_on
         self.approvals_disabled = false
@@ -64,13 +75,6 @@ module ActsAsApprovable
 
       def approvals_on?
         not self.approvals_disabled
-      end
-
-      ##
-      # Returns true if the approval queue is active at both the local and global
-      # level. Note that the global level supercedes the local level.
-      def approvals_enabled?
-        global_approvals_on? and approvals_on?
       end
 
       def global_approvals_on?

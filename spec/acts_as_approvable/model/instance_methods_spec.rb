@@ -5,9 +5,9 @@ describe ActsAsApprovable::Model::InstanceMethods do
 
   describe '#approvals_enabled?' do
     before(:each) do
-        subject.stub(:global_approvals_on? => true)
-        subject.stub(:model_approvals_on? => true)
-        subject.stub(:approvals_on? => true)
+      subject.stub(:global_approvals_on? => true)
+      subject.stub(:model_approvals_on? => true)
+      subject.stub(:approvals_on? => true)
     end
 
     context 'when approvals are globally disabled' do
