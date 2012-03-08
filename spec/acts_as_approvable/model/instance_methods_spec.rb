@@ -288,4 +288,37 @@ describe ActsAsApprovable::Model::InstanceMethods do
       end
     end
   end
+
+  describe '#without_approval' do
+    it 'disables approval queues' do
+      subject.without_approval { |r| r.update_attributes(:title => 'no review') }
+      subject.update_approvals.should be_empty
+    end
+
+    it 'enables the approval queue after running' do
+      subject.should be_approvals_on
+      subject.without_approval { |r| r.update_attributes(:title => 'no review') }
+      subject.should be_approvals_on
+    end
+
+    it 'returns the approval queue to the previous state' do
+      subject.approvals_off
+      subject.without_approval { |r| r.update_attributes(:title => 'no review') }
+      subject.should_not be_approvals_on
+    end
+  end
+
+  describe '#save_without_approval' do
+    it 'calls #without_approval' do
+      subject.should_receive(:without_approval)
+      subject.save_without_approval
+    end
+  end
+
+  describe '#save_without_approval!' do
+    it 'calls #without_approval' do
+      subject.should_receive(:without_approval)
+      subject.save_without_approval!
+    end
+  end
 end
