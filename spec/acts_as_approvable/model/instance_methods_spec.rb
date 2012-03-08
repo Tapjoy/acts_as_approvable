@@ -100,4 +100,24 @@ describe ActsAsApprovable::Model::InstanceMethods do
       subject.approvals_disabled?
     end
   end
+
+  describe '#approvals_off' do
+    before(:each) do
+      subject.approvals_off
+    end
+
+    it 'disables the record level approval queue' do
+      subject.approvals_on?.should be_false
+    end
+  end
+
+  describe '#approvals_on' do
+    before(:each) do
+      subject.approvals_on
+    end
+
+    it 'enables the record level approval queue' do
+      subject.approvals_on?.should be_true
+    end
+  end
 end
