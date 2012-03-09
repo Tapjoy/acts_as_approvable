@@ -1,3 +1,13 @@
+== NEXT
+
+ * Fixed issue where approval state would be checked if the local state field
+ was present but not the value being checked.
+ * Reorganized `ActsAsApprovable::Model` into seperate files.
+ * `.acts_as_approvable` is the only method that should be available until
+ called. Moved other class methods into a module that is included on
+ configuration.
+ * Moved from Test::Unit to RSpec
+
 == 0.6.6
 
  * `#pending_changes?` should not be true if there are no pending update
