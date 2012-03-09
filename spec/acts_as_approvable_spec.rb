@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe ActsAsApprovable do
+  it { should respond_to(:owner_class) }
+  it { should respond_to(:owner_class=) }
+  it { should respond_to(:view_language) }
+  it { should respond_to(:view_language=) }
+
   describe '.enabled?' do
     it 'returns true by default' do
       subject.enabled?.should be_true
@@ -21,8 +26,4 @@ describe ActsAsApprovable do
     end
   end
 
-  it { should respond_to(:owner_class) }
-  it { should respond_to(:owner_class=) }
-  it { should respond_to(:view_language) }
-  it { should respond_to(:view_language=) }
 end
