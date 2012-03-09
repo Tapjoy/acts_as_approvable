@@ -25,8 +25,6 @@ module Support
 
       if db_adapter.nil?
         raise 'No DB Adapter selected. Pass the DB= option to pick one, or install Sqlite or Sqlite3.'
-      else
-        puts "Running with #{db_adapter} for database adapter"
       end
 
       ActiveRecord::Base.establish_connection(config[db_adapter])
