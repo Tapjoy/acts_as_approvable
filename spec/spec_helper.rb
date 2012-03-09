@@ -52,13 +52,13 @@ def load_schema
     load(File.expand_path('schema.rb', File.dirname(__FILE__)))
   end
 
-  [NotApprovable, DefaultApprovable, CreatesApprovable, CreatesWithStateApprovable, UpdatesApprovable, UpdatesIgnoreFieldsApprovable, UpdatesOnlyFieldsApprovable].each do |klass|
+  [User, Approval, NotApprovable, DefaultApprovable, CreatesApprovable, CreatesWithStateApprovable, UpdatesApprovable, UpdatesIgnoreFieldsApprovable, UpdatesOnlyFieldsApprovable].each do |klass|
     klass.reset_column_information
   end
 end
 
 def truncate
-  [NotApprovable, DefaultApprovable, CreatesApprovable, UpdatesApprovable].each do |klass|
+  [User, Approval, NotApprovable, DefaultApprovable, CreatesApprovable, UpdatesApprovable].each do |klass|
     klass.delete_all
   end
 end

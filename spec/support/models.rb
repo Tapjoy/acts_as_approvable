@@ -1,3 +1,10 @@
+class User < ActiveRecord::Base
+  def self.table_name; 'users'; end
+  def self.primary_key; 'id'; end
+
+  def to_str; id; end
+end
+
 class NotApprovable < ActiveRecord::Base
   def self.table_name; 'nots'; end
   def self.primary_key; 'id'; end
@@ -43,4 +50,11 @@ class UpdatesIgnoreFieldsApprovable < ActiveRecord::Base
   def self.primary_key; 'id'; end
 
   acts_as_approvable :on => :update, :ignore => [:title]
+end
+
+class OwnedApproval < ActiveRecord::Base
+  def self.table_name; 'approvals'; end
+  def self.primary_key; 'id'; end
+
+  include ActsAsApprovable::Ownership
 end
