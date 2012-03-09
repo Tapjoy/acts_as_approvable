@@ -44,14 +44,17 @@ module ActsAsApprovable
 
       def approvable_update
         changed = {}
+        originals = {}
+
         notably_changed.each do |attr|
           original, changed_to = changes[attr]
 
           write_attribute(attr.to_s, original)
           changed[attr] = changed_to
+          originals[attr] = original
         end
 
-        @approval = approvals.build(:event => 'update', :state => 'pending', :object => changed)
+        @approval = approvals.build(:event => 'update', :state => 'pending', :object => changed, :original => originals)
       end
     end
   end

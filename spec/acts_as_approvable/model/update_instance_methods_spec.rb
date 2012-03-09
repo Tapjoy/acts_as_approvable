@@ -94,4 +94,18 @@ describe ActsAsApprovable::Model::UpdateInstanceMethods do
       subject.approvable_fields
     end
   end
+
+  context 'when a record is updated' do
+    before(:each) do
+      subject.update_attribute(:body, 'updated')
+    end
+
+    it 'saves the updated values to the approval record' do
+      subject.update_approvals.last.object.should == {'body' => 'updated'}
+    end
+
+    it 'saves the original values to the approval record' do
+      subject.update_approvals.last.original.should == {'body' => nil}
+    end
+  end
 end
