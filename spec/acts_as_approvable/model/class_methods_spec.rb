@@ -133,6 +133,13 @@ describe ActsAsApprovable::Model::ClassMethods do
     end
   end
 
+  describe '.global_approvals_on?' do
+    it 'checks the global approval status' do
+      ActsAsApprovable.should_receive(:enabled?)
+      subject.global_approvals_on?
+    end
+  end
+
   describe '.approvable_on?' do
     it { should be_approvable_on(:create) }
     it { should be_approvable_on(:update) }
