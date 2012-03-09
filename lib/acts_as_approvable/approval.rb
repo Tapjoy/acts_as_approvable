@@ -10,6 +10,7 @@ class Approval < ActiveRecord::Base
   validates_numericality_of :state, :greater_than_or_equal_to => 0, :less_than => STATES.length
 
   serialize :object
+  serialize :original
 
   before_save :able_to_save?
 

@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  :state,     :null => false, :default => 0
     t.integer  :owner_id
     t.text     :object
+    t.text     :original
     t.text     :reason
 
     t.timestamps

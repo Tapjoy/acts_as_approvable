@@ -7,6 +7,7 @@ class CreateApprovals < ActiveRecord::Migration
       t.integer  :state,     :null => false, :default => 0
 <% if options[:owner] %>      t.integer  :owner_id
 <% end %>      t.text     :object
+      t.text     :original
       t.text     :reason
 
       t.timestamps
