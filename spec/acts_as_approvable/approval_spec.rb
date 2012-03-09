@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Approval do
+  before(:each) do
+    subject.stub(:save! => true, :save => true)
+  end
+
   it 'should serialize :object' do
     described_class.serialized_attributes.keys.should include('object')
   end
@@ -134,142 +138,68 @@ describe Approval do
     end
   end
 
-  describe '#pending?' do
-    context 'when the state is pending' do
-      before(:each) do
-        subject.stub(:state => 'pending')
-      end
-
-      it { should be_pending }
+  context 'when the state is pending' do
+    before(:each) do
+      subject.stub(:state => 'pending')
     end
 
-    context 'when the state is approved' do
-      before(:each) do
-        subject.stub(:state => 'approved')
-      end
-
-      it { should_not be_pending }
-    end
-
-    context 'when the state is rejected' do
-      before(:each) do
-        subject.stub(:state => 'rejected')
-      end
-
-      it { should_not be_pending }
-    end
+    it { should be_pending }
+    it { should_not be_approved }
+    it { should_not be_rejected }
+    it { should_not be_locked }
+    it { should be_unlocked }
   end
 
-  describe '#approved?' do
-    context 'when the state is pending' do
-      before(:each) do
-        subject.stub(:state => 'pending')
-      end
-
-      it { should_not be_approved }
+  context 'when the state is approved' do
+    before(:each) do
+      subject.stub(:state => 'approved')
     end
 
-    context 'when the state is approved' do
-      before(:each) do
-        subject.stub(:state => 'approved')
-      end
-
-      it { should be_approved }
-    end
-
-    context 'when the state is rejected' do
-      before(:each) do
-        subject.stub(:state => 'rejected')
-      end
-
-      it { should_not be_approved }
-    end
+    it { should_not be_pending }
+    it { should be_approved }
+    it { should_not be_rejected }
+    it { should be_locked }
+    it { should_not be_unlocked }
   end
 
-  describe '#rejected?' do
-    context 'when the state is pending' do
-      before(:each) do
-        subject.stub(:state => 'pending')
-      end
-
-      it { should_not be_rejected }
+  context 'when the state is rejected' do
+    before(:each) do
+      subject.stub(:state => 'rejected')
     end
 
-    context 'when the state is approved' do
-      before(:each) do
-        subject.stub(:state => 'approved')
-      end
-
-      it { should_not be_rejected }
-    end
-
-    context 'when the state is rejected' do
-      before(:each) do
-        subject.stub(:state => 'rejected')
-      end
-
-      it { should be_rejected }
-    end
+    it { should_not be_pending }
+    it { should_not be_approved }
+    it { should be_rejected }
+    it { should be_locked }
+    it { should_not be_unlocked }
   end
 
-  describe '#locked?' do
-    context 'when the state is pending' do
-      before(:each) do
-        subject.stub(:state => 'pending')
-      end
-
-      it { should_not be_locked }
+  context 'when the event is :update' do
+    before(:each) do
+      subject.stub(:event => 'update')
     end
 
-    context 'when the state is approved' do
-      before(:each) do
-        subject.stub(:state => 'approved')
-      end
-
-      it { should be_locked }
-    end
-
-    context 'when the state is rejected' do
-      before(:each) do
-        subject.stub(:state => 'rejected')
-      end
-
-      it { should be_locked }
-    end
+    it { should be_update }
+    it { should_not be_create }
   end
 
-  describe '#unlocked?' do
-    context 'when the state is pending' do
-      before(:each) do
-        subject.stub(:state => 'pending')
-      end
-
-      it { should be_unlocked }
+  context 'when the event is :create' do
+    before(:each) do
+      subject.stub(:event => 'create')
     end
 
-    context 'when the state is approved' do
-      before(:each) do
-        subject.stub(:state => 'approved')
-      end
-
-      it { should_not be_unlocked }
-    end
-
-    context 'when the state is rejected' do
-      before(:each) do
-        subject.stub(:state => 'rejected')
-      end
-
-      it { should_not be_unlocked }
-    end
+    it { should_not be_update }
+    it { should be_create }
   end
 
-  describe '#can_save?' do
-    context 'when the record is unlocked' do
-      before(:each) do
-        subject.stub(:locked? => false)
-      end
+  context 'when the approval is unlocked' do
+    before(:each) do
+      @item = DefaultApprovable.without_approval { |m| m.create }
+      subject.stub(:locked? => false, :created_at => Time.now, :item => @item)
+      @item.stub(:updated_at => Time.now)
+    end
 
+    describe '#can_save?' do
       it { should be_can_save }
 
       it 'does not check the what the state was' do
@@ -278,182 +208,267 @@ describe Approval do
       end
     end
 
-    context 'when the record is locked' do
+    describe '#stale?' do
+      it 'checks when the item was changed' do
+        @item.should_receive(:has_attribute?).with(:updated_at).and_return(true)
+        subject.stale?
+      end
+    end
+
+    describe '#fresh?' do
+      it 'checks when the item was changed' do
+        @item.should_receive(:has_attribute?).with(:updated_at).and_return(true)
+        subject.fresh?
+      end
+    end
+
+    context 'when the approval is newer than the last update' do
       before(:each) do
-        subject.stub(:locked? => true)
+        subject.stub(:created_at => @item.updated_at + 60)
       end
 
+      it { should_not be_stale }
+      it { should be_fresh }
+    end
+
+    context 'when the approval is older than the last update' do
+      before(:each) do
+        subject.stub(:created_at => @item.updated_at - 60)
+      end
+
+      it { should be_stale }
+      it { should_not be_fresh }
+    end
+  end
+
+  context 'when the approval is locked' do
+    before(:each) do
+      subject.stub(:locked? => true)
+    end
+
+    it { should_not be_stale }
+    it { should be_fresh }
+
+    describe '#can_save?' do
       it 'checks the what the state was' do
         subject.should_receive(:state_was)
         subject.can_save?
       end
-
-      context 'and the state is pending' do
-        before(:each) do
-          subject.stub(:state_was => 'pending')
-        end
-
-        it { should be_can_save }
-      end
-
-      context 'and the state is approved' do
-        before(:each) do
-          subject.stub(:state_was => 'approved')
-        end
-
-        it { should_not be_can_save }
-      end
-
-      context 'and the state is rejected' do
-        before(:each) do
-          subject.stub(:state_was => 'rejected')
-        end
-
-        it { should_not be_can_save }
-      end
     end
-  end
 
-  describe '#stale?' do
-    context 'when the record is locked' do
-      before(:each) do
-        subject.stub(:locked? => true)
-      end
-
-      it { should_not be_stale }
-
+    describe '#stale?' do
       it 'does not check when the item was changed' do
         subject.should_not_receive(:item)
         subject.stale?
       end
     end
 
-    context 'when the record is unlocked' do
-      before(:each) do
-        @item = DefaultApprovable.without_approval { |m| m.create }
-        subject.stub(:locked? => false, :created_at => Time.now, :item => @item)
-        @item.stub(:updated_at => Time.now)
-      end
-
-      it 'checks when the item was changed' do
-        @item.should_receive(:has_attribute?).with(:updated_at).and_return(true)
-        subject.stale?
-      end
-
-      context 'when the approval is newer than the last update' do
-        before(:each) do
-          subject.stub(:created_at => @item.updated_at + 60)
-        end
-
-        it { should_not be_stale }
-      end
-
-      context 'when the approval is older than the last update' do
-        before(:each) do
-          subject.stub(:created_at => @item.updated_at - 60)
-        end
-
-        it { should be_stale }
-      end
-    end
-  end
-
-  describe '#fresh?' do
-    context 'when the record is locked' do
-      before(:each) do
-        subject.stub(:locked? => true)
-      end
-
-      it { should be_fresh }
-
+    describe '#fresh?' do
       it 'does not check when the item was changed' do
         subject.should_not_receive(:item)
         subject.fresh?
       end
     end
 
-    context 'when the record is unlocked' do
+    describe '#approve!' do
+      it 'raises a Locked exception' do
+        expect { subject.approve! }.to raise_error(ActsAsApprovable::Error::Locked)
+      end
+
+      it 'leaves the approval in a pending state' do
+        begin; subject.approve!; rescue ActsAsApprovable::Error::Locked; end
+        subject.should be_pending
+      end
+    end
+
+    describe '#reject!' do
+      it 'raises a Locked exception' do
+        expect { subject.reject! }.to raise_error(ActsAsApprovable::Error::Locked)
+      end
+
+      it 'leaves the approval in a pending state' do
+        begin; subject.reject!; rescue ActsAsApprovable::Error::Locked; end
+        subject.should be_pending
+      end
+    end
+
+    context 'and the state is pending' do
       before(:each) do
-        @item = DefaultApprovable.without_approval { |m| m.create }
-        subject.stub(:locked? => false, :created_at => Time.now, :item => @item)
-        @item.stub(:updated_at => Time.now)
+        subject.stub(:state_was => 'pending')
       end
 
-      it 'checks when the item was changed' do
-        @item.should_receive(:has_attribute?).with(:updated_at).and_return(true)
-        subject.fresh?
+      it { should be_can_save }
+    end
+
+    context 'and the state is approved' do
+      before(:each) do
+        subject.stub(:state_was => 'approved')
       end
 
-      context 'when the approval is newer than the last update' do
-        before(:each) do
-          subject.stub(:created_at => @item.updated_at + 60)
+      it { should_not be_can_save }
+    end
+
+    context 'and the state is rejected' do
+      before(:each) do
+        subject.stub(:state_was => 'rejected')
+      end
+
+      it { should_not be_can_save }
+    end
+  end
+
+  context 'when the approval is stale' do
+    before(:each) do
+      @item = DefaultApprovable.without_approval { |m| m.create }
+      subject.stub(:stale? => true, :item => @item)
+    end
+
+    it { should be_stale }
+    it { should_not be_fresh }
+
+    describe '#approve!' do
+      it 'raises a Stale exception' do
+        expect { subject.approve! }.to raise_error(ActsAsApprovable::Error::Stale)
+      end
+
+      it 'leaves the approval in a pending state' do
+        begin; subject.approve!; rescue ActsAsApprovable::Error::Stale; end
+        subject.should be_pending
+      end
+
+      context 'when approval is forced' do
+        it 'does not raise a Stale exception' do
+          expect { subject.approve!(true) }.to_not raise_error(ActsAsApprovable::Error::Stale)
         end
 
-        it { should be_fresh }
+        it 'leaves the approval in a pending state' do
+          subject.approve!(true)
+          subject.should be_approved
+        end
+      end
+    end
+
+    describe '#reject!' do
+      it 'does not raise a Stale exception' do
+        expect { subject.reject! }.to_not raise_error(ActsAsApprovable::Error::Stale)
       end
 
-      context 'when the approval is older than the last update' do
+      it 'moves the approval to a rejected state' do
+        subject.reject!
+        subject.should be_rejected
+      end
+    end
+  end
+
+  context 'when the approval is unlocked and fresh' do
+    before(:each) do
+      @item = DefaultApprovable.without_approval { |m| m.create }
+      subject.stub(:locked? => false, :stale? => false, :item => @item, :object => {})
+    end
+
+    it { should_not be_stale }
+    it { should be_fresh }
+
+    describe '#approve!' do
+      it 'does not raise an exception' do
+        expect { subject.approve! }.to_not raise_error
+      end
+
+      it 'moves the approval to an approved state' do
+        subject.approve!
+        subject.should be_approved
+      end
+
+      it 'calls the before and after callbacks' do
+        subject.should_receive(:run_item_callback).with(:before_approve).once.and_return(true)
+        subject.should_receive(:run_item_callback).with(:after_approve).once
+        subject.approve!
+      end
+
+      context 'when the event is :update' do
         before(:each) do
-          subject.stub(:created_at => @item.updated_at - 60)
+          subject.stub(:event => 'update')
         end
 
-        it { should_not be_fresh }
-      end
-    end
-  end
+        it 'sets the item attributes' do
+          @item.should_receive(:attributes=)
+          subject.approve!
+        end
 
-  describe '#update?' do
-    context 'when the event is :update' do
-      before(:each) do
-        subject.stub(:event => 'update')
-      end
-
-      it { should be_update }
-    end
-
-    context 'when the event is :create' do
-      before(:each) do
-        subject.stub(:event => 'create')
+        it 'does not set the local item state' do
+          @item.should_not_receive(:set_approval_state)
+          subject.approve!
+        end
       end
 
-      it { should_not be_update }
-    end
-  end
+      context 'when the event is :create' do
+        before(:each) do
+          subject.stub(:event => 'create')
+        end
 
-  describe '#create?' do
-    context 'when the event is :update' do
-      before(:each) do
-        subject.stub(:event => 'update')
-      end
+        it 'does not set the item attributes' do
+          @item.should_not_receive(:attributes=)
+          subject.approve!
+        end
 
-      it { should_not be_create }
-    end
-
-    context 'when the event is :create' do
-      before(:each) do
-        subject.stub(:event => 'create')
-      end
-
-      it { should be_create }
-    end
-  end
-
-  describe '#approve!' do
-    context 'when the approval is locked' do
-      before(:each) do
-        subject.stub(:locked? => true)
+        it 'sets the local item state' do
+          @item.should_receive(:set_approval_state).with('approved')
+          subject.approve!
+        end
       end
     end
 
-    context 'when the approval is stale' do
-      before(:each) do
-        subject.stub(:stale? => true)
+    describe '#reject!' do
+      it 'does not raise an exception' do
+        expect { subject.reject! }.to_not raise_error
       end
-    end
 
-    context 'when the approval is unlocked and fresh' do
-      before(:each) do
-        subject.stub(:locked? => false, :stale? => false)
+      it 'moves the approval to a rejected state' do
+        subject.reject!
+        subject.should be_rejected
+      end
+
+      it 'sets the reason if given' do
+        subject.reject!('reason')
+        subject.reason.should == 'reason'
+      end
+
+      it 'calls the before and after callbacks' do
+        subject.should_receive(:run_item_callback).with(:before_reject).once.and_return(true)
+        subject.should_receive(:run_item_callback).with(:after_reject).once
+        subject.reject!
+      end
+
+      context 'when the event is :update' do
+        before(:each) do
+          subject.stub(:event => 'update')
+        end
+
+        it 'does not set the item attributes' do
+          @item.should_not_receive(:attributes=)
+          subject.reject!
+        end
+
+        it 'does not set the local item state' do
+          @item.should_not_receive(:set_approval_state)
+          subject.reject!
+        end
+      end
+
+      context 'when the event is :create' do
+        before(:each) do
+          subject.stub(:event => 'create')
+        end
+
+        it 'does not set the item attributes' do
+          @item.should_not_receive(:attributes=)
+          subject.reject!
+        end
+
+        it 'sets the local item state' do
+          @item.should_receive(:set_approval_state).with('rejected')
+          subject.reject!
+        end
       end
     end
   end
