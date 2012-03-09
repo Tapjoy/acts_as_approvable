@@ -1,9 +1,4 @@
-test/*.db
-test/debug.log
+debug.log
 spec/*.db
-spec/debug.log
 coverage/
-rdoc/
-yardoc/
-.yardoc
 *.gem

@@ -2,6 +2,8 @@ require 'rubygems'
 require 'bundler/setup'
 require 'rake/testtask'
 require 'rspec/core/rake_task'
+require 'cucumber'
+require 'cucumber/rake/task'
 require 'yard'
 require 'appraisal'
 
@@ -52,6 +54,10 @@ elsif RUBY_VERSION =~ /^1\.9/
       Rake::Task['test'].invoke
     end
   end
+end
+
+Cucumber::Rake::Task.new(:features) do |t|
+  t.cucumber_opts = "features --format pretty"
 end
 
 desc 'Generate documentation for the acts_as_approvable plugin.'
