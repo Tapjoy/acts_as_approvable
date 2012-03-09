@@ -15,12 +15,6 @@ appraise 'rails31' do
   gem 'sqlite3'
 end
 
-appraise 'rails32' do
-  gem 'activerecord', '~> 3.2.0'
-  gem 'railties',     '~> 3.2.0'
-  gem 'sqlite3'
-end
-
 appraise 'mysql2' do
   gem 'mysql2',       '~> 0.2.18'
 end
