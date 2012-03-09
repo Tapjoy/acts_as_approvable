@@ -50,19 +50,20 @@ def load_schema
     load(File.expand_path('schema.rb', File.dirname(__FILE__)))
   end
 
-  ar_classes.each { |klass| klass.reset_column_information }
-end
-
-def ar_classes
-  ActiveRecord::Base.send(ActiveRecord::Base.respond_to?(:descendants) ? :descendants : :subclasses)
+  [NotApprovable, DefaultApprovable, CreatesApprovable, CreatesWithStateApprovable, UpdatesApprovable, UpdatesIgnoreFieldsApprovable, UpdatesOnlyFieldsApprovable].each do |klass|
+    klass.reset_column_information
+  end
 end
 
 def truncate
-  ar_classes.each { |klass| klass.delete_all }
+  [NotApprovable, DefaultApprovable, CreatesApprovable, UpdatesApprovable].each do |klass|
+    klass.delete_all
+  end
 end
 
 RSpec.configure do |config|
   config.before(:suite) do
+    LOGGER = setup_log unless defined?(LOGGER)
     load_schema
   end
 
