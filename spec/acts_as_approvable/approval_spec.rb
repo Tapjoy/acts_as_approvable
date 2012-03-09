@@ -199,12 +199,12 @@ describe Approval do
       @item.stub(:updated_at => Time.now)
     end
 
-    describe '#can_save?' do
-      it { should be_can_save }
+    describe '#able_to_save?' do
+      it { should be_able_to_save }
 
       it 'does not check the what the state was' do
         subject.should_not_receive(:state_was)
-        subject.can_save?
+        subject.able_to_save?
       end
     end
 
@@ -249,10 +249,10 @@ describe Approval do
     it { should_not be_stale }
     it { should be_fresh }
 
-    describe '#can_save?' do
+    describe '#able_to_save?' do
       it 'checks the what the state was' do
         subject.should_receive(:state_was)
-        subject.can_save?
+        subject.able_to_save?
       end
     end
 
@@ -297,7 +297,7 @@ describe Approval do
         subject.stub(:state_was => 'pending')
       end
 
-      it { should be_can_save }
+      it { should be_able_to_save }
     end
 
     context 'and the state is approved' do
@@ -305,7 +305,7 @@ describe Approval do
         subject.stub(:state_was => 'approved')
       end
 
-      it { should_not be_can_save }
+      it { should_not be_able_to_save }
     end
 
     context 'and the state is rejected' do
@@ -313,7 +313,7 @@ describe Approval do
         subject.stub(:state_was => 'rejected')
       end
 
-      it { should_not be_can_save }
+      it { should_not be_able_to_save }
     end
   end
 

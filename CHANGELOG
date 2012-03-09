@@ -7,6 +7,7 @@
  called. Moved other class methods into a module that is included on
  configuration.
  * Moved from Test::Unit to RSpec
+ * Renamed `can_save?` to `able_to_save?`
 
 == 0.6.6
 

@@ -11,7 +11,7 @@ class Approval < ActiveRecord::Base
 
   serialize :object
 
-  before_save :can_save?
+  before_save :able_to_save?
 
   ##
   # Find the enumerated value for a given state.
@@ -97,7 +97,7 @@ class Approval < ActiveRecord::Base
   ##
   # Returns true if the approval able to be saved. This requires an unlocked
   # approval, or an approval just leaving the 'pending' state.
-  def can_save?
+  def able_to_save?
     unlocked? or state_was == 'pending'
   end
 
