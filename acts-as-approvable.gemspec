@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<shoulda>
   s.add_development_dependency %q<rspec>
   s.add_development_dependency %q<timecop>
+  s.add_development_dependency %q<cucumber>
   s.add_development_dependency %q<rake>
   s.add_development_dependency %q<rcov> if RUBY_VERSION =~ /^1\.8/
   s.add_development_dependency %q<simplecov> if RUBY_VERSION =~ /^1\.9/
