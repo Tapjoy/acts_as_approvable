@@ -120,4 +120,28 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
       end
     end
   end
+
+  describe '#approve!' do
+    it 'approves the record' do
+      subject.approve!
+      subject.should be_approved
+    end
+
+    it 'proxies to the approval record for approval' do
+      subject.should_receive(:approval)
+      subject.approve!
+    end
+  end
+
+  describe '#reject!' do
+    it 'rejects the record' do
+      subject.reject!
+      subject.should be_rejected
+    end
+
+    it 'proxies to the approval record for approval' do
+      subject.should_receive(:approval)
+      subject.reject!
+    end
+  end
 end
