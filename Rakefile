@@ -14,7 +14,7 @@ task :pry do |t|
   require 'pry'
   require './spec/spec_helper'
 
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
+  setup_log(STDOUT)
   load_schema
 
   #ActsAsApprovable::Ownership.configure

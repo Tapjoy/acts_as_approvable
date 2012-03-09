@@ -18,12 +18,14 @@ require File.expand_path('../lib/acts-as-approvable', File.dirname(__FILE__))
 require File.expand_path('support/models', File.dirname(__FILE__))
 require File.expand_path('support/matchers', File.dirname(__FILE__))
 
-logfile = File.expand_path('debug.log', File.dirname(__FILE__))
-LOGGER = ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
-                                       ActiveSupport::BufferedLogger.new(logfile)
-                                     else
-                                       Logger.new(logfile)
-                                     end
+def setup_log(logfile = nil)
+  logfile ||= File.expand_path('debug.log', File.dirname(__FILE__))
+  ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
+                                ActiveSupport::BufferedLogger.new(logfile)
+                              else
+                                Logger.new(logfile)
+                              end
+end
 
 def load_schema
   config = YAML::load(IO.read(File.expand_path('database.yml', File.dirname(__FILE__))))
