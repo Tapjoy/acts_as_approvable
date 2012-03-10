@@ -22,6 +22,28 @@ describe ActsAsApprovable::Model::DestroyInstanceMethods do
         subject.destroy_approvals(false).should == [@approval2]
       end
     end
+
+    context 'with other event records' do
+      subject { DefaultApprovable.create }
+
+      before(:each) do
+        @approval3 = subject.approval
+
+        subject.update_attribute(:title, 'review')
+        @approval4 = subject.approvals.last
+        @approval4.approve!
+      end
+
+      it 'retreives only :destroy approvals' do
+        subject.destroy_approvals.should == [@approval1, @approval2]
+      end
+
+      context 'when requesting only pending records' do
+        it 'retreives only pending :destroy approvals' do
+          subject.destroy_approvals(false).should == [@approval2]
+        end
+      end
+    end
   end
 
   describe '#pending_destruction?' do
