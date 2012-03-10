@@ -16,8 +16,8 @@ task :pry do |t|
   require 'pry'
   require './spec/spec_helper'
 
-  setup_log(STDOUT)
-  load_schema
+  Support::Database.setup_log(STDOUT)
+  Support::Database.load_schema
 
   #ActsAsApprovable::Ownership.configure
   Pry.start(TOPLEVEL_BINDING)
