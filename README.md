@@ -1,5 +1,4 @@
-Acts as Approvable
-==================
+# Acts as Approvable  [![Build Status](https://secure.travis-ci.org/jlogsdon/acts_as_approvable.png)](http://travis-ci.org/jlogsdon/acts_as_approvable?branch=master)
 
 This plugin provides a workflow for approving new records and changes to existing
 records.
