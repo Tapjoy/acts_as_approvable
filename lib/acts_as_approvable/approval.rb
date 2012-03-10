@@ -128,6 +128,8 @@ class Approval < ActiveRecord::Base
     event == 'create'
   end
 
+  ##
+  # Returns true if this is a `:destroy` approval event.
   def destroy?
     event == 'destroy'
   end

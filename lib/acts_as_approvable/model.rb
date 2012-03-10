@@ -12,7 +12,7 @@ module ActsAsApprovable
     # Declare this in your model to require approval on new records or changes to fields.
     #
     # @param [Hash] options the options for this models approval workflow.
-    # @option options [Symbol,Array] :on    The events to require approval on (`:create` or `:update`).
+    # @option options [Symbol,Array] :on    The events to require approval on (`:create`, `:update` or `:destroy`).
     # @option options [String] :state_field The local field to store `:create` approval state.
     # @option options [Array]  :ignore      A list of fields to ignore. By default we ignore `:created_at`, `:updated_at` and
     #                                       the field specified in `:state_field`.
