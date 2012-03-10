@@ -80,6 +80,14 @@ module ActsAsApprovable
         without_approval { |i| save!(*args) }
       end
 
+      def destroy_without_approval
+        without_approval { |i| destroy }
+      end
+
+      def destroy_without_approval!
+        without_approval { |i| destroy! }
+      end
+
       private
       def approvable_save
         @approval.save if @approval.present? && @approval.new_record?

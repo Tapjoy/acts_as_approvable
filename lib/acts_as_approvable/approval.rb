@@ -128,6 +128,10 @@ class Approval < ActiveRecord::Base
     event == 'create'
   end
 
+  def destroy?
+    event == 'destroy'
+  end
+
   ##
   # Attempt to approve the record change.
   #
@@ -148,9 +152,11 @@ class Approval < ActiveRecord::Base
       item.attributes = data
     elsif create?
       item.set_approval_state('approved')
+    elsif destroy?
+      item.destroy_without_approval
     end
 
-    item.save_without_approval!
+    item.save_without_approval! unless destroy?
     update_attributes!(:state => 'approved')
     run_item_callback(:after_approve)
   end
