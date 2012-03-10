@@ -8,6 +8,7 @@
  configuration.
  * Moved from Test::Unit to RSpec
  * Renamed `can_save?` to `able_to_save?`
+ * Specify larger field size for original and object columns (16MB)
 
 == 0.6.6
 
