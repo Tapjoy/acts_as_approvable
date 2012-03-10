@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.date      = %q(2012-02-14)
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- test/*`.split("\n")
+  s.test_files    = `git ls-files -- spec/* features/*`.split("\n")
   s.require_paths = ['lib']
 
   s.add_development_dependency %q<activerecord>, '~> 2.3'
