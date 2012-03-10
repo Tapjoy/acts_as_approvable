@@ -4,21 +4,21 @@ ActiveRecord::Schema.define(:version => 0) do
 
   create_table :nots, :force => true do |t|
     t.string  :title
-    t.text    :body
+    t.text    :body, :limit => 16777216
 
     t.timestamps
   end
 
   create_table :defaults, :force => true do |t|
     t.string  :title
-    t.text    :body
+    t.text    :body, :limit => 16777216
 
     t.timestamps
   end
 
   create_table :creates, :force => true do |t|
     t.string  :title
-    t.text    :body
+    t.text    :body, :limit => 16777216
     t.string  :state
 
     t.timestamps
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(:version => 0) do
 
   create_table :updates, :force => true do |t|
     t.string  :title
-    t.text    :body
+    t.text    :body, :limit => 16777216
 
     t.timestamps
   end
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   :event,     :null => false
     t.integer  :state,     :null => false, :default => 0
     t.integer  :owner_id
-    t.text     :object
-    t.text     :original
+    t.text     :object,    :limit => 16777216
+    t.text     :original,  :limit => 16777216
     t.text     :reason
 
     t.timestamps

@@ -1,14 +1,14 @@
 class CreateApprovals < ActiveRecord::Migration
   def self.up
     create_table :approvals do |t|
-      t.string   :item_type, :null => false
-      t.integer  :item_id,   :null => false
-      t.string   :event,     :null => false
-      t.integer  :state,     :null => false, :default => 0
-<% if options[:owner] %>      t.integer  :owner_id
-<% end %>      t.text     :object
-      t.text     :original
-      t.text     :reason
+      t.string  :item_type, :null => false
+      t.integer :item_id,   :null => false
+      t.string  :event,     :null => false
+      t.integer :state,     :null => false, :default => 0
+<% if options[:owner] %>      t.integer :owner_id
+<% end %>      t.text    :object,    :limit => 16777216
+      t.text    :original,  :limit => 16777216
+      t.text    :reason
 
       t.timestamps
     end
