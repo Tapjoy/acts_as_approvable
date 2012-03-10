@@ -3,16 +3,18 @@ appraise 'rails2' do
   gem 'sqlite3'
 end
 
-appraise 'rails30' do
-  gem 'activerecord', '~> 3.0.0'
-  gem 'railties',     '~> 3.0.0'
-  gem 'sqlite3'
-end
+if RUBY_VERSION =~ /^1\.9/
+  appraise 'rails30' do
+    gem 'activerecord', '~> 3.0.0'
+    gem 'railties',     '~> 3.0.0'
+    gem 'sqlite3'
+  end
 
-appraise 'rails31' do
-  gem 'activerecord', '~> 3.1.0'
-  gem 'railties',     '~> 3.1.0'
-  gem 'sqlite3'
+  appraise 'rails31' do
+    gem 'activerecord', '~> 3.1.0'
+    gem 'railties',     '~> 3.1.0'
+    gem 'sqlite3'
+  end
 end
 
 appraise 'mysql2' do

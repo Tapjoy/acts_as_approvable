@@ -56,6 +56,28 @@ elsif RUBY_VERSION =~ /^1\.9/
   end
 end
 
+namespace :test do
+  desc 'Setup appraisals and install gems for the gambit run'
+  task :setup do
+    start = Time.now
+    Kernel.system('rbenv each -v bundle install')
+    Kernel.system('rbenv each -v bundle exec rake appraisal:install')
+    elapsed = Time.now - start
+
+    puts "\nRan everything in #{elapsed} seconds"
+  end
+
+  desc 'Run all specs and features across all installed rubies'
+  task :gambit do
+    start = Time.now
+    Kernel.system('rbenv each -v bundle exec rake appraisal test')
+    Kernel.system('rbenv each -v bundle exec rake appraisal features')
+    elapsed = Time.now - start
+
+    puts "\nRan everything in #{elapsed} seconds"
+  end
+end
+
 Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = "features --format pretty"
 end
