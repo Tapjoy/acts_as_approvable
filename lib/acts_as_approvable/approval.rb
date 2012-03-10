@@ -6,7 +6,7 @@ class Approval < ActiveRecord::Base
   belongs_to :item,  :polymorphic => true
 
   validates_presence_of  :item
-  validates_inclusion_of :event, :in => %w(create update)
+  validates_inclusion_of :event, :in => %w(create update destroy)
   validates_numericality_of :state, :greater_than_or_equal_to => 0, :less_than => STATES.length
 
   serialize :object

@@ -52,6 +52,13 @@ class UpdatesIgnoreFieldsApprovable < ActiveRecord::Base
   acts_as_approvable :on => :update, :ignore => [:title]
 end
 
+class DestroysApprovable < ActiveRecord::Base
+  def self.table_name; 'destroys'; end
+  def self.primary_key; 'id'; end
+
+  acts_as_approvable :on => :destroy
+end
+
 class OwnedApproval < ActiveRecord::Base
   def self.table_name; 'approvals'; end
   def self.primary_key; 'id'; end
