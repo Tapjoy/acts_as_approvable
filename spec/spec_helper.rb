@@ -1,8 +1,11 @@
 if RUBY_VERSION =~ /^1\.9/
-  require 'simplecov'
-  SimpleCov.start do
-    add_filter '/spec/'
-  end if ENV['COVERAGE']
+  begin
+    require 'simplecov'
+    SimpleCov.start do
+      add_filter '/spec/'
+    end if ENV['COVERAGE']
+  rescue LoadError
+  end
 end
 
 ENV['RAILS_ENV'] = 'test'
