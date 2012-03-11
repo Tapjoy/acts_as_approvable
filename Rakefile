@@ -39,13 +39,16 @@ desc 'Test the acts_as_approvable plugin.'
 RSpec::Core::RakeTask.new(:test)
 
 if RUBY_VERSION =~ /^1\.8/
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |t|
-    t.libs        << 'test' << 'lib'
-    t.rcov_opts   << '--exclude' << '"Library/Ruby/*"' << '--sort' << 'coverage'
-    t.pattern     = 'test/*_test.rb'
-    t.output_dir  = 'coverage/'
-    t.verbose     = true
+  begin
+    require 'rcov/rcovtask'
+    Rcov::RcovTask.new do |t|
+      t.libs        << 'test' << 'lib'
+      t.rcov_opts   << '--exclude' << '"Library/Ruby/*"' << '--sort' << 'coverage'
+      t.pattern     = 'test/*_test.rb'
+      t.output_dir  = 'coverage/'
+      t.verbose     = true
+    end
+  rescue LoadError
   end
 elsif RUBY_VERSION =~ /^1\.9/
   namespace :test do
