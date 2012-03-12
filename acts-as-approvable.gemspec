@@ -17,14 +17,14 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- spec/* features/*`.split("\n")
   s.require_paths = ['lib']
 
-  s.add_development_dependency %q<activerecord>, '~> 2.3'
-  s.add_development_dependency %q<appraisal>
-  s.add_development_dependency %q<redcarpet>
-  s.add_development_dependency %q<shoulda>, '~> 2.0'
-  s.add_development_dependency %q<rspec>
-  s.add_development_dependency %q<timecop>
-  s.add_development_dependency %q<cucumber>
-  s.add_development_dependency %q<rake>
+  s.add_development_dependency %q<activerecord>,  '~> 2.3.14'
+  s.add_development_dependency %q<appraisal>,     '~> 0.4.1'
+  s.add_development_dependency %q<redcarpet>,     '~> 2.1.0'
+  s.add_development_dependency %q<shoulda>,       '~> 2.0'
+  s.add_development_dependency %q<rspec>,         '~> 2.8.0'
+  s.add_development_dependency %q<timecop>,       '~> 0.3.5'
+  s.add_development_dependency %q<cucumber>,      '~> 1.1.0'
+  s.add_development_dependency %q<rake>,          '~> 0.9.2'
   s.add_development_dependency %q<rcov> if RUBY_VERSION =~ /^1\.8/
   s.add_development_dependency %q<simplecov> if RUBY_VERSION =~ /^1\.9/
   s.add_development_dependency %q<yard>
