@@ -25,8 +25,17 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<timecop>,       '~> 0.3.5'
   s.add_development_dependency %q<cucumber>,      '~> 1.1.0'
   s.add_development_dependency %q<rake>,          '~> 0.9.2'
-  s.add_development_dependency %q<rcov> if RUBY_VERSION =~ /^1\.8/
-  s.add_development_dependency %q<simplecov> if RUBY_VERSION =~ /^1\.9/
   s.add_development_dependency %q<yard>
-  s.add_development_dependency %q<pry>
+  s.add_development_dependency %q<pry>,           '~> 0.9.8.1'
+  s.add_development_dependency %q<pry-syntax-hacks>
+
+  if RUBY_VERSION =~ /^1\.9/
+    s.add_development_dependency %q<simplecov>
+    s.add_development_dependency %q<pry-coolline>
+    s.add_development_dependency %q<pry-stack_explorer>
+    s.add_development_dependency %q<pry-nav>,           '~> 0.1.0'
+    s.add_development_dependency %q<plymouth>
+  elsif RUBY_VERSION =~ /^1\.8/
+    s.add_development_dependency %q<rcov>
+  end
 end

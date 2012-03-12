@@ -11,11 +11,15 @@ end
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', '..'))
 
-require 'rubygems'
 require 'rspec'
 require 'shoulda'
 require 'timecop'
 require 'active_record'
+
+begin
+  require 'plymouth'
+rescue LoadError
+end
 
 require File.expand_path('../lib/acts-as-approvable', File.dirname(__FILE__))
 
