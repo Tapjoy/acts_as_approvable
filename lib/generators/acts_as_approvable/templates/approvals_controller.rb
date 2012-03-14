@@ -67,13 +67,8 @@ class ApprovalsController < <%= options[:base] %>
   def setup_conditions
     @conditions ||= {}
 
-<% if owner? %>    if params[:owner_id]
-      @conditions[:owner_id] = params[:owner_id]
-      @conditions[:owner_id] = nil if params[:owner_id] == 0
-    end
-<% end %>    if params[:item_type]
-      @conditions[:item_type] = params[:item_type]
-    end
+<% if owner? %>    @conditions[:owner_id] = params[:owner_id] if params[:owner_id].present?
+<% end %>    @conditions[:item_type] = params[:item_type] if params[:item_type].present?
   end
 
   # Check for the selected models partial, use the generic one if it doesn't exist
