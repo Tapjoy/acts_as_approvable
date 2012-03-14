@@ -1,3 +1,7 @@
+== 0.6.8.1
+
+ * Bad gem push...
+
 == 0.6.8
 
  * Fixed issue where approval state would be checked if the local state field
