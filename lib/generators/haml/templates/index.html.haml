@@ -5,7 +5,7 @@
     = label_tag('state', 'State')
     = select_tag('state', options_for_select(Approval.options_for_state, @conditions[:state]))
 <% if owner? %>  = label_tag('owner_id', 'Owner')
-  = select('owner_id', options_for_select(Approval.options_for_assigned_owners(true), @conditions[:owner_id]))
+  = select_tag('owner_id', options_for_select(Approval.options_for_assigned_owners(true), @conditions[:owner_id]))
 <% end %>  = label_tag('item_type', 'Type')
   = select_tag('item_type', options_for_select(Approval.options_for_type(true), @conditions[:item_type]))
   %button{:type => 'Submit'} Filter
