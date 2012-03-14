@@ -27,7 +27,6 @@ require File.expand_path('support/database', File.dirname(__FILE__))
 require File.expand_path('support/models', File.dirname(__FILE__))
 require File.expand_path('support/matchers', File.dirname(__FILE__))
 
-
 RSpec.configure do |config|
   config.before(:suite) do
     LOGGER = Support::Database.setup_log unless defined?(LOGGER)
