@@ -1,4 +1,4 @@
-== NEXT
+== 0.6.8
 
  * Fixed issue where approval state would be checked if the local state field
  was present but not the value being checked.
