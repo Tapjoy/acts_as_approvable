@@ -4,8 +4,7 @@ module ActsAsApprovable
     # Raised when a locked approval is accepted or rejected.
     class Locked < ActsAsApprovable::Error
       def initialize(*args)
-        args[0] = 'this approval is locked'
-        super(*args)
+        super('this approval is locked')
       end
     end
 
@@ -13,8 +12,7 @@ module ActsAsApprovable
     # Raised when a stale approval is accepted.
     class Stale < ActsAsApprovable::Error
       def initialize(*args)
-        args[0] = 'this approval is stale and should not be approved'
-        super(*args)
+        super('this approval is stale and should not be approved')
       end
     end
 
@@ -23,8 +21,9 @@ module ActsAsApprovable
     # {ActsAsApprovable::Ownership::ClassMethods#available_owners}.
     class InvalidOwner < ActsAsApprovable::Error
       def initialize(*args)
-        args[0] = 'this record cannot be assigned as an owner'
-        super(*args)
+        super('this record cannot be assigned as an owner')
+      end
+    end
 
     class InvalidTransition < ActsAsApprovable::Error
       def initialize(from, to, approval)
