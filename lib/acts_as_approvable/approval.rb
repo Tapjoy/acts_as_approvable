@@ -106,7 +106,7 @@ class Approval < ActiveRecord::Base
   # Returns true if the affected item has been updated since this approval was
   # created.
   def stale?
-    unlocked? and item.has_attribute?(:updated_at) and created_at < item.updated_at
+    unlocked? and item.has_attribute?(:updated_at) and updated_at < item.updated_at
   end
 
   ##
