@@ -1,3 +1,8 @@
+== NEXT
+
+ * Fix generator templates using `select` instead of `select_tag`
+ * `reset!` to push a create approval back to a valid pending state
+
 == 0.6.8.1
 
  * Bad gem push...
