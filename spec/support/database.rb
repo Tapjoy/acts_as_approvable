@@ -24,7 +24,10 @@ module Support
       end
 
       if db_adapter.nil?
-        raise 'No DB Adapter selected. Pass the DB= option to pick one, or install Sqlite or Sqlite3.'
+        puts
+        puts
+        puts "You must run tests using one of the available appraisals. `bundle exec rake -T` to list, `bundle exec rake appraisal:rails31` to run against Rails 3.1 and SQLite."
+        exit
       end
 
       ActiveRecord::Base.establish_connection(config[db_adapter])
