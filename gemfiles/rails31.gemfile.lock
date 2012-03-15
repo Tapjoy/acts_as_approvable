@@ -1,7 +1,7 @@
 PATH
-  remote: /Users/jlogsdon/Code/acts_as_approvable/acts_as_approvable
+  remote: /Users/jlogsdon/Code/jlogsdon.github.com/acts_as_approvable
   specs:
-    acts-as-approvable (0.6.7)
+    acts-as-approvable (0.6.8.1)
 
 GEM
   remote: http://rubygems.org/
