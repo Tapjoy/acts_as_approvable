@@ -180,6 +180,8 @@ class Approval < ActiveRecord::Base
 
     item.set_approval_state('pending')
     item.save_without_approval!
+
+    state_will_change! # Force an update to the record
     update_attributes!(:state => 'rejected')
   end
 

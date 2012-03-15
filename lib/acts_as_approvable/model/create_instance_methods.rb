@@ -69,6 +69,11 @@ module ActsAsApprovable
         approval.reject!
       end
 
+      def reset!
+        return unless approvable_on?(:create) && approval.present?
+        approval.reset!
+      end
+
       private
       def approvable_create?
         approvals_enabled? and approvable_on?(:create)

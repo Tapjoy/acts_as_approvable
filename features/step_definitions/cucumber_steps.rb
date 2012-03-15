@@ -10,7 +10,17 @@ Given /^a record created with (create|update|any) approval$/ do |type|
             end
 end
 
-When /^I (approve|reject) the (record|changes?)$/ do |state, type|
+Given /^the record is (stale)$/ do |state|
+  case state
+  when 'stale'
+    @record.title = 'changed'
+    sleep(1) # Save will put updated_at in a stale place
+  end
+
+  @record.save_without_approval!
+end
+
+When /^I (approve|reject|reset) the (record|changes?)$/ do |state, type|
   begin
     method = "#{state}!".to_sym
 
@@ -44,9 +54,17 @@ When /^I update the record with:$/ do |table|
   @update = table.rows_hash
 end
 
-Then /^it should be (pending|approved|rejected)$/ do |state|
+Then /^it should (not )?be (pending|approved|rejected|stale)$/ do |invert, state|
   method = "#{state}?".to_sym
-  @record.send(method).should be_true
+  record = state == 'stale' ? @record.approval : @record
+
+  unless invert == 'not '
+    record.send(method).should be_true
+  else
+    record.send(method).should be_false
+  end
+
+  @record.reload
 end
 
 Then /^it should have (no )?pending changes$/ do |empty|

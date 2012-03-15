@@ -201,13 +201,19 @@ describe Approval do
       it 'should not raise an InvalidTransition error' do
         expect { subject.reset! }.not_to raise_error(ActsAsApprovable::Error::InvalidTransition)
       end
+
+      it 'should save even if no values change' do
+        subject.stub(:item => DefaultApprovable.new)
+        subject.should_receive(:save!).and_return(true)
+        subject.reset!
+      end
     end
   end
 
   context 'when the approval is unlocked' do
     before(:each) do
       @item = DefaultApprovable.without_approval { |m| m.create }
-      subject.stub(:locked? => false, :created_at => Time.now, :item => @item)
+      subject.stub(:locked? => false, :updated_at => Time.now, :item => @item)
       @item.stub(:updated_at => Time.now)
     end
 
@@ -252,7 +258,7 @@ describe Approval do
 
     context 'when the approval is newer than the last update' do
       before(:each) do
-        subject.stub(:created_at => @item.updated_at + 60)
+        subject.stub(:updated_at => @item.updated_at + 60)
       end
 
       it { should_not be_stale }
@@ -261,7 +267,7 @@ describe Approval do
 
     context 'when the approval is older than the last update' do
       before(:each) do
-        subject.stub(:created_at => @item.updated_at - 60)
+        subject.stub(:updated_at => @item.updated_at - 60)
       end
 
       it { should be_stale }

@@ -145,5 +145,25 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
         subject.reject!
       end
     end
+
+    describe '#reset!' do
+      it 'proxies to the approval record for approval' do
+        subject.should_receive(:approval)
+        subject.reset!
+      end
+
+      context 'when the approval is stale' do
+        before(:each) do
+          subject.approval.class.record_timestamps = false
+          subject.approval.update_attribute(:updated_at, subject.approval.updated_at - 1)
+          subject.approval.class.record_timestamps = true
+        end
+
+        it 'puts the approval back to fresh' do
+          subject.reset!
+          subject.approval.should be_fresh
+        end
+      end
+    end
   end
 end
