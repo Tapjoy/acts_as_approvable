@@ -19,7 +19,7 @@ require 'active_record'
 begin
   require 'plymouth'
 rescue LoadError
-end
+end if ENV['PRYABLE']
 
 require File.expand_path('../lib/acts-as-approvable', File.dirname(__FILE__))
 
