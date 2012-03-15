@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
 
   if RUBY_VERSION =~ /^1\.9/
     s.add_development_dependency %q<simplecov>
-    s.add_development_dependency %q<pry-coolline>
     s.add_development_dependency %q<pry-stack_explorer>
     s.add_development_dependency %q<pry-nav>,           '~> 0.1.0'
     s.add_development_dependency %q<plymouth>
