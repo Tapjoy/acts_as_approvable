@@ -25,6 +25,10 @@ module ActsAsApprovable
       def initialize(*args)
         args[0] = 'this record cannot be assigned as an owner'
         super(*args)
+
+    class InvalidTransition < ActsAsApprovable::Error
+      def initialize(from, to, approval)
+        super("you may not transition from #{from} to #{to} in a #{approval.event} approval")
       end
     end
   end

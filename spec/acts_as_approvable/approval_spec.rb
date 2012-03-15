@@ -181,6 +181,12 @@ describe Approval do
 
     it { should be_update }
     it { should_not be_create }
+
+    describe '#reset!' do
+      it 'should raise an InvalidTransition error' do
+        expect { subject.reset! }.to raise_error(ActsAsApprovable::Error::InvalidTransition)
+      end
+    end
   end
 
   context 'when the event is :create' do
@@ -190,6 +196,12 @@ describe Approval do
 
     it { should_not be_update }
     it { should be_create }
+
+    describe '#reset!' do
+      it 'should not raise an InvalidTransition error' do
+        expect { subject.reset! }.not_to raise_error(ActsAsApprovable::Error::InvalidTransition)
+      end
+    end
   end
 
   context 'when the approval is unlocked' do
@@ -219,6 +231,22 @@ describe Approval do
       it 'checks when the item was changed' do
         @item.should_receive(:has_attribute?).with(:updated_at).and_return(true)
         subject.fresh?
+      end
+    end
+
+    describe '#reset!' do
+      before(:each) do
+        subject.stub(:event => 'create')
+      end
+
+      it 'saves the approval record' do
+        subject.should_receive(:save!).and_return(true)
+        subject.reset!
+      end
+
+      it 'changes the item state' do
+        @item.should_receive(:set_approval_state).with('pending')
+        subject.reset!
       end
     end
 

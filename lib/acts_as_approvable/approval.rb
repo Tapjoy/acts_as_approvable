@@ -164,13 +164,23 @@ class Approval < ActiveRecord::Base
     raise ActsAsApprovable::Error::Locked if locked?
     return unless run_item_callback(:before_reject)
 
-    if create?
-      item.set_approval_state('rejected')
-    end
+    item.set_approval_state('rejected') if create?
 
     item.save_without_approval!
     update_attributes!(:state => 'rejected', :reason => reason)
     run_item_callback(:after_reject)
+  end
+
+  ##
+  # Force the approval back into a 'pending' state. Only valid for :create events.
+  #
+  # @raise [ActsAsApprovable::Error::InvalidTransition] raised if the event is not {#create? :create}.
+  def reset!
+    raise ActsAsApprovable::Error::InvalidTransition.new(state, 'pending', self) unless create?
+
+    item.set_approval_state('pending')
+    item.save_without_approval!
+    update_attributes!(:state => 'rejected')
   end
 
   private
