@@ -53,6 +53,22 @@ module ActsAsApprovable
   end
 
   ##
+  # Set the class used for overriding Ownership retrieval
+  #
+  # @see Ownership
+  def self.owner_source=(source)
+    @owner_source = source
+  end
+
+  ##
+  # Get the class used for overriding Ownership retrieval
+  #
+  # @see Ownership
+  def self.owner_source
+    @owner_source
+  end
+
+  ##
   # Set the engine used for rendering view files.
   def self.view_language=(lang)
     @lang = lang
