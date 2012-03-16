@@ -1,7 +1,11 @@
-== NEXT
+== 0.6.9
 
  * Fix generator templates using `select` instead of `select_tag`
  * `reset!` to push a create approval back to a valid pending state
+ * Refactor Ownership setup to use a source class instead of monkey-patching
+ to override owner retrieval methods. Fixes an issue with rails development
+ mode.
+ * General cleanup
 
 == 0.6.8.1
 
