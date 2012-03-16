@@ -29,9 +29,10 @@ describe ActsAsApprovable::Ownership do
       subject.configure(:owner => FakeUser)
     end
 
-    it 'applies the provided block' do
-      Approval.should_receive(:class_exec)
-      subject.configure {}
+    it 'uses the given :source' do
+      class FakeSource; end
+      ActsAsApprovable.should_receive(:owner_source=).with(FakeSource)
+      subject.configure(:source => FakeSource)
     end
   end
 

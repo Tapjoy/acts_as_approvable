@@ -19,10 +19,29 @@ describe ActsAsApprovable::Ownership::ClassMethods do
     end
   end
 
+  describe '.owner_source' do
+    it 'proxies to ActsAsApprovable' do
+      ActsAsApprovable.should_receive(:owner_source)
+      subject.owner_source
+    end
+  end
+
   describe '.available_owners' do
     it 'selects all records from #owner_class' do
       subject.available_owners.should include(@user1)
       subject.available_owners.should include(@user2)
+    end
+
+    context 'when an owner source is configured' do
+      before(:each) do
+        class FakeSource; end
+        ActsAsApprovable.owner_source = FakeSource
+      end
+
+      it 'proxies to the configured source' do
+        FakeSource.should_receive(:available_owners)
+        subject.available_owners
+      end
     end
   end
 
@@ -48,6 +67,20 @@ describe ActsAsApprovable::Ownership::ClassMethods do
 
     it 'does not includes a prompt by default' do
       subject.options_for_available_owners.should_not include(['(none)', nil])
+    end
+  end
+
+  context 'when an owner source is configured' do
+    before(:each) do
+      class FakeSource; end
+      ActsAsApprovable.owner_source = FakeSource
+    end
+
+    describe '.assigned_owners' do
+      it 'proxies to the configured source' do
+        FakeSource.should_receive(:assigned_owners)
+        subject.assigned_owners
+      end
     end
   end
 
