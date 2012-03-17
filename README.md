@@ -51,8 +51,10 @@ Configuration
 The generator creates an initializor at `config/initializers/acts_as_approvable.rb`. A sample
 initializer might look like this:
 
-    ActsAsApprovable.view_language = 'haml'
-    ActsAsApprovable::Ownership.configure
+```ruby
+ActsAsApprovable.view_language = 'haml'
+ActsAsApprovable::Ownership.configure
+```
 
 The `Ownership` functionality expects a `User` model in your project by default, but by providing
 an `:owner` option you can change the expected model to whatever you wish. `.configure` also
@@ -62,43 +64,63 @@ you see fit.
 For example, to only allow Users with the "admin" role to 'own' an Approval, change your initializer
 to something like this:
 
-    ActsAsApprovable.view_language = 'haml'
-    ActsAsApprovable::Ownership.configure do
-      def self.available_owners
-        owner_class.all(:conditions => ['role', 'admin'])
-      end
-    end
+```ruby
+ActsAsApprovable.view_language = 'haml'
+ActsAsApprovable::Ownership.configure(:source => ApprovalSources)
+```
+
+The `ApprovalSources` class should be created by you if you wish to override how available owners
+are selected or the option arrays for `select_tag` are created. Below is an example:
+
+```ruby
+class ApprovalSources
+  def self.available_owners
+    User.all(:conditions => ['role', 'admin'])
+  end
+
+  def self.option_for_owner(owner)
+    # default is [owner.to_str, owner.id]
+    [owner.email, owner.id]
+  end
+end
+```
 
 Examples
 ========
 
 Require approval for new Users, but not modifications...
 
-    class User < ActiveRecord::Base
-      acts_as_approvable :on => :create, :state_field => :state
+```ruby
+class User < ActiveRecord::Base
+  acts_as_approvable :on => :create, :state_field => :state
 
-      # Let the user know they've been approved
-      def after_approve(approval)
-        ApprovalMailer.deliver_user_approved(self.email)
-      end
+  # Let the user know they've been approved (ApprovalMailer is your creation)
+  def after_approve(approval)
+    ApprovalMailer.deliver_user_approved(self.email)
+  end
 
-      # Let the user know they were rejected
-      def after_reject(approval)
-        ApprovalMailer.deliver_user_rejected(self.email, approval.reason)
-      end
-    end
+  # Let the user know they were rejected
+  def after_reject(approval)
+    ApprovalMailer.deliver_user_rejected(self.email, approval.reason)
+  end
+end
+```
 
 Require approval when a Game's title or description is changed, but not when view or installation count is changed...
 
-    class Game < ActiveRecord::Base
-        acts_as_approvable :on => :update, :ignore => [:views, :installs]
-    end
+```ruby
+class Game < ActiveRecord::Base
+  acts_as_approvable :on => :update, :ignore => [:views, :installs]
+end
+```
 
 Require approval for all changes, except the standard ignored fields (`created_at`, `updated_at` and `:state_field`)...
 
-    class Advertisement < ActiveRecord::Base
-        acts_as_approvable :state_field => :state
-    end
+```ruby
+class Advertisement < ActiveRecord::Base
+  acts_as_approvable :state_field => :state
+end
+```
 
 Options
 =======
