@@ -21,7 +21,7 @@ begin
 rescue LoadError
 end if ENV['PRYABLE']
 
-require File.expand_path('../lib/acts-as-approvable', File.dirname(__FILE__))
+require File.expand_path('../lib/acts_as_approvable', File.dirname(__FILE__))
 
 require File.expand_path('support/database', File.dirname(__FILE__))
 require File.expand_path('support/models', File.dirname(__FILE__))

@@ -1,7 +1,7 @@
 PATH
   remote: /Users/jlogsdon/Code/jlogsdon.github.com/acts_as_approvable
   specs:
-    acts-as-approvable (0.6.9)
+    acts_as_approvable (0.6.9)
 
 GEM
   remote: http://rubygems.org/
@@ -116,7 +116,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.1.0)
-  acts-as-approvable!
+  acts_as_approvable!
   appraisal (~> 0.4.1)
   cucumber (~> 1.1.0)
   plymouth

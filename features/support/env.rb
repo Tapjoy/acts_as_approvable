@@ -3,7 +3,7 @@ ENV['RAILS_ENV'] = 'test'
 require 'rubygems'
 require 'active_record'
 
-require File.expand_path('../../lib/acts-as-approvable', File.dirname(__FILE__))
+require File.expand_path('../../lib/acts_as_approvable', File.dirname(__FILE__))
 
 require File.expand_path('../../spec/support/database', File.dirname(__FILE__))
 require File.expand_path('../../spec/support/models', File.dirname(__FILE__))

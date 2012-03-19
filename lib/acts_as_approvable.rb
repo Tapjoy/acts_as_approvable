@@ -6,7 +6,7 @@ require 'acts_as_approvable/model'
 require 'acts_as_approvable/approval'
 require 'acts_as_approvable/error'
 require 'acts_as_approvable/ownership'
-require 'acts-as-approvable/version'
+require 'acts_as_approvable/version'
 
 if defined?(Rails) && Rails.version =~ /^3\./
   require 'acts_as_approvable/railtie'
