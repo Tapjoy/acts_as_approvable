@@ -361,22 +361,43 @@ describe Approval do
     it { should_not be_fresh }
 
     describe '#approve!' do
-      it 'raises a Stale exception' do
-        expect { subject.approve! }.to raise_error(ActsAsApprovable::Error::Stale)
-      end
+      context 'with an :update approval' do
+        before(:each) do
+          subject.stub(:event => 'update', :object => [])
+        end
 
-      it 'leaves the approval in a pending state' do
-        begin; subject.approve!; rescue ActsAsApprovable::Error::Stale; end
-        subject.should be_pending
-      end
-
-      context 'when approval is forced' do
-        it 'does not raise a Stale exception' do
-          expect { subject.approve!(true) }.to_not raise_error(ActsAsApprovable::Error::Stale)
+        it 'raises a Stale exception' do
+          expect { subject.approve! }.to raise_error(ActsAsApprovable::Error::Stale)
         end
 
         it 'leaves the approval in a pending state' do
-          subject.approve!(true)
+          begin; subject.approve!; rescue ActsAsApprovable::Error::Stale; end
+          subject.should be_pending
+        end
+
+        context 'when approval is forced' do
+          it 'does not raise a Stale exception' do
+            expect { subject.approve!(true) }.to_not raise_error(ActsAsApprovable::Error::Stale)
+          end
+
+          it 'leaves the approval in a pending state' do
+            subject.approve!(true)
+            subject.should be_approved
+          end
+        end
+      end
+
+      context 'with a :create approval' do
+        before(:each) do
+          subject.stub(:event => 'create')
+        end
+
+        it 'does not raise a Stale exception' do
+          expect { subject.approve! }.to_not raise_error(ActsAsApprovable::Error::Stale)
+        end
+
+        it 'changes the approval to approved' do
+          subject.approve!
           subject.should be_approved
         end
       end

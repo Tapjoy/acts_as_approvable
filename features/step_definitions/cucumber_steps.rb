@@ -20,15 +20,17 @@ Given /^the record is (stale)$/ do |state|
   @record.save_without_approval!
 end
 
-When /^I (approve|reject|reset) the (record|changes?)$/ do |state, type|
+When /^I (approve|reject|reset) the (record|changes?)( forcefully)?$/ do |state, type, force|
   begin
-    method = "#{state}!".to_sym
+    params = ["#{state}!".to_sym]
+    params << true if force
 
     case type
-    when 'record'; @record.send(method)
-    when 'changes', 'change'; @approval.send(method)
+    when 'record'; @record.send(params.first)
+    when 'changes', 'change'; @approval.send(*params)
     end
-  rescue => @last_error
+  rescue => error
+    @last_error = error if error.present?
   end
 
   @record.reload

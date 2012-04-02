@@ -136,7 +136,7 @@ class Approval < ActiveRecord::Base
   # @raise [ActsAsApprovable::Error::Stale] raised if the record is {#stale? stale} and `force` is false.
   def approve!(force = false)
     raise ActsAsApprovable::Error::Locked if locked?
-    raise ActsAsApprovable::Error::Stale if stale? and !force
+    raise ActsAsApprovable::Error::Stale if update? and stale? and !force
     return unless run_item_callback(:before_approve)
 
     if update?

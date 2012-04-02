@@ -24,3 +24,13 @@ Feature: Create Approvals
         When the record is already approved
         And I reject the record
         Then it should raise ActsAsApprovable::Error::Locked
+
+    Scenario: a stale record is approved
+        When the record is stale
+        And I approve the record
+        Then it should be approved
+
+    Scenario: a stale record is rejected
+        When the record is stale
+        And I reject the record
+        Then it should be rejected

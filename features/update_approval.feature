@@ -32,3 +32,17 @@ Feature: Update Approvals
         And I approve the changes
         And the record should have changed to:
             | body | file:second_large |
+
+    Scenario: a stale record is approved
+        When I update the record with:
+            | body | not updated |
+        And the record is stale
+        And I approve the changes
+        Then it should raise ActsAsApprovable::Error::Stale
+
+    Scenario: a stale record is forcefully approved
+        When I update the record with:
+            | body | not updated |
+        And the record is stale
+        And I approve the changes forcefully
+        Then the record should have the changes

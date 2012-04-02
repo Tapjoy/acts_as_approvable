@@ -1,3 +1,7 @@
+== 0.7.0
+
+ * Only check #stale? if the approval is for an update.
+
 == 0.6.9
 
  * Fix generator templates using `select` instead of `select_tag`
