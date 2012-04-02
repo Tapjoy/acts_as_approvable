@@ -220,7 +220,6 @@ describe Approval do
     it { should_not be_update }
     it { should_not be_create }
     it { should be_destroy }
->>>>>>> Implement destroy approvals
   end
 
   context 'when the approval is unlocked' do
