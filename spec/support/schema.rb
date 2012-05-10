@@ -31,6 +31,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
 
+  create_table :destroys, :force => true do |t|
+    t.timestamps
+  end
+
   create_table :approvals, :force => true do |t|
     t.string   :item_type, :null => false
     t.integer  :item_id,   :null => false

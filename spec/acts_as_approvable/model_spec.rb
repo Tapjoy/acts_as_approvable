@@ -10,6 +10,7 @@ describe ActsAsApprovable::Model do
     it { should_not extend(ActsAsApprovable::Model::InstanceMethods) }
     it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
     it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+    it { should_not extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
   end
 
   context 'with default configuration options' do
@@ -17,6 +18,7 @@ describe ActsAsApprovable::Model do
 
     it { should be_approvable_on(:create) }
     it { should be_approvable_on(:update) }
+    it { should be_approvable_on(:destroy) }
     it { should be_approvals_enabled }
     it { subject.new.should have_many(:approvals) }
 
@@ -24,6 +26,7 @@ describe ActsAsApprovable::Model do
     it { should extend(ActsAsApprovable::Model::InstanceMethods) }
     it { should extend(ActsAsApprovable::Model::CreateInstanceMethods) }
     it { should extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+    it { should extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
 
     it 'has no approvable_field' do
       subject.approvable_field.should_not be
@@ -45,11 +48,13 @@ describe ActsAsApprovable::Model do
 
       it { should be_approvable_on(:create) }
       it { should_not be_approvable_on(:update) }
+      it { should_not be_approvable_on(:destroy) }
 
       it { should extend(ActsAsApprovable::Model::ClassMethods) }
       it { should extend(ActsAsApprovable::Model::InstanceMethods) }
       it { should extend(ActsAsApprovable::Model::CreateInstanceMethods) }
       it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+      it { should_not extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
     end
 
     context 'and a :state_field' do
@@ -80,11 +85,29 @@ describe ActsAsApprovable::Model do
 
       it { should be_approvable_on(:update) }
       it { should_not be_approvable_on(:create) }
+      it { should_not be_approvable_on(:destroy) }
 
       it { should extend(ActsAsApprovable::Model::ClassMethods) }
       it { should extend(ActsAsApprovable::Model::InstanceMethods) }
       it { should extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
       it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+      it { should_not extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
+    end
+  end
+
+  context 'with :destroy as the only event' do
+    context 'and no other options' do
+      subject { DestroysApprovable }
+
+      it { should be_approvable_on(:destroy) }
+      it { should_not be_approvable_on(:create) }
+      it { should_not be_approvable_on(:update) }
+
+      it { should extend(ActsAsApprovable::Model::ClassMethods) }
+      it { should extend(ActsAsApprovable::Model::InstanceMethods) }
+      it { should extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
+      it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+      it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
     end
   end
 end

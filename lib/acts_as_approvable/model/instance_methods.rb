@@ -16,22 +16,32 @@ module ActsAsApprovable
         not approvals_enabled?
       end
 
+      ##
+      # Turn off approvals for this instance.
       def approvals_off
         @approvals_disabled = true
       end
 
+      ##
+      # Turn on approvals for this instance.
       def approvals_on
         @approvals_disabled = false
       end
 
+      ##
+      # Returns true if the approval queue is on for this instance.
       def approvals_on?
         not @approvals_disabled
       end
 
+      ##
+      # Returns true if the approval queue is on for this model.
       def model_approvals_on?
         self.class.approvals_on?
       end
 
+      ##
+      # Returns true if the approval queue is on globally.
       def global_approvals_on?
         ActsAsApprovable.enabled?
       end
@@ -72,12 +82,20 @@ module ActsAsApprovable
         approvals_on if enable
       end
 
-      def save_without_approval(*args)
+      def save_without_approval(*args) #:nodoc:
         without_approval { |i| save(*args) }
       end
 
-      def save_without_approval!(*args)
+      def save_without_approval!(*args) #:nodoc:
         without_approval { |i| save!(*args) }
+      end
+
+      def destroy_without_approval #:nodoc:
+        without_approval { |i| destroy }
+      end
+
+      def destroy_without_approval! #:nodoc:
+        without_approval { |i| destroy! }
       end
 
       private

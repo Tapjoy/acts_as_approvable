@@ -128,7 +128,7 @@ Options
 The following options may be used to configure the workflow on a per-model
 basis:
 
- * `:on`            The type of events (`:create` or `:update`) to require approval on.
+ * `:on`            The type of events (`:create`, `:update` or `:destroy`) to require approval on.
  * `:ignore`        A list of fields to ignore for `:update` approvals.
  * `:only`          A list of fields that should be approved. All other fields are
                     ignored. If set, the `:ignore` option is... ignored.

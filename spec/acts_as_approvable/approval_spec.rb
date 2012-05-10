@@ -181,6 +181,7 @@ describe Approval do
 
     it { should be_update }
     it { should_not be_create }
+    it { should_not be_destroy }
 
     describe '#reset!' do
       it 'should raise an InvalidTransition error' do
@@ -196,6 +197,7 @@ describe Approval do
 
     it { should_not be_update }
     it { should be_create }
+    it { should_not be_destroy }
 
     describe '#reset!' do
       it 'should not raise an InvalidTransition error' do
@@ -208,6 +210,16 @@ describe Approval do
         subject.reset!
       end
     end
+  end
+
+  context 'when the event is :destroy' do
+    before(:each) do
+      subject.stub(:event => 'destroy')
+    end
+
+    it { should_not be_update }
+    it { should_not be_create }
+    it { should be_destroy }
   end
 
   context 'when the approval is unlocked' do
@@ -454,6 +466,11 @@ describe Approval do
           @item.should_not_receive(:set_approval_state)
           subject.approve!
         end
+
+        it 'does not destroy the item' do
+          @item.should_not_receive(:destroy)
+          subject.approve!
+        end
       end
 
       context 'when the event is :create' do
@@ -468,6 +485,32 @@ describe Approval do
 
         it 'sets the local item state' do
           @item.should_receive(:set_approval_state).with('approved')
+          subject.approve!
+        end
+
+        it 'does not destroy the item' do
+          @item.should_not_receive(:destroy)
+          subject.approve!
+        end
+      end
+
+      context 'when the event is :destroy' do
+        before(:each) do
+          subject.stub(:event => 'destroy')
+        end
+
+        it 'does not set the item attributes' do
+          @item.should_not_receive(:attributes=)
+          subject.approve!
+        end
+
+        it 'does not set the local item state' do
+          @item.should_not_receive(:set_approval_state)
+          subject.approve!
+        end
+
+        it 'destroys the item' do
+          @item.should_receive(:destroy)
           subject.approve!
         end
       end
@@ -508,6 +551,11 @@ describe Approval do
           @item.should_not_receive(:set_approval_state)
           subject.reject!
         end
+
+        it 'does not destroy the item' do
+          @item.should_not_receive(:destroy)
+          subject.reject!
+        end
       end
 
       context 'when the event is :create' do
@@ -522,6 +570,32 @@ describe Approval do
 
         it 'sets the local item state' do
           @item.should_receive(:set_approval_state).with('rejected')
+          subject.reject!
+        end
+
+        it 'does not destroy the item' do
+          @item.should_not_receive(:destroy)
+          subject.reject!
+        end
+      end
+
+      context 'when the event is :destroy' do
+        before(:each) do
+          subject.stub(:event => 'destroy')
+        end
+
+        it 'does not set the item attributes' do
+          @item.should_not_receive(:attributes=)
+          subject.reject!
+        end
+
+        it 'does not set the local item state' do
+          @item.should_not_receive(:set_approval_state)
+          subject.reject!
+        end
+
+        it 'does not destroy the item' do
+          @item.should_not_receive(:destroy)
           subject.reject!
         end
       end

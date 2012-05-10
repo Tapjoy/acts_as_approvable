@@ -2,10 +2,11 @@ def support_file_path(file)
   File.join('features', 'support', file.gsub(/^file:/, '').gsub(/ +/, '_') + '.txt')
 end
 
-Given /^a record created with (create|update|any) approval$/ do |type|
+Given /^a record created with (create|update|destroy|any) approval$/ do |type|
   @record = case type
             when 'create'; CreatesApprovable.create
             when 'update'; UpdatesApprovable.create
+            when 'destroy'; DestroysApprovable.create
             when 'any'; DefaultApprovable.create
             end
 end
@@ -20,20 +21,18 @@ Given /^the record is (stale)$/ do |state|
   @record.save_without_approval!
 end
 
-When /^I (approve|reject|reset) the (record|changes?)( forcefully)?$/ do |state, type, force|
+When /^I (approve|reject|reset) the (record|changes?|destruction)( forcefully)?$/ do |state, type, force|
   begin
     params = ["#{state}!".to_sym]
     params << true if force
 
-    case type
-    when 'record'; @record.send(params.first)
-    when 'changes', 'change'; @approval.send(*params)
-    end
+    record = type == 'record' ? @record : @approval
+    record.send(*params)
   rescue => error
     @last_error = error if error.present?
   end
 
-  @record.reload
+  @record.reload unless type == 'destruction'
 end
 
 When /^the record is already (approved|rejected)$/ do |state|
@@ -56,6 +55,11 @@ When /^I update the record with:$/ do |table|
   @update = table.rows_hash
 end
 
+When /^I destroy the record$/ do
+  @record.destroy
+  @approval = @record.destroy_approvals.last
+end
+
 Then /^it should (not )?be (pending|approved|rejected|stale)$/ do |invert, state|
   method = "#{state}?".to_sym
   record = state == 'stale' ? @record.approval : @record
@@ -71,6 +75,14 @@ end
 
 Then /^it should have (no )?pending changes$/ do |empty|
   @record.pending_changes?.should_not == !!empty
+end
+
+Then /^it should (not )?be pending destruction$/ do |invert|
+  if !!invert
+    @record.should_not be_pending_destruction
+  else
+    @record.should be_pending_destruction
+  end
 end
 
 Then /^it should raise (.+?)$/ do |exception|
@@ -102,5 +114,19 @@ Then /^the (approval|record) should (not )?have changed to:$/ do |type, changed,
     else
       changes[attr].should == value
     end
+  end
+end
+
+Then /^it should (still|no longer) exist$/ do |state|
+  begin
+    persisted = @record.class.find_by_id(@record.id)
+  rescue ActiveRecord::RecordNotFound
+    persisted = false
+  end
+
+  if state == 'still'
+    persisted.should be
+  else
+    persisted.should_not be
   end
 end
