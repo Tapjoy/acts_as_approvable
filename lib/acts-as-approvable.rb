@@ -14,6 +14,11 @@ elsif defined?(ActiveRecord)
   ActiveRecord::Base.send :extend, ActsAsApprovable::Model
 end
 
+# Alert users of the move!
+if defined?(ActiveSupport::Deprecation)
+  ActiveSupport::Deprecation.warn 'acts-as-approvable has officially moved to acts_as_approvable! Please update your gem references.'
+end
+
 $LOAD_PATH.shift
 
 module ActsAsApprovable
