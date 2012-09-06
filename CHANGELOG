@@ -1,6 +1,8 @@
 == 0.7.0
 
- * Only check #stale? if the approval is for an update.
+ * Support approvals for record deletions.
+ * Only check `#stale?` if the approval is for an update.
+ * Configuration option for disabling the stale check.
 
 == 0.6.9
 
