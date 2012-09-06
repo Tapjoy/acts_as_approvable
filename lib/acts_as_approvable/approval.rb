@@ -6,7 +6,7 @@ class Approval < ActiveRecord::Base
   belongs_to :item,  :polymorphic => true
 
   validates_presence_of  :item
-  validates_inclusion_of :event, :in => %w(create update)
+  validates_inclusion_of :event, :in => %w(create update destroy)
   validates_numericality_of :state, :greater_than_or_equal_to => 0, :less_than => STATES.length
 
   serialize :object
@@ -129,6 +129,12 @@ class Approval < ActiveRecord::Base
   end
 
   ##
+  # Returns true if this is a `:destroy` approval event.
+  def destroy?
+    event == 'destroy'
+  end
+
+  ##
   # Attempt to approve the record change.
   #
   # @param [Boolean] force if the approval record is stale force the acceptance.
@@ -148,9 +154,11 @@ class Approval < ActiveRecord::Base
       item.attributes = data
     elsif create?
       item.set_approval_state('approved')
+    elsif destroy?
+      item.destroy_without_approval
     end
 
-    item.save_without_approval!
+    item.save_without_approval! unless destroy?
     update_attributes!(:state => 'approved')
     run_item_callback(:after_approve)
   end

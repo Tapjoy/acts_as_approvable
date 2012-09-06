@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.name    = %q(acts_as_approvable)
   s.version = ActsAsApprovable::VERSION
 
-  s.summary     = %q(Generic approval queues for record creation and updates)
-  s.description = %q(Generic approval queues for record creation and updates)
+  s.summary     = %q(Generic approval queues for record creation, updates and deletion)
+  s.description = %q(Generic approval queues for record creation, updates and deletion)
 
   s.authors   = ['James Logsdon', 'Hwan-Joon Choi', 'Neal Wiggins']
   s.email     = %q(dwarf@girsbrain.org)

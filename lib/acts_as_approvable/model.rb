@@ -2,6 +2,7 @@ require 'acts_as_approvable/model/class_methods'
 require 'acts_as_approvable/model/instance_methods'
 require 'acts_as_approvable/model/create_instance_methods'
 require 'acts_as_approvable/model/update_instance_methods'
+require 'acts_as_approvable/model/destroy_instance_methods'
 
 module ActsAsApprovable
   ##
@@ -11,7 +12,7 @@ module ActsAsApprovable
     # Declare this in your model to require approval on new records or changes to fields.
     #
     # @param [Hash] options the options for this models approval workflow.
-    # @option options [Symbol,Array] :on    The events to require approval on (`:create` or `:update`).
+    # @option options [Symbol,Array] :on    The events to require approval on (`:create`, `:update` or `:destroy`).
     # @option options [String] :state_field The local field to store `:create` approval state.
     # @option options [Array]  :ignore      A list of fields to ignore. By default we ignore `:created_at`, `:updated_at` and
     #                                       the field specified in `:state_field`.
@@ -21,7 +22,7 @@ module ActsAsApprovable
       include InstanceMethods
 
       cattr_accessor :approvable_on
-      self.approvable_on = Array.wrap(options.delete(:on) { [:create, :update] })
+      self.approvable_on = Array.wrap(options.delete(:on) { [:create, :update, :destroy] })
 
       cattr_accessor :approvable_field
       self.approvable_field = options.delete(:state_field)
@@ -47,6 +48,10 @@ module ActsAsApprovable
       if approvable_on?(:create)
         include CreateInstanceMethods
         before_create :approvable_create, :if => :approvable_create?
+      end
+
+      if approvable_on?(:destroy)
+        include DestroyInstanceMethods
       end
 
       after_save :approvable_save, :if => :approvals_enabled?
