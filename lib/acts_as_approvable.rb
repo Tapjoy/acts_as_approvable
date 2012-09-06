@@ -83,4 +83,16 @@ module ActsAsApprovable
       @lang || 'erb'
     end
   end
+
+  ##
+  # Enable or disable the stale record check when approving updates.
+  def self.stale_check=(bool)
+    @stale_check = !!bool
+  end
+
+  ##
+  # Get the state of the stale check.
+  def self.stale_check?
+    @stale_check || true
+  end
 end

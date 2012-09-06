@@ -5,6 +5,8 @@ describe ActsAsApprovable do
   it { should respond_to(:owner_class=) }
   it { should respond_to(:view_language) }
   it { should respond_to(:view_language=) }
+  it { should respond_to(:stale_check=) }
+  it { should respond_to(:stale_check?) }
 
   describe '.enabled?' do
     it 'returns true by default' do
