@@ -387,6 +387,16 @@ describe Approval do
           subject.should be_pending
         end
 
+        context 'when the stale check is disabled' do
+          before(:each) do
+            ActsAsApprovable.stub(:stale_check? => false)
+          end
+
+          it 'does not raise a Stale exception' do
+            expect { subject.approve!(true) }.to_not raise_error(ActsAsApprovable::Error::Stale)
+          end
+        end
+
         context 'when approval is forced' do
           it 'does not raise a Stale exception' do
             expect { subject.approve!(true) }.to_not raise_error(ActsAsApprovable::Error::Stale)

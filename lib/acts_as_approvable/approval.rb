@@ -117,6 +117,12 @@ class Approval < ActiveRecord::Base
   end
 
   ##
+  # Returns true if the approval is stale and the stale check is enabled.
+  def stale_approval?
+    ActsAsApprovable.stale_check? and update? and stale?
+  end
+
+  ##
   # Returns true if this is an `:update` approval event.
   def update?
     event == 'update'
@@ -142,7 +148,7 @@ class Approval < ActiveRecord::Base
   # @raise [ActsAsApprovable::Error::Stale] raised if the record is {#stale? stale} and `force` is false.
   def approve!(force = false)
     raise ActsAsApprovable::Error::Locked if locked?
-    raise ActsAsApprovable::Error::Stale if update? and stale? and !force
+    raise ActsAsApprovable::Error::Stale if !force and stale_approval?
     return unless run_item_callback(:before_approve)
 
     if update?
