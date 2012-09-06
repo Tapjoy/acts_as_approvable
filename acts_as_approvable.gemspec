@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.authors   = ['James Logsdon', 'Hwan-Joon Choi', 'Neal Wiggins']
   s.email     = %q(dwarf@girsbrain.org)
-  s.homepage  = %q(http://github.com/jlogsdon/acts_as_approvable)
+  s.homepage  = %q(http://github.com/Tapjoy/acts_as_approvable)
   s.date      = %q(2012-02-14)
 
   s.files         = `git ls-files`.split("\n")
