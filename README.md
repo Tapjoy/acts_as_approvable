@@ -11,7 +11,7 @@ Rails 3
 
 Add the gem to your Gemfile:
 
-    gem 'acts-as-approvable'
+    gem 'acts_as_approvable'
 
 Then run the generator:
 
@@ -22,7 +22,7 @@ Rails 2
 
 Add the gem to `config/environment.rb`
 
-    config.gem 'acts-as-approvable'
+    config.gem 'acts_as_approvable'
 
 Then run `rake gems:install`. After the gem is installed, run the generator:
 
@@ -43,7 +43,7 @@ These options are also available by passing `--help` as an option to the generat
 API Documentation
 =================
 
-API Documentation is [available online](http://rubydoc.info/gems/acts-as-approvable/frames).
+API Documentation is [available online](http://rubydoc.info/gems/acts_as_approvable/frames).
 
 Configuration
 =============
