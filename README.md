@@ -88,6 +88,14 @@ end
 Examples
 ========
 
+The simplest example uses all of the default options...
+
+```ruby
+class Article < ActiveRecord::Base
+  acts_as_approvable
+end
+```
+
 Require approval for new Users, but not modifications...
 
 ```ruby
@@ -129,14 +137,16 @@ The following options may be used to configure the workflow on a per-model
 basis:
 
  * `:on`            The type of events (`:create`, `:update` or `:destroy`) to require approval on.
- * `:ignore`        A list of fields to ignore for `:update` approvals.
- * `:only`          A list of fields that should be approved. All other fields are
-                    ignored. If set, the `:ignore` option is... ignored.
- * `:state_field`   A local model field to save the `:create` approvals state. Useful
-                    for selecting approved models without joining the approvals table.
-
-The fields `:created_at`, `:updated_at` and whatever is set for the `:state_field`
-are automatically ignored.
+                    *Default: `[:create, :update, :destroy]`*
+ * `:ignore`        A list of fields to ignore for `:update` approvals. The fields `:created_at`, `:updated_at` and
+                    whatever is set for the `:state_field` are automatically ignored.
+                    *Default: `nil`*
+ * `:only`          A list of fields that should be approved. All other fields are ignored. If set, the `:ignore`
+                    option is... ignored.
+                    *Default: `nil`*
+ * `:state_field`   A local model field to save the `:create` approvals state. Useful for selecting approved models
+                    without joining the approvals table.
+                    *Default: `nil`*
 
 Contributors
 ============
