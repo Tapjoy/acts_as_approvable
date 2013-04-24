@@ -3,6 +3,8 @@ class Approval < ActiveRecord::Base
   # Enumeration of available states.
   STATES = %w(pending approved rejected)
 
+  attr_accessible :event, :state, :object, :original, :reason
+
   belongs_to :item,  :polymorphic => true
 
   validates_presence_of  :item
