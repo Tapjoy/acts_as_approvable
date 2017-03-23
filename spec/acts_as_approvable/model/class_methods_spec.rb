@@ -4,7 +4,11 @@ describe ActsAsApprovable::Model::ClassMethods do
   subject { DefaultApprovable }
 
   describe '.acts_as_approvable' do
-    subject { CleanApprovable }
+    subject do
+      Class.new(ActiveRecord::Base) do
+        self.table_name = 'nots'
+      end
+    end
 
     it 'includes InstanceMethods into the class' do
       subject.should_not extend(ActsAsApprovable::Model::InstanceMethods)
@@ -160,7 +164,11 @@ describe ActsAsApprovable::Model::ClassMethods do
   end
 
   describe '.approvable_fields' do
-    subject { CleanApprovable }
+    subject do
+      Class.new(ActiveRecord::Base) do
+        self.table_name = 'nots'
+      end
+    end
 
     context 'with :only fields configured' do
       before(:each) do

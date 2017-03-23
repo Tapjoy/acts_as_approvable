@@ -1,5 +1,4 @@
 require 'rspec/expectations'
-require 'shoulda/active_record/matchers'
 
 class Module
   # Return any modules we +extend+
@@ -43,45 +42,5 @@ RSpec::Matchers.define :be_an_options_array do
   end
   failure_message_for_should_not do |actual|
     "expected #{actual} not to map to a valid #options_for_select array"
-  end
-end
-
-module Shoulda
-  module ActiveRecord
-    module Matchers
-      def validate_inclusion_of(attr)
-        ValidatesInclusionOfMatcher.new(attr)
-      end
-
-      class ValidatesInclusionOfMatcher < ValidationMatcher
-        def in(values)
-          @values = values
-          self
-        end
-
-        def description
-          "require #{@attribute} to be one of #{@values.inspect}"
-        end
-
-        def matches?(subject)
-          super(subject)
-
-          allows_given_values && disallows_other_values
-        end
-
-        private
-        def allows_given_values
-          @values.each do |value|
-            allows_value_of(value, @message)
-          end unless @values.empty?
-        end
-
-        def disallows_other_values
-          @values.each do |value|
-            disallows_value_of("#{value}s", @message)
-          end unless @values.empty?
-        end
-      end
-    end
   end
 end

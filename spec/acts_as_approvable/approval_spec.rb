@@ -15,7 +15,7 @@ describe Approval do
 
   describe '.validates' do
     it { should validate_presence_of(:item) }
-    it { should validate_inclusion_of(:event).in(%w(create update)) }
+    it { should validate_inclusion_of(:event).in_array(%w(create update)) }
     it { should validate_numericality_of(:state) }
     it { should ensure_inclusion_of(:state).in_range(0..(described_class::STATES.length - 1)).with_low_message(/greater than/).with_high_message(/less than/)}
   end
