@@ -16,31 +16,31 @@ RSpec::Matchers.define :extend do |expected|
   description do
     "extend #{expected}"
   end
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected #{actual} to extend #{expected}"
   end
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected #{actual} not to extend #{expected}"
   end
 end
 
 RSpec::Matchers.define :be_an_options_array do
   match do |actual|
-    actual.should be_an(Array)
+    expect(actual).to be_an(Array)
     actual.each do |option|
       unless option.is_a?(String)
-        option.should be_an(Array)
-        option.length.should be(2)
+        expect(option).to be_an(Array)
+        expect(option.length).to be(2)
       end
     end
   end
   description do
     'returns an array usable by #options_for_select'
   end
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected #{actual} to map to a valid #options_for_select array"
   end
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected #{actual} not to map to a valid #options_for_select array"
   end
 end

@@ -4,41 +4,41 @@ describe ActsAsApprovable::Model do
   context 'when acts_as_approvable is not configured' do
     subject { NotApprovable }
 
-    it { subject.new.should_not have_many(:approvals) }
+    it { expect(subject.new).not_to have_many(:approvals) }
 
-    it { should_not extend(ActsAsApprovable::Model::ClassMethods) }
-    it { should_not extend(ActsAsApprovable::Model::InstanceMethods) }
-    it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
-    it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
-    it { should_not extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
+    it { is_expected.not_to extend(ActsAsApprovable::Model::ClassMethods) }
+    it { is_expected.not_to extend(ActsAsApprovable::Model::InstanceMethods) }
+    it { is_expected.not_to extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+    it { is_expected.not_to extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+    it { is_expected.not_to extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
   end
 
   context 'with default configuration options' do
     subject { DefaultApprovable }
 
-    it { should be_approvable_on(:create) }
-    it { should be_approvable_on(:update) }
-    it { should be_approvable_on(:destroy) }
-    it { should be_approvals_enabled }
-    it { subject.new.should have_many(:approvals) }
+    it { is_expected.to be_approvable_on(:create) }
+    it { is_expected.to be_approvable_on(:update) }
+    it { is_expected.to be_approvable_on(:destroy) }
+    it { is_expected.to be_approvals_enabled }
+    it { expect(subject.new).to have_many(:approvals) }
 
-    it { should extend(ActsAsApprovable::Model::ClassMethods) }
-    it { should extend(ActsAsApprovable::Model::InstanceMethods) }
-    it { should extend(ActsAsApprovable::Model::CreateInstanceMethods) }
-    it { should extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
-    it { should extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
+    it { is_expected.to extend(ActsAsApprovable::Model::ClassMethods) }
+    it { is_expected.to extend(ActsAsApprovable::Model::InstanceMethods) }
+    it { is_expected.to extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+    it { is_expected.to extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+    it { is_expected.to extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
 
     it 'has no approvable_field' do
-      subject.approvable_field.should_not be
+      expect(subject.approvable_field).not_to be
     end
 
     it 'ignores timestamps' do
-      subject.approvable_ignore.should include('created_at')
-      subject.approvable_ignore.should include('updated_at')
+      expect(subject.approvable_ignore).to include('created_at')
+      expect(subject.approvable_ignore).to include('updated_at')
     end
 
     it 'ignores the primary key' do
-      subject.approvable_ignore.should include(subject.primary_key)
+      expect(subject.approvable_ignore).to include(subject.primary_key)
     end
   end
 
@@ -46,35 +46,35 @@ describe ActsAsApprovable::Model do
     context 'and no other options' do
       subject { CreatesApprovable }
 
-      it { should be_approvable_on(:create) }
-      it { should_not be_approvable_on(:update) }
-      it { should_not be_approvable_on(:destroy) }
+      it { is_expected.to be_approvable_on(:create) }
+      it { is_expected.not_to be_approvable_on(:update) }
+      it { is_expected.not_to be_approvable_on(:destroy) }
 
-      it { should extend(ActsAsApprovable::Model::ClassMethods) }
-      it { should extend(ActsAsApprovable::Model::InstanceMethods) }
-      it { should extend(ActsAsApprovable::Model::CreateInstanceMethods) }
-      it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
-      it { should_not extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::ClassMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::InstanceMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+      it { is_expected.not_to extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+      it { is_expected.not_to extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
     end
 
     context 'and a :state_field' do
       subject { CreatesWithStateApprovable }
 
       it 'has an approvable_field' do
-        subject.approvable_field.should be
+        expect(subject.approvable_field).to be
       end
 
       it 'ignores the approvable_field' do
-        subject.approvable_ignore.should include(subject.approvable_field.to_s)
+        expect(subject.approvable_ignore).to include(subject.approvable_field.to_s)
       end
 
       it 'ignores timestamps' do
-        subject.approvable_ignore.should include('created_at')
-        subject.approvable_ignore.should include('updated_at')
+        expect(subject.approvable_ignore).to include('created_at')
+        expect(subject.approvable_ignore).to include('updated_at')
       end
 
       it 'ignores the primary key' do
-        subject.approvable_ignore.should include(subject.primary_key)
+        expect(subject.approvable_ignore).to include(subject.primary_key)
       end
     end
   end
@@ -83,15 +83,15 @@ describe ActsAsApprovable::Model do
     context 'and no other options' do
       subject { UpdatesApprovable }
 
-      it { should be_approvable_on(:update) }
-      it { should_not be_approvable_on(:create) }
-      it { should_not be_approvable_on(:destroy) }
+      it { is_expected.to be_approvable_on(:update) }
+      it { is_expected.not_to be_approvable_on(:create) }
+      it { is_expected.not_to be_approvable_on(:destroy) }
 
-      it { should extend(ActsAsApprovable::Model::ClassMethods) }
-      it { should extend(ActsAsApprovable::Model::InstanceMethods) }
-      it { should extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
-      it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
-      it { should_not extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::ClassMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::InstanceMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+      it { is_expected.not_to extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+      it { is_expected.not_to extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
     end
   end
 
@@ -99,15 +99,15 @@ describe ActsAsApprovable::Model do
     context 'and no other options' do
       subject { DestroysApprovable }
 
-      it { should be_approvable_on(:destroy) }
-      it { should_not be_approvable_on(:create) }
-      it { should_not be_approvable_on(:update) }
+      it { is_expected.to be_approvable_on(:destroy) }
+      it { is_expected.not_to be_approvable_on(:create) }
+      it { is_expected.not_to be_approvable_on(:update) }
 
-      it { should extend(ActsAsApprovable::Model::ClassMethods) }
-      it { should extend(ActsAsApprovable::Model::InstanceMethods) }
-      it { should extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
-      it { should_not extend(ActsAsApprovable::Model::CreateInstanceMethods) }
-      it { should_not extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::ClassMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::InstanceMethods) }
+      it { is_expected.to extend(ActsAsApprovable::Model::DestroyInstanceMethods) }
+      it { is_expected.not_to extend(ActsAsApprovable::Model::CreateInstanceMethods) }
+      it { is_expected.not_to extend(ActsAsApprovable::Model::UpdateInstanceMethods) }
     end
   end
 end

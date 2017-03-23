@@ -14,12 +14,12 @@ describe ActsAsApprovable::Model::DestroyInstanceMethods do
     end
 
     it 'retreives all :destroy approvals' do
-      subject.destroy_approvals.should == [@approval1, @approval2]
+      expect(subject.destroy_approvals).to eq([@approval1, @approval2])
     end
 
     context 'when requesting only pending records' do
       it 'retreives pending :destroy approvals' do
-        subject.destroy_approvals(false).should == [@approval2]
+        expect(subject.destroy_approvals(false)).to eq([@approval2])
       end
     end
 
@@ -35,12 +35,12 @@ describe ActsAsApprovable::Model::DestroyInstanceMethods do
       end
 
       it 'retreives only :destroy approvals' do
-        subject.destroy_approvals.should == [@approval1, @approval2]
+        expect(subject.destroy_approvals).to eq([@approval1, @approval2])
       end
 
       context 'when requesting only pending records' do
         it 'retreives only pending :destroy approvals' do
-          subject.destroy_approvals(false).should == [@approval2]
+          expect(subject.destroy_approvals(false)).to eq([@approval2])
         end
       end
     end
@@ -48,7 +48,7 @@ describe ActsAsApprovable::Model::DestroyInstanceMethods do
 
   describe '#pending_destruction?' do
     context 'with pending approvals' do
-      it { should_not be_pending_destruction }
+      it { is_expected.not_to be_pending_destruction }
     end
 
     context 'with pending approvals' do
@@ -56,7 +56,7 @@ describe ActsAsApprovable::Model::DestroyInstanceMethods do
         subject.destroy
       end
 
-      it { should be_pending_destruction }
+      it { is_expected.to be_pending_destruction }
     end
 
     context 'with rejected approvals' do
@@ -65,7 +65,7 @@ describe ActsAsApprovable::Model::DestroyInstanceMethods do
         subject.approvals.last.reject!
       end
 
-      it { should_not be_pending_destruction }
+      it { is_expected.not_to be_pending_destruction }
     end
   end
 end
