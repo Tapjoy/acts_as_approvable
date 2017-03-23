@@ -19,9 +19,9 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'activerecord',     '>= 2.3', '< 4.0'
   s.add_development_dependency 'shoulda-matchers', '~> 2.8'
-  s.add_development_dependency 'rspec',            '~> 2.8.0'
+  s.add_development_dependency 'rspec',            '~> 3.0'
   s.add_development_dependency 'timecop',          '~> 0.3.5'
-  s.add_development_dependency 'cucumber',         '~> 1.1.0'
+  s.add_development_dependency 'cucumber',         '~> 2.0'
   s.add_development_dependency 'rake',             '~> 0.9.2'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'minitest'
