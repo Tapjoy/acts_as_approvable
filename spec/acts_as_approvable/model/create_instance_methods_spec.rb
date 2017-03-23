@@ -19,12 +19,12 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
   context do
     before(:each) do
       @approval = subject.approvals.first
-      subject.stub(:approval => @approval)
+      allow(subject).to receive_messages(:approval => @approval)
     end
 
     describe '#approval_state' do
       it 'gets the state from the approval record' do
-        @approval.should_receive(:state)
+        expect(@approval).to receive(:state)
         subject.approval_state
       end
 
@@ -32,12 +32,12 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
         subject { CreatesWithStateApprovable.create }
 
         it 'gets the state from the configured field' do
-          subject.should_receive(:state)
+          expect(subject).to receive(:state)
           subject.approval_state
         end
 
         it 'does not get the state from the approval record' do
-          subject.should_not_receive(:approval)
+          expect(subject).not_to receive(:approval)
           subject.approval_state
         end
       end
@@ -45,7 +45,7 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
 
     describe '#set_approval_state' do
       it 'does nothing if no :state_field is configured' do
-        subject.should_not_receive(:state=)
+        expect(subject).not_to receive(:state=)
         subject.set_approval_state('pending')
       end
 
@@ -53,7 +53,7 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
         subject { CreatesWithStateApprovable.create }
 
         it 'sets the configured field' do
-          subject.should_receive(:state=)
+          expect(subject).to receive(:state=)
           subject.set_approval_state('pending')
         end
       end
@@ -61,7 +61,7 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
 
     describe '#pending?' do
       it 'gets the status from the approval record' do
-        subject.should_receive(:approval)
+        expect(subject).to receive(:approval)
         subject.pending?
       end
 
@@ -69,12 +69,12 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
         subject { CreatesWithStateApprovable.create }
 
         it 'gets the state from the configured field' do
-          subject.should_receive(:state)
+          expect(subject).to receive(:state)
           subject.pending?
         end
 
         it 'does not get the state from the approval record' do
-          subject.should_not_receive(:approval)
+          expect(subject).not_to receive(:approval)
           subject.pending?
         end
       end
@@ -82,7 +82,7 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
 
     describe '#approved?' do
       it 'gets the status from the approval record' do
-        subject.should_receive(:approval)
+        expect(subject).to receive(:approval)
         subject.approved?
       end
 
@@ -90,12 +90,12 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
         subject { CreatesWithStateApprovable.create }
 
         it 'gets the state from the configured field' do
-          subject.should_receive(:state)
+          expect(subject).to receive(:state)
           subject.approved?
         end
 
         it 'does not get the state from the approval record' do
-          subject.should_not_receive(:approval)
+          expect(subject).not_to receive(:approval)
           subject.approved?
         end
       end
@@ -103,7 +103,7 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
 
     describe '#rejected?' do
       it 'gets the status from the approval record' do
-        subject.should_receive(:approval)
+        expect(subject).to receive(:approval)
         subject.rejected?
       end
 
@@ -111,12 +111,12 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
         subject { CreatesWithStateApprovable.create }
 
         it 'gets the state from the configured field' do
-          subject.should_receive(:state)
+          expect(subject).to receive(:state)
           subject.rejected?
         end
 
         it 'does not get the state from the approval record' do
-          subject.should_not_receive(:approval)
+          expect(subject).not_to receive(:approval)
           subject.rejected?
         end
       end
@@ -125,11 +125,11 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
     describe '#approve!' do
       it 'approves the record' do
         subject.approve!
-        subject.should be_approved
+        expect(subject).to be_approved
       end
 
       it 'proxies to the approval record for approval' do
-        subject.should_receive(:approval)
+        expect(subject).to receive(:approval)
         subject.approve!
       end
     end
@@ -137,18 +137,18 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
     describe '#reject!' do
       it 'rejects the record' do
         subject.reject!
-        subject.should be_rejected
+        expect(subject).to be_rejected
       end
 
       it 'proxies to the approval record for approval' do
-        subject.should_receive(:approval)
+        expect(subject).to receive(:approval)
         subject.reject!
       end
     end
 
     describe '#reset!' do
       it 'proxies to the approval record for approval' do
-        subject.should_receive(:approval)
+        expect(subject).to receive(:approval)
         subject.reset!
       end
 
@@ -161,7 +161,7 @@ describe ActsAsApprovable::Model::CreateInstanceMethods do
 
         it 'puts the approval back to fresh' do
           subject.reset!
-          subject.approval.should be_fresh
+          expect(subject.approval).to be_fresh
         end
       end
     end

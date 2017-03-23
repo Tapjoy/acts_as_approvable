@@ -8,7 +8,7 @@ describe ActsAsApprovable::Ownership::InstanceMethods do
   before(:each) do
     @user1 = User.create
     @user2 = User.new
-    subject.stub(:save => true)
+    allow(subject).to receive_messages(:save => true)
   end
 
   subject { Approval.new }

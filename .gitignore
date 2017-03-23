@@ -2,3 +2,5 @@ debug.log
 spec/*.db
 coverage/
 *.gem
+vendor/bundle
+.bundle

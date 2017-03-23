@@ -65,28 +65,32 @@ Then /^it should (not )?be (pending|approved|rejected|stale)$/ do |invert, state
   record = state == 'stale' ? @record.approval : @record
 
   unless invert == 'not '
-    record.send(method).should be_true
+    expect(record.send(method)).to be_truthy
   else
-    record.send(method).should be_false
+    expect(record.send(method)).to be_falsey
   end
 
   @record.reload
 end
 
-Then /^it should have (no )?pending changes$/ do |empty|
-  @record.pending_changes?.should_not == !!empty
+Then /^it should have (no )?pending changes$/ do |no_changes|
+  if no_changes
+    expect(@record).not_to be_pending_changes
+  else
+    expect(@record).to be_pending_changes
+  end
 end
 
 Then /^it should (not )?be pending destruction$/ do |invert|
   if !!invert
-    @record.should_not be_pending_destruction
+    expect(@record).not_to be_pending_destruction
   else
-    @record.should be_pending_destruction
+    expect(@record).to be_pending_destruction
   end
 end
 
 Then /^it should raise (.+?)$/ do |exception|
-  @last_error.class.should == eval(exception)
+  expect(@last_error.class.name).to eql(exception)
 end
 
 Then /^the (approval|record) should (not )?have (the changes|changed)$/ do |type, changed, tense|
@@ -96,9 +100,9 @@ Then /^the (approval|record) should (not )?have (the changes|changed)$/ do |type
   @update.each_pair do |attr, value|
     value = File.read(support_file_path(value)) if value =~ /^file:/
     if changed
-      changes[attr].should_not == value
+      expect(changes[attr]).not_to eql(value)
     else
-      changes[attr].should == value
+      expect(changes[attr]).to eql(value)
     end
   end
 end
@@ -110,9 +114,9 @@ Then /^the (approval|record) should (not )?have changed to:$/ do |type, changed,
   table.rows_hash.each_pair do |attr, value|
     value = File.read(support_file_path(value)) if value =~ /^file:/
     if changed
-      changes[attr].should_not == value
+      expect(changes[attr]).not_to eql(value)
     else
-      changes[attr].should == value
+      expect(changes[attr]).to eql(value)
     end
   end
 end
@@ -125,8 +129,8 @@ Then /^it should (still|no longer) exist$/ do |state|
   end
 
   if state == 'still'
-    persisted.should be
+    expect(persisted).to be_truthy
   else
-    persisted.should_not be
+    expect(persisted).to be_falsey
   end
 end

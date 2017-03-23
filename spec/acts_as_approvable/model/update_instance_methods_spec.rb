@@ -14,19 +14,19 @@ describe ActsAsApprovable::Model::UpdateInstanceMethods do
     end
 
     it 'retreives all :update approvals' do
-      subject.update_approvals.should == [@approval1, @approval2]
+      expect(subject.update_approvals).to eq([@approval1, @approval2])
     end
 
     context 'when requesting only pending records' do
       it 'retreives pending :update approvals' do
-        subject.update_approvals(false).should == [@approval2]
+        expect(subject.update_approvals(false)).to eq([@approval2])
       end
     end
   end
 
   describe '#pending_changes?' do
     it 'returns false with no pending approvals' do
-      subject.should_not be_pending_changes
+      expect(subject).not_to be_pending_changes
     end
 
     context 'with pending approvals' do
@@ -35,7 +35,7 @@ describe ActsAsApprovable::Model::UpdateInstanceMethods do
       end
 
       it 'returns true' do
-        subject.should be_pending_changes
+        expect(subject).to be_pending_changes
       end
     end
 
@@ -49,20 +49,20 @@ describe ActsAsApprovable::Model::UpdateInstanceMethods do
       end
 
       it 'returns false' do
-        subject.should_not be_pending_changes
+        expect(subject).not_to be_pending_changes
       end
     end
   end
 
   describe '#changed_notably?' do
     it 'returns true if #notably_changed returns values' do
-      subject.stub(:notably_changed => [1])
-      subject.should be_changed_notably
+      allow(subject).to receive_messages(:notably_changed => [1])
+      expect(subject).to be_changed_notably
     end
 
     it 'returns false if #notably_changed does not return values' do
-      subject.stub(:notably_changed => [])
-      subject.should_not be_changed_notably
+      allow(subject).to receive_messages(:notably_changed => [])
+      expect(subject).not_to be_changed_notably
     end
   end
 
@@ -73,24 +73,24 @@ describe ActsAsApprovable::Model::UpdateInstanceMethods do
     end
 
     it 'includes fields that should be approved' do
-      subject.changed.should include('title')
-      subject.notably_changed.should include('title')
+      expect(subject.changed).to include('title')
+      expect(subject.notably_changed).to include('title')
     end
 
     it 'does not include fields that should be ignored' do
-      subject.changed.should include('updated_at')
-      subject.notably_changed.should_not include('updated_at')
+      expect(subject.changed).to include('updated_at')
+      expect(subject.notably_changed).not_to include('updated_at')
     end
 
     it 'gets a list of approvable fields from #approvable_fields' do
-      subject.should_receive(:approvable_fields).and_return([])
+      expect(subject).to receive(:approvable_fields).and_return([])
       subject.notably_changed
     end
   end
 
   describe '#approvable_fields' do
     it 'proxies to the class level' do
-      subject.class.should_receive(:approvable_fields)
+      expect(subject.class).to receive(:approvable_fields)
       subject.approvable_fields
     end
   end
@@ -101,11 +101,11 @@ describe ActsAsApprovable::Model::UpdateInstanceMethods do
     end
 
     it 'saves the updated values to the approval record' do
-      subject.update_approvals.last.object.should == {'body' => 'updated'}
+      expect(subject.update_approvals.last.object).to eq({'body' => 'updated'})
     end
 
     it 'saves the original values to the approval record' do
-      subject.update_approvals.last.original.should == {'body' => nil}
+      expect(subject.update_approvals.last.original).to eq({'body' => nil})
     end
   end
 end
