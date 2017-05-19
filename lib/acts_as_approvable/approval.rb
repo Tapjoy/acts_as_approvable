@@ -7,12 +7,16 @@ class Approval < ActiveRecord::Base
 
   validates_presence_of  :item
   validates_inclusion_of :event, :in => %w(create update destroy)
-  validates_numericality_of :state, :greater_than_or_equal_to => 0, :less_than => STATES.length
+  validate :valid_state
 
   serialize :object
   serialize :original
 
   before_save :able_to_save?
+
+  def valid_state
+    attributes['state'] >= 0 && attributes['state'] < STATES.length
+  end
 
   ##
   # Find the enumerated value for a given state.
